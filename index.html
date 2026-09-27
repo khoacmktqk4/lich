@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lịch giảng dạy — Khoa Chuyên môn Kỹ thuật</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#16202B; --ink-2:#26333F; --paper:#F5F2EA; --paper-2:#EDE8DB; --card:#FFFFFF;
+  --line:#DAD4C2; --line-soft:#E7E2D2; --muted:#6B7280;
+  --gold:#C7922B; --gold-soft:#F2E2BE;
+  --p301:#6E7B4F; --p301-soft:#E7EBDC; --p303:#A9683D; --p303-soft:#F2E4D6;
+  --p302:#3E7C7B; --p302-soft:#DCECEB; --nhu:#B5602E; --nhu-soft:#F3E1D3;
+  --khi:#3E6E8E; --khi-soft:#DCE7EE; --red:#A83B32; --red-soft:#F3DEDB;
+  --radius-s:4px; --radius-m:8px;
+  --font-serif:'Source Serif 4', Georgia, serif;
+  --font-sans:'IBM Plex Sans', -apple-system, sans-serif;
+  --font-mono:'IBM Plex Mono', monospace;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#EDE8DB; --ink-2:#D8D2C0; --paper:#161A1E; --paper-2:#1D2229; --card:#1F252C;
+    --line:#333B44; --line-soft:#2A3138; --muted:#9AA3AD;
+    --p301-soft:#26301F; --p303-soft:#2E241A; --p302-soft:#1B2C2C;
+    --nhu-soft:#2E2018; --khi-soft:#1B2733; --gold-soft:#332811; --red-soft:#301E1C;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#EDE8DB; --ink-2:#D8D2C0; --paper:#161A1E; --paper-2:#1D2229; --card:#1F252C;
+  --line:#333B44; --line-soft:#2A3138; --muted:#9AA3AD;
+  --p301-soft:#26301F; --p303-soft:#2E241A; --p302-soft:#1B2C2C;
+  --nhu-soft:#2E2018; --khi-soft:#1B2733; --gold-soft:#332811; --red-soft:#301E1C;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px); height:100%;}
+*{box-sizing:border-box;}
+body{margin:0; min-height:100%; background:var(--paper); color:var(--ink); font-family:var(--font-sans); font-size:14.5px; line-height:1.45; -webkit-font-smoothing:antialiased;}
+h1,h2,h3{font-family:var(--font-serif); font-weight:600; margin:0;}
+button{font-family:var(--font-sans); cursor:pointer;}
+
+header.top{position:sticky; top:0; z-index:40; background:var(--ink); color:var(--paper); padding:calc(env(safe-area-inset-top,0px) + 10px) 12px 8px; border-bottom:3px solid var(--gold);}
+.top-row{display:flex; align-items:flex-start; justify-content:space-between; gap:8px; max-width:1180px; margin:0 auto; flex-wrap:wrap;}
+.brand-eyebrow{font-family:var(--font-mono); font-size:10px; letter-spacing:.04em; color:var(--gold); margin-bottom:2px;}
+.brand h1{font-size:17px; color:#fff; line-height:1.2;}
+.brand p{margin:3px 0 0; font-size:11.5px; color:#B9C2CC;}
+.toolbar{display:flex; gap:6px; align-items:center; flex-wrap:wrap; width:100%; margin-top:8px;}
+select.sel{background:#1F2A36; color:#fff; border:1px solid #3A4753; border-radius:var(--radius-s); padding:8px 8px; font-size:13px; flex:1 1 140px; min-width:0;}
+.btn{font-size:12.5px; font-weight:600; border-radius:var(--radius-s); border:1px solid transparent; padding:8px 11px; display:inline-flex; align-items:center; justify-content:center; gap:5px; white-space:nowrap;}
+.btn-gold{background:var(--gold); color:#1B1204; border-color:var(--gold);}
+.btn-ghost{background:transparent; color:#fff; border-color:#3A4753;}
+.btn-ghost:hover{background:#1F2A36;}
+.btn-outline{background:var(--card); color:var(--ink); border-color:var(--line);}
+.btn-sm{font-size:11px; padding:5px 9px;}
+
+nav.tabs{display:flex; gap:3px; max-width:1180px; margin:9px auto 0; border-top:1px solid #2C3947; padding-top:7px; overflow-x:auto; -webkit-overflow-scrolling:touch;}
+.tab{font-size:12.5px; font-weight:600; color:#B9C2CC; background:transparent; border:none; padding:7px 10px; border-radius:var(--radius-s) var(--radius-s) 0 0; white-space:nowrap; flex-shrink:0;}
+.tab[aria-selected="true"]{color:#fff; background:var(--ink-2); box-shadow:inset 0 -2px 0 var(--gold);}
+
+main{max-width:1180px; margin:0 auto; padding:12px 12px 60px;}
+
+/* status panels */
+.status-panel{background:var(--card); border:1px solid var(--line); border-radius:var(--radius-m); padding:18px; margin-bottom:16px;}
+.status-panel h3{font-size:15px; margin-bottom:8px;}
+.status-panel p{font-size:13px; color:var(--muted); line-height:1.6; margin:0 0 8px;}
+.status-panel ol{margin:8px 0 0; padding-left:20px; font-size:13px; color:var(--ink); line-height:1.8;}
+.status-panel code{background:var(--paper-2); padding:1px 5px; border-radius:3px; font-family:var(--font-mono); font-size:12px;}
+.spinner{width:22px; height:22px; border:3px solid var(--line); border-top-color:var(--gold); border-radius:50%; animation:spin .8s linear infinite; margin-bottom:10px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.status-panel.error{border-color:var(--red); border-left:4px solid var(--red);}
+.status-panel.setup{border-color:var(--gold); border-left:4px solid var(--gold);}
+
+.pin{background:var(--card); border:1px solid var(--gold); border-left:5px solid var(--gold); border-radius:var(--radius-m); padding:10px 14px; margin-bottom:16px;}
+.pin-head{display:flex; align-items:center; justify-content:space-between; cursor:pointer; gap:10px;}
+.pin-head-left{display:flex; align-items:baseline; gap:9px; flex-wrap:wrap;}
+.pin-tag{font-family:var(--font-mono); font-size:10px; letter-spacing:.06em; background:var(--gold); color:#1B1204; padding:2px 6px; border-radius:3px; font-weight:600;}
+.pin-date{font-family:var(--font-serif); font-weight:600; font-size:15px;}
+.pin-sub{font-size:12px; color:var(--muted);}
+.pin-toggle{background:none; border:none; color:var(--muted); font-size:17px; padding:2px 6px;}
+.pin-body{margin-top:10px;}
+.pin-empty{font-size:13px; color:var(--muted); padding:5px 0;}
+.pin-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:8px;}
+.pin-tasklink{margin-top:8px; font-size:12px; color:var(--muted); background:none; border:none; padding:0; text-decoration:underline; cursor:pointer; display:block;}
+
+.chip{border-radius:var(--radius-s); padding:8px 10px; border:1px solid var(--line); position:relative; min-height:44px; cursor:pointer;}
+.chip:active{transform:scale(.98);}
+.chip-top{display:flex; align-items:center; gap:6px;}
+.chip-track-tag{font-family:var(--font-mono); font-size:9px; font-weight:700; padding:1px 5px; border-radius:3px; background:rgba(0,0,0,.08); letter-spacing:.02em;}
+.chip-code{font-family:var(--font-mono); font-size:10.5px; font-weight:600; opacity:.85;}
+.chip-subject{font-size:13px; font-weight:600; margin-top:3px; line-height:1.3;}
+.chip-teacher{font-size:11.5px; color:var(--muted); margin-top:3px;}
+.chip.track-P301{background:var(--p301-soft); border-color:var(--p301);}
+.chip.track-P303{background:var(--p303-soft); border-color:var(--p303);}
+.chip.track-P302{background:var(--p302-soft); border-color:var(--p302);}
+.chip.track-QNhu{background:var(--nhu-soft); border-color:var(--nhu);}
+.chip.track-QKhi{background:var(--khi-soft); border-color:var(--khi);}
+.chip.holiday{background:var(--red-soft); border-color:var(--red);}
+.chip.dim{opacity:.28; filter:grayscale(.4);}
+.chip.match{outline:2px solid var(--gold); outline-offset:1px;}
+
+.bar{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; flex-wrap:wrap;}
+.bar h2{font-size:16.5px;}
+.nav-group{display:flex; align-items:center; gap:6px;}
+.iconbtn{width:30px; height:30px; border-radius:50%; border:1px solid var(--line); background:var(--card); font-size:15px; display:flex; align-items:center; justify-content:center; color:var(--ink);}
+.legend{display:flex; gap:10px; flex-wrap:wrap; font-size:11px; color:var(--muted); margin-bottom:12px;}
+.legend span{display:inline-flex; align-items:center; gap:5px;}
+.dot{width:9px; height:9px; border-radius:2px; display:inline-block;}
+
+.day-card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius-m); margin-bottom:12px; overflow:hidden;}
+.day-card.is-today{border-color:var(--gold); box-shadow:0 0 0 1px var(--gold);}
+.day-head{display:flex; align-items:baseline; gap:10px; padding:9px 12px; background:var(--paper-2); border-bottom:1px solid var(--line);}
+.day-head .wd{font-family:var(--font-serif); font-weight:600; font-size:14.5px;}
+.day-head .dt{font-family:var(--font-mono); font-size:12px; color:var(--muted);}
+.day-head .today-badge{margin-left:auto; font-family:var(--font-mono); font-size:9.5px; background:var(--gold); color:#1B1204; padding:2px 6px; border-radius:3px; font-weight:600;}
+.slot-block{padding:10px 12px; border-top:1px solid var(--line-soft);}
+.slot-block:first-child{border-top:none;}
+.slot-head{font-family:var(--font-mono); font-size:11px; color:var(--muted); margin-bottom:7px; display:flex; align-items:center; justify-content:space-between;}
+.slot-chips{display:flex; flex-wrap:wrap; gap:7px;}
+.slot-chips > .chip{flex:1 1 220px;}
+@media (max-width:560px){ .slot-chips > .chip{flex:1 1 100%;} }
+.slot-empty{font-size:12px; color:var(--muted); padding:4px 2px;}
+
+.month-scroll{overflow-x:auto; -webkit-overflow-scrolling:touch; margin:0 -12px; padding:0 12px;}
+.month-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:5px; min-width:520px;}
+.month-grid .wd-label{font-family:var(--font-mono); font-size:10px; color:var(--muted); text-align:center; padding-bottom:2px;}
+.month-cell{background:var(--card); border:1px solid var(--line); border-radius:var(--radius-s); min-height:60px; padding:5px; cursor:pointer; display:flex; flex-direction:column; gap:4px;}
+.month-cell.out{opacity:.35;}
+.month-cell.is-today{border-color:var(--gold); box-shadow:0 0 0 1px var(--gold);}
+.month-cell.selected{background:var(--gold-soft);}
+.month-cell .num{font-family:var(--font-mono); font-size:12px; font-weight:600;}
+.month-dots{display:flex; flex-wrap:wrap; gap:3px; margin-top:auto;}
+.month-dots .dot{width:7px; height:7px;}
+.month-count{font-size:9.5px; color:var(--muted); font-family:var(--font-mono);}
+.day-detail{margin-top:14px;}
+
+.stat-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin-bottom:20px;}
+.stat-card{background:var(--card); border:1px solid var(--line); border-left:4px solid var(--gold); border-radius:var(--radius-m); padding:13px 15px;}
+.stat-num{font-family:var(--font-serif); font-size:25px; font-weight:600; line-height:1;}
+.stat-label{font-size:11.5px; color:var(--muted); margin-top:6px;}
+.panel{background:var(--card); border:1px solid var(--line); border-radius:var(--radius-m); padding:14px 16px; margin-bottom:14px;}
+.panel h3{font-size:14px; margin-bottom:10px;}
+.bar-row{display:flex; align-items:center; gap:10px; margin-bottom:7px; font-size:12.5px;}
+.bar-row .name{width:105px; flex-shrink:0; font-size:11.5px;}
+.bar-row .track{flex:1; background:var(--paper-2); border-radius:3px; height:15px; position:relative; overflow:hidden;}
+.bar-row .fill{background:var(--gold); height:100%; border-radius:3px;}
+.bar-row .n{width:28px; text-align:right; font-family:var(--font-mono); font-size:11.5px; color:var(--muted); flex-shrink:0;}
+
+/* Nhat ky (personal notes, local only) */
+.log-nav{display:flex; align-items:center; gap:8px; margin-bottom:14px;}
+.log-nav .datelabel{flex:1; font-family:var(--font-serif); font-weight:600; font-size:15px; text-align:center;}
+.log-add-row{display:flex; gap:8px; margin-bottom:14px;}
+.log-add-row input{flex:1; padding:10px 12px; border:1px solid var(--line); border-radius:var(--radius-s); background:var(--card); color:var(--ink); font-size:13.5px;}
+.log-list{display:flex; flex-direction:column; gap:7px; margin-bottom:20px;}
+.log-item{display:flex; align-items:flex-start; gap:9px; background:var(--card); border:1px solid var(--line); border-radius:var(--radius-s); padding:9px 10px;}
+.log-item.done{opacity:.55;}
+.log-item input[type=checkbox]{margin-top:3px; width:17px; height:17px; accent-color:var(--gold); flex-shrink:0;}
+.log-item .txt{flex:1; font-size:13.5px; line-height:1.4; word-break:break-word; padding-top:1px;}
+.log-item.done .txt{text-decoration:line-through; color:var(--muted);}
+.log-item .txt[contenteditable="true"]{outline:none; border-bottom:1px dashed var(--gold);}
+.log-item .del{background:none; border:none; color:var(--muted); font-size:16px; padding:0 3px; flex-shrink:0;}
+.log-empty{font-size:13px; color:var(--muted); padding:10px 2px;}
+.log-note{font-size:11.5px; color:var(--muted); margin-bottom:14px; line-height:1.6;}
+
+/* Read-only detail modal */
+.overlay{position:fixed; inset:0; background:rgba(20,20,20,.5); display:none; align-items:flex-end; justify-content:center; z-index:200; padding:0;}
+.overlay.show{display:flex;}
+@media (min-width:641px){ .overlay{align-items:center; padding:16px;} }
+.modal{background:var(--card); border-radius:var(--radius-m) var(--radius-m) 0 0; width:100%; max-width:420px; max-height:80vh; overflow-y:auto; box-shadow:0 -8px 24px rgba(0,0,0,.2);}
+@media (min-width:641px){ .modal{border-radius:var(--radius-m);} }
+.modal-head{display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid var(--line); background:var(--ink); border-radius:var(--radius-m) var(--radius-m) 0 0;}
+.modal-head h3{color:#fff; font-size:15px;}
+.modal-close{background:none; border:none; color:#fff; font-size:20px; line-height:1; padding:2px 6px;}
+.modal-body{padding:16px 18px;}
+.kv{display:flex; justify-content:space-between; gap:10px; padding:9px 0; border-bottom:1px solid var(--line-soft); font-size:13.5px;}
+.kv:last-child{border-bottom:none;}
+.kv .k{color:var(--muted); flex-shrink:0;}
+.kv .v{text-align:right; font-weight:600;}
+
+#toast{position:fixed; bottom:18px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--ink); color:#fff; padding:10px 18px; border-radius:6px; font-size:13px; opacity:0; transition:opacity .2s, transform .2s; z-index:300; pointer-events:none;}
+#toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
+footer{max-width:1180px; margin:0 auto; padding:0 12px 30px; color:var(--muted); font-size:11px;}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-row">
+    <div class="brand">
+      <div class="brand-eyebrow">KHOA CHUYÊN MÔN KỸ THUẬT</div>
+      <h1>Lịch giảng dạy năm 2026</h1>
+      <p id="rangeLabel">Đang tải dữ liệu…</p>
+    </div>
+  </div>
+  <div class="toolbar">
+    <select id="teacherSelect" class="sel" aria-label="Lọc theo giáo viên"><option value="">Tất cả giáo viên</option></select>
+    <button class="btn btn-ghost" id="refreshBtn">⟳ Làm mới</button>
+    <button class="btn btn-ghost" id="todayBtn">Hôm nay</button>
+    <button class="btn btn-ghost" id="themeBtn">◐</button>
+  </div>
+  <nav class="tabs" role="tablist">
+    <button class="tab" role="tab" data-tab="week" aria-selected="true">Theo tuần</button>
+    <button class="tab" role="tab" data-tab="month" aria-selected="false">Theo tháng</button>
+    <button class="tab" role="tab" data-tab="stats" aria-selected="false">Thống kê</button>
+    <button class="tab" role="tab" data-tab="log" aria-selected="false">Nhật ký</button>
+  </nav>
+</header>
+
+<main>
+  <div id="statusArea"></div>
+
+  <section class="pin" id="pinToday" style="display:none">
+    <div class="pin-head" id="pinHead">
+      <div class="pin-head-left">
+        <span class="pin-tag">GHIM · HÔM NAY</span>
+        <span class="pin-date" id="pinDate">—</span>
+        <span class="pin-sub" id="pinSub"></span>
+      </div>
+      <button class="pin-toggle" id="pinToggle" aria-label="Thu gọn">▾</button>
+    </div>
+    <div class="pin-body" id="pinBody"></div>
+  </section>
+
+  <div id="legend" class="legend"></div>
+
+  <section id="view-week"></section>
+  <section id="view-month" style="display:none"></section>
+  <section id="view-stats" style="display:none"></section>
+  <section id="view-log" style="display:none"></section>
+</main>
+
+<footer>Dữ liệu đọc trực tiếp từ Google Sheet do Trưởng khoa quản lý · Trang này chỉ hiển thị, không chỉnh sửa được dữ liệu lịch giảng dạy.</footer>
+
+<div class="overlay" id="detailOverlay">
+  <div class="modal">
+    <div class="modal-head"><h3>Chi tiết buổi học</h3><button class="modal-close" id="detailClose">&times;</button></div>
+    <div class="modal-body" id="detailBody"></div>
+  </div>
+</div>
+<div id="toast"></div>
+
+<script>
+/* =====================================================================
+   CẤU HÌNH — dán 3 link "Xuất bản lên web" (định dạng CSV) từ Google
+   Sheet của bạn vào đây. Xem hướng dẫn Trưởng khoa đã nhận kèm file này.
+   ===================================================================== */
+const CSV_URL_LESSONS  = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwhv74EwSsv_qHFBiN6FXgkvJbx30fYpR58vUQ-8PGjgL6SeGEw46sNPYaUh52Pg/pub?gid=1043616151&single=true&output=csv";
+const CSV_URL_SUBJECTS = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwhv74EwSsv_qHFBiN6FXgkvJbx30fYpR58vUQ-8PGjgL6SeGEw46sNPYaUh52Pg/pub?gid=281471370&single=true&output=csv";
+const CSV_URL_TEACHERS = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwhv74EwSsv_qHFBiN6FXgkvJbx30fYpR58vUQ-8PGjgL6SeGEw46sNPYaUh52Pg/pub?gid=1700388377&single=true&output=csv";
+/* ===================================================================== */
+</script>
+<script>
+(function(){
+"use strict";
+
+/* ================= CSV parsing ================= */
+function parseCSV(text){
+  const rows = [];
+  let row = [], field = "", inQuotes = false;
+  for(let i=0;i<text.length;i++){
+    const c = text[i], next = text[i+1];
+    if(inQuotes){
+      if(c === '"' && next === '"'){ field += '"'; i++; }
+      else if(c === '"'){ inQuotes = false; }
+      else field += c;
+    } else {
+      if(c === '"') inQuotes = true;
+      else if(c === ','){ row.push(field); field = ""; }
+      else if(c === '\n'){ row.push(field); rows.push(row); row=[]; field=""; }
+      else if(c === '\r'){ /* skip */ }
+      else field += c;
+    }
+  }
+  if(field.length || row.length){ row.push(field); rows.push(row); }
+  return rows.filter(r => r.some(c=>c!==""));
+}
+function csvToObjects(text){
+  const rows = parseCSV(text);
+  if(!rows.length) return [];
+  const headers = rows[0].map(h=>h.trim());
+  return rows.slice(1).map(r=>{
+    const o = {};
+    headers.forEach((h,i)=> o[h] = (r[i]!==undefined ? r[i].trim() : ""));
+    return o;
+  });
+}
+async function fetchCSV(url){
+  const bust = url + (url.includes("?") ? "&" : "?") + "_ts=" + Date.now();
+  const res = await fetch(bust, {cache:"no-store"});
+  if(!res.ok) throw new Error("HTTP " + res.status);
+  return csvToObjects(await res.text());
+}
+
+/* ================= Date parsing ================= */
+function normalizeDate(s){
+  if(!s) return null;
+  s = s.trim();
+  let m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if(m) return m[1]+"-"+m[2].padStart(2,"0")+"-"+m[3].padStart(2,"0");
+  m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if(m) return m[3]+"-"+m[1].padStart(2,"0")+"-"+m[2].padStart(2,"0");
+  return null;
+}
+
+/* ================= Build data model from sheet rows ================= */
+function buildLessons(rows){
+  const out = [];
+  let id = 1;
+  rows.forEach(r=>{
+    const date = normalizeDate(r["Ngày"]);
+    const code = (r["Mã môn"]||"").trim();
+    if(!date || !code) return;
+    const nhom = (r["Nhóm"]||"").trim();
+    const lop = (r["Lớp/Phòng"]||"").trim();
+    let room = "";
+    if(["P301","P303","P302"].includes(lop)) room = lop;
+    else if(nhom === "Quân nhu") room = "QNhu";
+    else if(nhom === "Quân khí") room = "QKhi";
+    else room = lop || "P301";
+    out.push({
+      id: id++,
+      date,
+      period: (r["Tiết"]||"").trim(),
+      room,
+      code,
+      subject: (r["Tên môn học"]||code).trim(),
+      teacherCode: (r["Mã GV"]||"").trim() || null,
+      teacher: (r["Tên giáo viên"]||"").trim() || null,
+      location: (r["Địa điểm / Ghi chú"]||"").trim(),
+      isHoliday: code === "NGHI_LE" || /nghỉ lễ/i.test(r["Tên môn học"]||""),
+    });
+  });
+  return out;
+}
+function buildTeachers(rows){
+  const list = [];
+  rows.forEach(r=>{
+    const code = (r["Mã GV"]||"").trim();
+    const name = (r["Tên giáo viên"]||"").trim();
+    if(code && name) list.push({code, name});
+  });
+  return list;
+}
+
+/* ================= Constants ================= */
+const TRACKS = [
+  {key:"P301", label:"Quân y · L1 (P301)"},
+  {key:"P303", label:"Quân y · L2 (P303)"},
+  {key:"P302", label:"Quân y · L3 (P302)"},
+  {key:"QNhu", label:"Quân nhu"},
+  {key:"QKhi", label:"Quân khí"},
+];
+const SLOTS = [
+  {key:"s1", periods:["1-3","2-3"]},
+  {key:"s2", periods:["4-5"]},
+  {key:"s3", periods:["6-8"]},
+];
+function slotOf(period){ return SLOTS.find(s=>s.periods.includes(period)) || SLOTS[0]; }
+function trackVar(key){ return {P301:"p301", P303:"p303", P302:"p302", QNhu:"nhu", QKhi:"khi"}[key]; }
+function todayISO(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function parseISO(s){ const [y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d); }
+function toISO(d){ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function fmtVN(iso){ if(!iso) return ""; const d=parseISO(iso); return String(d.getDate()).padStart(2,"0")+"/"+String(d.getMonth()+1).padStart(2,"0")+"/"+d.getFullYear(); }
+function addDays(iso,n){ const d=parseISO(iso); d.setDate(d.getDate()+n); return toISO(d); }
+function mondayOf(iso){ const d=parseISO(iso); const wd=(d.getDay()+6)%7; d.setDate(d.getDate()-wd); return toISO(d); }
+function weekdayNameOf(iso){ const d=parseISO(iso); const names=["Chủ Nhật","Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy"]; return names[d.getDay()]; }
+function escapeHtml(s){ return String(s==null?"":s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function periodStart(p){ return parseInt(String(p).split("-")[0],10) || 0; }
+function sortLessons(a,b){ const pa=periodStart(a.period), pb=periodStart(b.period); if(pa!==pb) return pa-pb; return TRACKS.findIndex(t=>t.key===a.room)-TRACKS.findIndex(t=>t.key===b.room); }
+const TODAY = todayISO();
+
+let lessons = [];
+let teachers = [];
+let IDX = {byDate:{}, MIN_DATE:null, MAX_DATE:null};
+function reindex(){
+  const byDate = {}; let MIN_DATE=null, MAX_DATE=null;
+  lessons.forEach(l=>{
+    (byDate[l.date] = byDate[l.date] || []).push(l);
+    if(!MIN_DATE || l.date<MIN_DATE) MIN_DATE=l.date;
+    if(!MAX_DATE || l.date>MAX_DATE) MAX_DATE=l.date;
+  });
+  IDX = {byDate, MIN_DATE, MAX_DATE};
+}
+
+const state = {
+  tab:"week", teacher:"", selectedDay:null,
+  weekAnchor: TODAY, monthAnchor: TODAY.slice(0,7)+"-01",
+  pinOpen: localStorage.getItem("pinOpen") !== "0",
+  logDate: TODAY,
+};
+
+/* ================= Toast ================= */
+let toastTimer=null;
+function toast(msg){
+  const el = document.getElementById("toast");
+  el.textContent = msg; el.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(()=>el.classList.remove("show"), 2200);
+}
+
+/* ================= Theme ================= */
+function applyTheme(t){ if(t) document.documentElement.setAttribute("data-theme", t); else document.documentElement.removeAttribute("data-theme"); }
+applyTheme(localStorage.getItem("theme") || "");
+document.getElementById("themeBtn").addEventListener("click", ()=>{
+  const cur = document.documentElement.getAttribute("data-theme");
+  const next = cur === "dark" ? "light" : (cur === "light" ? "" : "dark");
+  applyTheme(next);
+  try{ localStorage.setItem("theme", next); }catch(e){}
+});
+
+/* ================= Status panel (loading / setup / error) ================= */
+function showStatus(kind, html){
+  const el = document.getElementById("statusArea");
+  el.innerHTML = "<div class='status-panel "+(kind||"")+"'>"+html+"</div>";
+}
+function clearStatus(){ document.getElementById("statusArea").innerHTML = ""; }
+function isConfigured(){
+  return CSV_URL_LESSONS && !CSV_URL_LESSONS.includes("PASTE_LINK") &&
+         CSV_URL_SUBJECTS && !CSV_URL_SUBJECTS.includes("PASTE_LINK") &&
+         CSV_URL_TEACHERS && !CSV_URL_TEACHERS.includes("PASTE_LINK");
+}
+function showSetupInstructions(){
+  showStatus("setup",
+    "<h3>Chưa kết nối dữ liệu</h3>" +
+    "<p>Trang này cần 3 link CSV từ Google Sheet của Trưởng khoa. Mở file HTML này bằng trình soạn thảo văn bản, tìm phần <code>CẤU HÌNH</code> ở đầu &lt;script&gt; và dán 3 link đã lấy từ Google Sheet (File → Chia sẻ → Xuất bản lên web → chọn từng sheet → định dạng CSV) vào 3 biến:</p>" +
+    "<ol><li><code>CSV_URL_LESSONS</code> — sheet \"Lich giang day\"</li>" +
+    "<li><code>CSV_URL_SUBJECTS</code> — sheet \"DanhMucMonHoc\"</li>" +
+    "<li><code>CSV_URL_TEACHERS</code> — sheet \"DanhMucGiaoVien\"</li></ol>"
+  );
+}
+function showLoading(){
+  showStatus("", "<div class='spinner'></div><p>Đang tải dữ liệu từ Google Sheet…</p>");
+}
+function showError(msg){
+  showStatus("error",
+    "<h3>Không tải được dữ liệu</h3><p>"+escapeHtml(msg)+"</p>" +
+    "<p>Kiểm tra: link CSV đã được \"Xuất bản lên web\" đúng sheet chưa, và mạng có đang chặn docs.google.com không.</p>" +
+    "<button class='btn btn-outline btn-sm' id='retryBtn'>Thử lại</button>"
+  );
+  const b = document.getElementById("retryBtn");
+  if(b) b.addEventListener("click", loadAllData);
+}
+
+/* ================= Load data ================= */
+async function loadAllData(){
+  if(!isConfigured()){ showSetupInstructions(); return; }
+  showLoading();
+  document.getElementById("pinToday").style.display = "none";
+  try{
+    const [lessonRows, subjRows, teachRows] = await Promise.all([
+      fetchCSV(CSV_URL_LESSONS), fetchCSV(CSV_URL_SUBJECTS), fetchCSV(CSV_URL_TEACHERS)
+    ]);
+    lessons = buildLessons(lessonRows);
+    teachers = buildTeachers(teachRows);
+    reindex();
+    clearStatus();
+    document.getElementById("pinToday").style.display = "";
+    const anchor = (IDX.MIN_DATE && IDX.MIN_DATE<=TODAY && TODAY<=IDX.MAX_DATE) ? TODAY : (IDX.MIN_DATE||TODAY);
+    state.weekAnchor = mondayOf(anchor);
+    state.monthAnchor = anchor.slice(0,7)+"-01";
+    refreshTeacherSelect();
+    renderAll();
+    toast("Đã tải "+lessons.length+" buổi học.");
+  }catch(err){
+    showError(err.message || String(err));
+  }
+}
+document.getElementById("refreshBtn").addEventListener("click", loadAllData);
+
+/* ================= Teacher select ================= */
+function refreshTeacherSelect(){
+  const sel = document.getElementById("teacherSelect");
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">Tất cả giáo viên</option>';
+  teachers.slice().sort((a,b)=>a.name.localeCompare(b.name,'vi')).forEach(t=>{
+    const opt=document.createElement("option"); opt.value=t.code; opt.textContent=t.name; sel.appendChild(opt);
+  });
+  sel.value = cur;
+}
+document.getElementById("teacherSelect").addEventListener("change", (e)=>{ state.teacher = e.target.value; renderAll(); });
+
+/* ================= Chip + detail modal ================= */
+const detailOverlay = document.getElementById("detailOverlay");
+document.getElementById("detailClose").addEventListener("click", ()=>detailOverlay.classList.remove("show"));
+detailOverlay.addEventListener("click", (e)=>{ if(e.target===detailOverlay) detailOverlay.classList.remove("show"); });
+
+function openDetail(lesson){
+  const body = document.getElementById("detailBody");
+  const trackInfo = TRACKS.find(t=>t.key===lesson.room);
+  body.innerHTML = [
+    ["Môn học", lesson.subject],
+    ["Mã môn", lesson.code],
+    ["Nhóm/Lớp", lesson.isHoliday ? "—" : (trackInfo?trackInfo.label:lesson.room)],
+    ["Ngày", weekdayNameOf(lesson.date)+", "+fmtVN(lesson.date)],
+    ["Tiết", lesson.period||"—"],
+    ["Giáo viên", lesson.teacher || "Chưa rõ"],
+    ["Địa điểm / Ghi chú", lesson.location || "—"],
+  ].map(([k,v])=>"<div class='kv'><span class='k'>"+k+"</span><span class='v'>"+escapeHtml(v)+"</span></div>").join("");
+  detailOverlay.classList.add("show");
+}
+function chipEl(lesson){
+  const el = document.createElement("div");
+  const trackClass = lesson.isHoliday ? "holiday" : "track-"+lesson.room;
+  el.className = "chip " + trackClass;
+  const trackInfo = TRACKS.find(t=>t.key===lesson.room);
+  const tagText = lesson.isHoliday ? "NGHỈ" : (trackInfo ? trackInfo.label.replace("Quân y · ","").replace("Quân ","Q.") : lesson.room);
+  el.innerHTML =
+    "<div class='chip-top'><span class='chip-track-tag'>"+escapeHtml(tagText)+"</span></div>" +
+    "<div class='chip-code'>"+escapeHtml(lesson.code)+" · Tiết "+escapeHtml(lesson.period||"")+"</div>" +
+    "<div class='chip-subject'>"+escapeHtml(lesson.subject)+"</div>" +
+    "<div class='chip-teacher'>"+escapeHtml(lesson.teacher || (lesson.isHoliday? "" : "GV: chưa rõ"))+"</div>";
+  if(state.teacher){
+    if(lesson.teacherCode && lesson.teacherCode.toLowerCase() === state.teacher.toLowerCase()) el.classList.add("match");
+    else el.classList.add("dim");
+  }
+  el.addEventListener("click", ()=>openDetail(lesson));
+  return el;
+}
+
+/* ================= Legend ================= */
+function renderLegend(){
+  document.getElementById("legend").innerHTML = TRACKS.map(t=>"<span><span class='dot' style='background:var(--"+trackVar(t.key)+")'></span>"+t.label+"</span>").join("")
+    + "<span><span class='dot' style='background:var(--gold)'></span>Hôm nay</span>";
+}
+
+/* ================= Pinned today ================= */
+function nextLessonFrom(iso){
+  const dates = Object.keys(IDX.byDate).filter(d=>d>iso).sort();
+  for(const d of dates){ if(IDX.byDate[d].length) return IDX.byDate[d].slice().sort(sortLessons)[0]; }
+  return null;
+}
+function pendingCountFor(dateIso){ return (workLog[dateIso]||[]).filter(t=>!t.done).length; }
+function renderPin(){
+  const inRange = IDX.MIN_DATE && TODAY >= IDX.MIN_DATE && TODAY <= IDX.MAX_DATE;
+  document.getElementById("pinDate").textContent = weekdayNameOf(TODAY) + ", " + fmtVN(TODAY);
+  const todays = (IDX.byDate[TODAY] || []).slice().sort(sortLessons);
+  document.getElementById("pinSub").textContent = inRange ? (todays.length?(todays.length+" buổi học"):"Không có lịch học hôm nay") : "Ngoài phạm vi dữ liệu";
+  const body = document.getElementById("pinBody");
+  body.innerHTML = "";
+  if(todays.length){
+    const wrap = document.createElement("div"); wrap.className="pin-grid";
+    todays.forEach(l=>wrap.appendChild(chipEl(l)));
+    body.appendChild(wrap);
+  } else {
+    const p = document.createElement("div"); p.className="pin-empty";
+    const next = nextLessonFrom(TODAY);
+    p.textContent = next ? ("Buổi học gần nhất: "+fmtVN(next.date)+" ("+weekdayNameOf(next.date)+") — "+next.subject) : "Không còn buổi học nào trong dữ liệu.";
+    body.appendChild(p);
+  }
+  const pending = pendingCountFor(TODAY);
+  const linkBtn = document.createElement("button");
+  linkBtn.className = "pin-tasklink";
+  linkBtn.textContent = pending ? ("📝 "+pending+" việc cần triển khai hôm nay →") : "📝 Ghi công việc triển khai hôm nay →";
+  linkBtn.addEventListener("click", (e)=>{ e.stopPropagation(); document.querySelector('.tab[data-tab="log"]').click(); state.logDate=TODAY; renderLog(); });
+  body.appendChild(linkBtn);
+  body.style.display = state.pinOpen ? "" : "none";
+  document.getElementById("pinToggle").textContent = state.pinOpen ? "▾" : "▸";
+}
+document.getElementById("pinHead").addEventListener("click", ()=>{
+  state.pinOpen = !state.pinOpen;
+  try{ localStorage.setItem("pinOpen", state.pinOpen?"1":"0"); }catch(e){}
+  renderPin();
+});
+
+/* ================= Tabs ================= */
+document.querySelectorAll(".tab").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    state.tab = btn.dataset.tab;
+    document.querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-selected", b===btn?"true":"false"));
+    document.getElementById("view-week").style.display = state.tab==="week" ? "" : "none";
+    document.getElementById("view-month").style.display = state.tab==="month" ? "" : "none";
+    document.getElementById("view-stats").style.display = state.tab==="stats" ? "" : "none";
+    document.getElementById("view-log").style.display = state.tab==="log" ? "" : "none";
+    renderAll();
+  });
+});
+document.getElementById("todayBtn").addEventListener("click", ()=>{
+  const anchor = (IDX.MIN_DATE && IDX.MIN_DATE<=TODAY && TODAY<=IDX.MAX_DATE) ? TODAY : (IDX.MIN_DATE||TODAY);
+  state.weekAnchor = mondayOf(anchor); state.monthAnchor = anchor.slice(0,7)+"-01"; state.selectedDay = anchor; state.logDate = TODAY;
+  renderAll();
+  document.getElementById("pinToday").scrollIntoView({behavior:"smooth", block:"start"});
+});
+
+/* ================= Week view ================= */
+function renderWeek(){
+  const root = document.getElementById("view-week");
+  root.innerHTML = "";
+  if(!IDX.MIN_DATE) return;
+  const bar = document.createElement("div"); bar.className="bar";
+  const weekEnd = addDays(state.weekAnchor,4);
+  bar.innerHTML = "<h2>Tuần "+fmtVN(state.weekAnchor)+" – "+fmtVN(weekEnd)+"</h2>";
+  const navGroup = document.createElement("div"); navGroup.className="nav-group";
+  const prev = document.createElement("button"); prev.className="iconbtn"; prev.textContent="‹";
+  const next = document.createElement("button"); next.className="iconbtn"; next.textContent="›";
+  prev.addEventListener("click", ()=>{ state.weekAnchor=addDays(state.weekAnchor,-7); renderAll(); });
+  next.addEventListener("click", ()=>{ state.weekAnchor=addDays(state.weekAnchor,7); renderAll(); });
+  navGroup.appendChild(prev); navGroup.appendChild(next); bar.appendChild(navGroup);
+  root.appendChild(bar);
+
+  for(let i=0;i<5;i++){
+    const iso = addDays(state.weekAnchor, i);
+    const dayLessons = IDX.byDate[iso]||[];
+    const card = document.createElement("div");
+    card.className = "day-card" + (iso===TODAY?" is-today":"");
+    const head = document.createElement("div"); head.className="day-head";
+    head.innerHTML = "<span class='wd'>"+weekdayNameOf(iso)+"</span><span class='dt'>"+fmtVN(iso)+"</span>"+(iso===TODAY?"<span class='today-badge'>HÔM NAY</span>":"");
+    card.appendChild(head);
+    SLOTS.forEach(slot=>{
+      const slotLessons = dayLessons.filter(l=>l.period && slotOf(l.period).key===slot.key).sort((a,b)=>TRACKS.findIndex(t=>t.key===a.room)-TRACKS.findIndex(t=>t.key===b.room));
+      if(!slotLessons.length) return;
+      const periodLabel = slotLessons[0].period;
+      const block = document.createElement("div"); block.className="slot-block";
+      const headline = (slot.key==="s3"?"Chiều":"Sáng")+" · tiết "+periodLabel;
+      block.innerHTML = "<div class='slot-head'><span>"+escapeHtml(headline)+"</span><span>"+slotLessons.length+" buổi</span></div>";
+      const chips = document.createElement("div"); chips.className="slot-chips";
+      slotLessons.forEach(l=>chips.appendChild(chipEl(l)));
+      block.appendChild(chips);
+      card.appendChild(block);
+    });
+    if(!dayLessons.length){
+      const empty = document.createElement("div"); empty.className="slot-empty"; empty.style.padding="12px"; empty.textContent="Không có lịch học.";
+      card.appendChild(empty);
+    }
+    root.appendChild(card);
+  }
+}
+
+/* ================= Month view ================= */
+function renderMonth(){
+  const root = document.getElementById("view-month");
+  root.innerHTML = "";
+  if(!IDX.MIN_DATE) return;
+  const [y,m] = state.monthAnchor.split("-").map(Number);
+  const monthDate = new Date(y, m-1, 1);
+  const bar = document.createElement("div"); bar.className="bar";
+  bar.innerHTML = "<h2>Tháng "+m+"/"+y+"</h2>";
+  const navGroup = document.createElement("div"); navGroup.className="nav-group";
+  const prev = document.createElement("button"); prev.className="iconbtn"; prev.textContent="‹";
+  const next = document.createElement("button"); next.className="iconbtn"; next.textContent="›";
+  prev.addEventListener("click", ()=>{ const d=new Date(y,m-2,1); state.monthAnchor=toISO(d).slice(0,7)+"-01"; renderAll(); });
+  next.addEventListener("click", ()=>{ const d=new Date(y,m,1); state.monthAnchor=toISO(d).slice(0,7)+"-01"; renderAll(); });
+  navGroup.appendChild(prev); navGroup.appendChild(next); bar.appendChild(navGroup);
+  root.appendChild(bar);
+
+  const scrollWrap = document.createElement("div"); scrollWrap.className="month-scroll";
+  const grid = document.createElement("div"); grid.className="month-grid";
+  ["T2","T3","T4","T5","T6","T7","CN"].forEach(l=>{ const el=document.createElement("div"); el.className="wd-label"; el.textContent=l; grid.appendChild(el); });
+  const firstDow = (monthDate.getDay()+6)%7;
+  const startIso = toISO(new Date(y, m-1, 1-firstDow));
+  for(let i=0;i<42;i++){
+    const iso = addDays(startIso, i);
+    const inMonth = iso.slice(0,7) === state.monthAnchor.slice(0,7);
+    const cell = document.createElement("div");
+    cell.className = "month-cell"+(inMonth?"":" out")+(iso===TODAY?" is-today":"")+(iso===state.selectedDay?" selected":"");
+    const dayLessons = IDX.byDate[iso]||[];
+    const num = document.createElement("div"); num.className="num"; num.textContent=String(parseISO(iso).getDate());
+    cell.appendChild(num);
+    if(dayLessons.length){
+      const dots = document.createElement("div"); dots.className="month-dots"; const seen={};
+      dayLessons.forEach(l=>{ const k=l.isHoliday?"holiday":l.room; if(seen[k])return; seen[k]=1;
+        const d=document.createElement("span"); d.className="dot"; d.style.background=l.isHoliday?"var(--red)":"var(--"+trackVar(l.room)+")"; dots.appendChild(d); });
+      cell.appendChild(dots);
+      const cnt = document.createElement("div"); cnt.className="month-count"; cnt.textContent=dayLessons.length+" buổi";
+      cell.appendChild(cnt);
+    }
+    cell.addEventListener("click", ()=>{ state.selectedDay=iso; renderMonth(); renderDayDetail(); });
+    grid.appendChild(cell);
+  }
+  scrollWrap.appendChild(grid); root.appendChild(scrollWrap);
+  const detail = document.createElement("div"); detail.className="day-detail"; detail.id="monthDayDetail";
+  root.appendChild(detail);
+  renderDayDetail();
+}
+function renderDayDetail(){
+  const el = document.getElementById("monthDayDetail");
+  if(!el) return;
+  const iso = state.selectedDay || ((IDX.MIN_DATE && IDX.MIN_DATE<=TODAY && TODAY<=IDX.MAX_DATE)?TODAY:(IDX.MIN_DATE||TODAY));
+  const lessonsHere = (IDX.byDate[iso]||[]).slice().sort(sortLessons);
+  const panel = document.createElement("div"); panel.className="panel";
+  panel.innerHTML = "<h3>"+weekdayNameOf(iso)+", "+fmtVN(iso)+"</h3>";
+  const wrap = document.createElement("div"); wrap.className="pin-grid";
+  if(lessonsHere.length) lessonsHere.forEach(l=>wrap.appendChild(chipEl(l)));
+  else { const e=document.createElement("div"); e.className="pin-empty"; e.textContent="Không có lịch học ngày này."; wrap.appendChild(e); }
+  panel.appendChild(wrap);
+  el.innerHTML=""; el.appendChild(panel);
+}
+
+/* ================= Stats view ================= */
+function renderStats(){
+  const root = document.getElementById("view-stats");
+  root.innerHTML = "";
+  if(!IDX.MIN_DATE) return;
+  const total = lessons.length;
+  const weekEnd = addDays(state.weekAnchor,4);
+  const thisWeek = lessons.filter(l=>l.date>=state.weekAnchor && l.date<=weekEnd).length;
+  const monthPrefix = state.monthAnchor.slice(0,7);
+  const thisMonth = lessons.filter(l=>l.date && l.date.startsWith(monthPrefix)).length;
+  const wdCount = {}; lessons.forEach(l=>{ const wd=weekdayNameOf(l.date); wdCount[wd]=(wdCount[wd]||0)+1; });
+  const busiest = Object.entries(wdCount).sort((a,b)=>b[1]-a[1])[0];
+  const next = nextLessonFrom(TODAY) || (IDX.byDate[TODAY]&&IDX.byDate[TODAY][0]);
+
+  const statGrid = document.createElement("div"); statGrid.className="stat-grid";
+  [[total,"Tổng buổi học"],[thisWeek,"Buổi học tuần đang xem"],[thisMonth,"Buổi học tháng đang xem"],[busiest?busiest[0]:"—","Ngày bận nhất"]].forEach(([n,l])=>{
+    const c=document.createElement("div"); c.className="stat-card";
+    c.innerHTML = "<div class='stat-num'>"+n+"</div><div class='stat-label'>"+l+"</div>";
+    statGrid.appendChild(c);
+  });
+  root.appendChild(statGrid);
+
+  const teacherCount = {};
+  lessons.forEach(l=>{ const key=l.teacher||"Chưa xác định"; teacherCount[key]=(teacherCount[key]||0)+1; });
+  const teacherEntries = Object.entries(teacherCount).sort((a,b)=>b[1]-a[1]);
+  const maxT = teacherEntries[0]?teacherEntries[0][1]:1;
+  const teacherPanel = document.createElement("div"); teacherPanel.className="panel";
+  teacherPanel.innerHTML = "<h3>Số buổi dạy theo giáo viên</h3>";
+  teacherEntries.forEach(([name,n])=>{
+    const row=document.createElement("div"); row.className="bar-row";
+    row.innerHTML = "<div class='name'>"+escapeHtml(name)+"</div><div class='track'><div class='fill' style='width:"+(n/maxT*100)+"%'></div></div><div class='n'>"+n+"</div>";
+    teacherPanel.appendChild(row);
+  });
+  root.appendChild(teacherPanel);
+
+  const trackCount = {}; lessons.forEach(l=>{ trackCount[l.room]=(trackCount[l.room]||0)+1; });
+  const maxTr = Math.max(1,...Object.values(trackCount));
+  const trackPanel = document.createElement("div"); trackPanel.className="panel";
+  trackPanel.innerHTML = "<h3>Số buổi học theo nhóm</h3>";
+  TRACKS.forEach(t=>{
+    const n=trackCount[t.key]||0;
+    const row=document.createElement("div"); row.className="bar-row";
+    row.innerHTML = "<div class='name'>"+t.label+"</div><div class='track'><div class='fill' style='width:"+(n/maxTr*100)+"%; background:var(--"+trackVar(t.key)+")'></div></div><div class='n'>"+n+"</div>";
+    trackPanel.appendChild(row);
+  });
+  root.appendChild(trackPanel);
+
+  const nextPanel = document.createElement("div"); nextPanel.className="panel";
+  nextPanel.innerHTML = "<h3>Buổi học sắp tới gần nhất</h3>";
+  if(next){ const wrap=document.createElement("div"); wrap.className="pin-grid"; wrap.appendChild(chipEl(next)); nextPanel.appendChild(wrap); }
+  else nextPanel.innerHTML += "<div class='pin-empty'>Không có buổi học nào sắp tới.</div>";
+  root.appendChild(nextPanel);
+}
+
+/* ================= Nhat ky (personal notes — local to this browser only) ================= */
+const LS_LOG = "khoaSchedule.worklog.v1";
+let workLog = {};
+try{ workLog = JSON.parse(localStorage.getItem(LS_LOG) || "{}"); }catch(e){ workLog = {}; }
+let nextLogId = 1;
+Object.values(workLog).forEach(arr=>arr.forEach(t=>{ if(t.id>=nextLogId) nextLogId=t.id+1; }));
+function persistLog(){ try{ localStorage.setItem(LS_LOG, JSON.stringify(workLog)); }catch(e){} }
+
+function renderLog(){
+  const root = document.getElementById("view-log");
+  root.innerHTML = "";
+  const bar = document.createElement("div"); bar.className="bar";
+  bar.innerHTML = "<h2>Nhật ký công việc triển khai</h2>";
+  root.appendChild(bar);
+  const note = document.createElement("p"); note.className="log-note";
+  note.textContent = "Ghi chú này chỉ lưu trên trình duyệt của bạn (riêng tư), không đồng bộ với Google Sheet hay hiển thị cho người khác.";
+  root.appendChild(note);
+
+  const nav = document.createElement("div"); nav.className="log-nav";
+  const prev = document.createElement("button"); prev.className="iconbtn"; prev.textContent="‹";
+  const next = document.createElement("button"); next.className="iconbtn"; next.textContent="›";
+  prev.addEventListener("click", ()=>{ state.logDate=addDays(state.logDate,-1); renderLog(); });
+  next.addEventListener("click", ()=>{ state.logDate=addDays(state.logDate,1); renderLog(); });
+  const label = document.createElement("div"); label.className="datelabel";
+  label.textContent = weekdayNameOf(state.logDate)+", "+fmtVN(state.logDate)+(state.logDate===TODAY?"  ·  Hôm nay":"");
+  nav.appendChild(prev); nav.appendChild(label); nav.appendChild(next);
+  root.appendChild(nav);
+
+  if(state.logDate !== TODAY){
+    const jump = document.createElement("button"); jump.className="btn btn-outline btn-sm"; jump.style.marginBottom="12px"; jump.textContent="Về hôm nay";
+    jump.addEventListener("click", ()=>{ state.logDate=TODAY; renderLog(); });
+    root.appendChild(jump);
+  }
+
+  const addRow = document.createElement("div"); addRow.className="log-add-row";
+  const input = document.createElement("input"); input.type="text"; input.placeholder="Nhập công việc cần triển khai ngày này…";
+  const addB = document.createElement("button"); addB.className="btn btn-gold"; addB.textContent="Thêm";
+  function commitAdd(){
+    const text = input.value.trim(); if(!text) return;
+    if(!workLog[state.logDate]) workLog[state.logDate] = [];
+    workLog[state.logDate].push({id:nextLogId++, text, done:false});
+    persistLog(); input.value=""; renderLog(); renderPin();
+  }
+  addB.addEventListener("click", commitAdd);
+  input.addEventListener("keydown", (e)=>{ if(e.key==="Enter") commitAdd(); });
+  addRow.appendChild(input); addRow.appendChild(addB);
+  root.appendChild(addRow);
+
+  const list = document.createElement("div"); list.className="log-list";
+  const entries = (workLog[state.logDate]||[]).slice().sort((a,b)=>(a.done-b.done)||(a.id-b.id));
+  if(!entries.length){
+    const e=document.createElement("div"); e.className="log-empty"; e.textContent="Chưa có công việc nào được ghi cho ngày này."; list.appendChild(e);
+  } else {
+    entries.forEach(t=>{
+      const item=document.createElement("div"); item.className="log-item"+(t.done?" done":"");
+      const cb=document.createElement("input"); cb.type="checkbox"; cb.checked=t.done;
+      cb.addEventListener("change", ()=>{ t.done=cb.checked; persistLog(); renderLog(); renderPin(); });
+      const txt=document.createElement("div"); txt.className="txt"; txt.textContent=t.text; txt.contentEditable="true";
+      txt.addEventListener("blur", ()=>{ const v=txt.textContent.trim(); if(v && v!==t.text){ t.text=v; persistLog(); } else txt.textContent=t.text; });
+      txt.addEventListener("keydown", (e)=>{ if(e.key==="Enter"){ e.preventDefault(); txt.blur(); } });
+      const del=document.createElement("button"); del.className="del"; del.innerHTML="&times;";
+      del.addEventListener("click", ()=>{ workLog[state.logDate]=(workLog[state.logDate]||[]).filter(x=>x.id!==t.id); persistLog(); renderLog(); renderPin(); });
+      item.appendChild(cb); item.appendChild(txt); item.appendChild(del);
+      list.appendChild(item);
+    });
+  }
+  root.appendChild(list);
+
+  const pendingDays = Object.keys(workLog).map(d=>({date:d, n:pendingCountFor(d)})).filter(x=>x.n>0 && x.date!==state.logDate).sort((a,b)=>a.date.localeCompare(b.date));
+  if(pendingDays.length){
+    const panel=document.createElement("div"); panel.className="panel";
+    panel.innerHTML = "<h3>Các ngày khác còn việc chưa xong</h3>";
+    pendingDays.forEach(x=>{
+      const row=document.createElement("div"); row.className="bar-row"; row.style.cursor="pointer";
+      row.innerHTML = "<div class='name' style='width:auto;flex:1'>"+weekdayNameOf(x.date)+", "+fmtVN(x.date)+"</div><div class='n' style='color:var(--gold);font-weight:700'>"+x.n+"</div>";
+      row.addEventListener("click", ()=>{ state.logDate=x.date; renderLog(); });
+      panel.appendChild(row);
+    });
+    root.appendChild(panel);
+  }
+}
+
+/* ================= Orchestrator ================= */
+function renderAll(){
+  document.getElementById("rangeLabel").textContent = IDX.MIN_DATE
+    ? ("Từ "+fmtVN(IDX.MIN_DATE)+" đến "+fmtVN(IDX.MAX_DATE)+" · "+lessons.length+" buổi học")
+    : "Chưa có dữ liệu";
+  renderLegend();
+  renderPin();
+  if(state.tab==="week") renderWeek();
+  if(state.tab==="month") renderMonth();
+  if(state.tab==="stats") renderStats();
+  if(state.tab==="log") renderLog();
+}
+
+loadAllData();
+
+})();
+</script>
+</body>
+</html>
