@@ -290,58 +290,91 @@ async function fetchCSV(url){
   const bust = url + (url.includes("?") ? "&" : "?") + "_ts=" + Date.now();
   const res = await fetch(bust, {cache:"no-store"});
   if(!res.ok) throw new Error("HTTP " + res.status);
-  return csvToObjects(await res.text());
+  let text = await res.text();
+  if(text.charCodeAt(0) === 0xFEFF) text = text.slice(1); // strip BOM
+  return csvToObjects(text);
 }
 
 /* ================= Date parsing ================= */
 function normalizeDate(s){
   if(!s) return null;
-  s = s.trim();
-  let m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  s = s.trim().replace(/^"|"$/g,"");
+  // ISO: 2026-06-19 or 2026/06/19
+  let m = s.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);
   if(m) return m[1]+"-"+m[2].padStart(2,"0")+"-"+m[3].padStart(2,"0");
-  m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
-  if(m) return m[3]+"-"+m[1].padStart(2,"0")+"-"+m[2].padStart(2,"0");
+  // D/M/Y or M/D/Y — ambiguous, resolve using validity (day<=31, month<=12)
+  m = s.match(/^(\d{1,2})[\/\.-](\d{1,2})[\/\.-](\d{4})/);
+  if(m){
+    let a = parseInt(m[1],10), b = parseInt(m[2],10);
+    const y = m[3];
+    let day, month;
+    if(a>12 && b<=12){ day=a; month=b; }               // must be D/M/Y
+    else if(b>12 && a<=12){ day=b; month=a; }           // must be M/D/Y
+    else { day=a; month=b; }                            // ambiguous -> assume D/M/Y (VN convention)
+    if(month>=1 && month<=12 && day>=1 && day<=31){
+      return y+"-"+String(month).padStart(2,"0")+"-"+String(day).padStart(2,"0");
+    }
+  }
   return null;
 }
 
 /* ================= Build data model from sheet rows ================= */
-function buildLessons(rows){
+function buildLessons(rows, subjMap, teachMap){
   const out = [];
   let id = 1;
+  let skippedNoDate = 0, skippedNoCode = 0;
   rows.forEach(r=>{
-    const date = normalizeDate(r["Ngày"]);
-    const code = (r["Mã môn"]||"").trim();
-    if(!date || !code) return;
-    const nhom = (r["Nhóm"]||"").trim();
-    const lop = (r["Lớp/Phòng"]||"").trim();
+    const rawDate = r["Ngày"] || r["Ngay"] || "";
+    const date = normalizeDate(rawDate);
+    const code = (r["Mã môn"]||r["Ma mon"]||"").trim();
+    if(!date){ if(rawDate) skippedNoDate++; return; }
+    if(!code){ skippedNoCode++; return; }
+    const nhom = (r["Nhóm"]||r["Nhom"]||"").trim();
+    const lop = (r["Lớp/Phòng"]||r["Lop/Phong"]||"").trim();
     let room = "";
     if(["P301","P303","P302"].includes(lop)) room = lop;
-    else if(nhom === "Quân nhu") room = "QNhu";
-    else if(nhom === "Quân khí") room = "QKhi";
+    else if(/quân nhu|quan nhu/i.test(nhom)) room = "QNhu";
+    else if(/quân khí|quan khi/i.test(nhom)) room = "QKhi";
     else room = lop || "P301";
+
+    const teacherCodeRaw = (r["Mã GV"]||r["Ma GV"]||"").trim();
+    const subjFromMap = subjMap[code.toLowerCase()];
+    const teachFromMap = teacherCodeRaw ? teachMap[teacherCodeRaw.toLowerCase()] : null;
+    const sheetSubjectName = (r["Tên môn học"]||r["Ten mon hoc"]||"").trim();
+    const sheetTeacherName = (r["Tên giáo viên"]||r["Ten giao vien"]||"").trim();
+    const looksLikeError = (t)=> /^#|chưa có trong danh mục/i.test(t||"");
+
     out.push({
       id: id++,
       date,
-      period: (r["Tiết"]||"").trim(),
+      period: (r["Tiết"]||r["Tiet"]||"").trim(),
       room,
       code,
-      subject: (r["Tên môn học"]||code).trim(),
-      teacherCode: (r["Mã GV"]||"").trim() || null,
-      teacher: (r["Tên giáo viên"]||"").trim() || null,
-      location: (r["Địa điểm / Ghi chú"]||"").trim(),
-      isHoliday: code === "NGHI_LE" || /nghỉ lễ/i.test(r["Tên môn học"]||""),
+      subject: (subjFromMap && subjFromMap.name) || (!looksLikeError(sheetSubjectName) && sheetSubjectName) || code,
+      teacherCode: teacherCodeRaw || null,
+      teacher: (teachFromMap && teachFromMap.name) || (!looksLikeError(sheetTeacherName) && sheetTeacherName) || null,
+      location: (r["Địa điểm / Ghi chú"]||r["Dia diem / Ghi chu"]||"").trim(),
+      isHoliday: code === "NGHI_LE" || /nghỉ lễ/i.test(sheetSubjectName),
     });
   });
-  return out;
+  return {lessons: out, skippedNoDate, skippedNoCode};
+}
+function buildCatalogMap(rows, codeKeys, nameKeys, extra){
+  const map = {};
+  rows.forEach(r=>{
+    let code = "", name = "";
+    for(const k of codeKeys){ if(r[k]){ code=r[k].trim(); break; } }
+    for(const k of nameKeys){ if(r[k]){ name=r[k].trim(); break; } }
+    if(code) map[code.toLowerCase()] = {code, name};
+  });
+  return map;
+}
+function buildSubjects(rows){
+  return buildCatalogMap(rows, ["Mã môn","Ma mon"], ["Tên bài / môn học","Tên môn học","Ten bai / mon hoc"]);
 }
 function buildTeachers(rows){
-  const list = [];
-  rows.forEach(r=>{
-    const code = (r["Mã GV"]||"").trim();
-    const name = (r["Tên giáo viên"]||"").trim();
-    if(code && name) list.push({code, name});
-  });
-  return list;
+  const map = buildCatalogMap(rows, ["Mã GV","Ma GV"], ["Tên giáo viên","Ten giao vien"]);
+  return Object.values(map);
 }
 
 /* ================= Constants ================= */
@@ -451,8 +484,11 @@ async function loadAllData(){
     const [lessonRows, subjRows, teachRows] = await Promise.all([
       fetchCSV(CSV_URL_LESSONS), fetchCSV(CSV_URL_SUBJECTS), fetchCSV(CSV_URL_TEACHERS)
     ]);
-    lessons = buildLessons(lessonRows);
+    const subjMap = buildSubjects(subjRows);
     teachers = buildTeachers(teachRows);
+    const teachMap = {}; teachers.forEach(t=>teachMap[t.code.toLowerCase()]=t);
+    const built = buildLessons(lessonRows, subjMap, teachMap);
+    lessons = built.lessons;
     reindex();
     clearStatus();
     document.getElementById("pinToday").style.display = "";
@@ -461,7 +497,11 @@ async function loadAllData(){
     state.monthAnchor = anchor.slice(0,7)+"-01";
     refreshTeacherSelect();
     renderAll();
-    toast("Đã tải "+lessons.length+" buổi học.");
+    let msg = "Đã tải "+lessons.length+" buổi học.";
+    if(built.skippedNoDate || built.skippedNoCode){
+      msg += " (Bỏ qua "+(built.skippedNoDate+built.skippedNoCode)+" dòng thiếu ngày/mã môn.)";
+    }
+    toast(msg);
   }catch(err){
     showError(err.message || String(err));
   }
