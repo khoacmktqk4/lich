@@ -147,21 +147,28 @@ main{max-width:1180px; margin:0 auto; padding:12px 12px 60px;}
 .bar-row .fill{background:var(--gold); height:100%; border-radius:3px;}
 .bar-row .n{width:28px; text-align:right; font-family:var(--font-mono); font-size:11.5px; color:var(--muted); flex-shrink:0;}
 
-/* Nhat ky (personal notes, local only) */
+/* Cong viec theo ngay (do Truong khoa ghi, doc tu Google Sheet) */
 .log-nav{display:flex; align-items:center; gap:8px; margin-bottom:14px;}
 .log-nav .datelabel{flex:1; font-family:var(--font-serif); font-weight:600; font-size:15px; text-align:center;}
-.log-add-row{display:flex; gap:8px; margin-bottom:14px;}
-.log-add-row input{flex:1; padding:10px 12px; border:1px solid var(--line); border-radius:var(--radius-s); background:var(--card); color:var(--ink); font-size:13.5px;}
-.log-list{display:flex; flex-direction:column; gap:7px; margin-bottom:20px;}
-.log-item{display:flex; align-items:flex-start; gap:9px; background:var(--card); border:1px solid var(--line); border-radius:var(--radius-s); padding:9px 10px;}
-.log-item.done{opacity:.55;}
-.log-item input[type=checkbox]{margin-top:3px; width:17px; height:17px; accent-color:var(--gold); flex-shrink:0;}
-.log-item .txt{flex:1; font-size:13.5px; line-height:1.4; word-break:break-word; padding-top:1px;}
-.log-item.done .txt{text-decoration:line-through; color:var(--muted);}
-.log-item .txt[contenteditable="true"]{outline:none; border-bottom:1px dashed var(--gold);}
-.log-item .del{background:none; border:none; color:var(--muted); font-size:16px; padding:0 3px; flex-shrink:0;}
-.log-empty{font-size:13px; color:var(--muted); padding:10px 2px;}
+.task-list{display:flex; flex-direction:column; gap:8px; margin-bottom:20px;}
+.task-item{background:var(--card); border:1px solid var(--line); border-left:4px solid var(--gold); border-radius:var(--radius-s); padding:10px 12px;}
+.task-title{font-size:14px; font-weight:600; line-height:1.4; word-break:break-word;}
+.task-meta{font-size:12.5px; color:var(--ink-2); margin-top:5px; line-height:1.45;}
+.task-meta .k, .task-note .k{font-family:var(--font-mono); font-size:10px; letter-spacing:.03em; color:var(--muted); margin-right:5px; text-transform:uppercase;}
+.task-note{font-size:12.5px; color:var(--muted); margin-top:4px; line-height:1.45; word-break:break-word;}
+.task-empty{font-size:13px; color:var(--muted); padding:10px 2px;}
 .log-note{font-size:11.5px; color:var(--muted); margin-bottom:14px; line-height:1.6;}
+.upcoming-row{display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid var(--line-soft); cursor:pointer; font-size:13px;}
+.upcoming-row:last-child{border-bottom:none;}
+.upcoming-row .d{flex:1;}
+.upcoming-row .n{font-family:var(--font-mono); font-size:11.5px; font-weight:700; color:var(--gold);}
+.month-cell .month-task{font-size:9.5px; color:var(--gold); font-family:var(--font-mono); font-weight:600;}
+.month-cell.teach-hit{background:var(--gold-soft); border-color:var(--gold); box-shadow:0 0 0 2px var(--gold);}
+.month-cell.teach-hit .num{color:var(--gold);}
+.month-cell.teach-hit .month-count{color:var(--ink); font-weight:600;}
+.month-cell.teach-off:not(.out){opacity:.5;}
+.teach-banner{font-size:12.5px; background:var(--gold-soft); border:1px solid var(--gold); border-radius:var(--radius-s); padding:7px 10px; margin-bottom:10px;}
+.task-block{margin-top:14px;}
 
 /* Read-only detail modal */
 .overlay{position:fixed; inset:0; background:rgba(20,20,20,.5); display:none; align-items:flex-end; justify-content:center; z-index:200; padding:0;}
@@ -204,7 +211,7 @@ footer{max-width:1180px; margin:0 auto; padding:0 12px 30px; color:var(--muted);
     <button class="tab" role="tab" data-tab="week" aria-selected="true">Theo tuần</button>
     <button class="tab" role="tab" data-tab="month" aria-selected="false">Theo tháng</button>
     <button class="tab" role="tab" data-tab="stats" aria-selected="false">Thống kê</button>
-    <button class="tab" role="tab" data-tab="log" aria-selected="false">Nhật ký</button>
+    <button class="tab" role="tab" data-tab="tasks" aria-selected="false">Công việc</button>
   </nav>
 </header>
 
@@ -228,7 +235,7 @@ footer{max-width:1180px; margin:0 auto; padding:0 12px 30px; color:var(--muted);
   <section id="view-week"></section>
   <section id="view-month" style="display:none"></section>
   <section id="view-stats" style="display:none"></section>
-  <section id="view-log" style="display:none"></section>
+  <section id="view-tasks" style="display:none"></section>
 </main>
 
 <footer>Dữ liệu đọc trực tiếp từ Google Sheet do Trưởng khoa quản lý · Trang này chỉ hiển thị, không chỉnh sửa được dữ liệu lịch giảng dạy.</footer>
@@ -246,9 +253,10 @@ footer{max-width:1180px; margin:0 auto; padding:0 12px 30px; color:var(--muted);
    CẤU HÌNH — dán 3 link "Xuất bản lên web" (định dạng CSV) từ Google
    Sheet của bạn vào đây. Xem hướng dẫn Trưởng khoa đã nhận kèm file này.
    ===================================================================== */
-const CSV_URL_LESSONS  = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwhv74EwSsv_qHFBiN6FXgkvJbx30fYpR58vUQ-8PGjgL6SeGEw46sNPYaUh52Pg/pub?gid=1043616151&single=true&output=csv";
-const CSV_URL_SUBJECTS = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwhv74EwSsv_qHFBiN6FXgkvJbx30fYpR58vUQ-8PGjgL6SeGEw46sNPYaUh52Pg/pub?gid=281471370&single=true&output=csv";
-const CSV_URL_TEACHERS = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwhv74EwSsv_qHFBiN6FXgkvJbx30fYpR58vUQ-8PGjgL6SeGEw46sNPYaUh52Pg/pub?gid=1700388377&single=true&output=csv";
+const CSV_URL_LESSONS  = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSHb0FFwu74XdGNSEVVheaD1XhJU2DFb4AxpxA8g_9aD5lBl00Srfy33_AkQ-nzyA/pub?gid=589329369&single=true&output=csv";
+const CSV_URL_SUBJECTS = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSHb0FFwu74XdGNSEVVheaD1XhJU2DFb4AxpxA8g_9aD5lBl00Srfy33_AkQ-nzyA/pub?gid=418155342&single=true&output=csv";
+const CSV_URL_TEACHERS = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSHb0FFwu74XdGNSEVVheaD1XhJU2DFb4AxpxA8g_9aD5lBl00Srfy33_AkQ-nzyA/pub?gid=1579967289&single=true&output=csv";
+const CSV_URL_TASKS    = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSHb0FFwu74XdGNSEVVheaD1XhJU2DFb4AxpxA8g_9aD5lBl00Srfy33_AkQ-nzyA/pub?gid=1365016418&single=true&output=csv";  // <-- Dán link CSV của sheet "CongViec" (Công việc triển khai theo ngày) vào đây
 /* ===================================================================== */
 </script>
 <script>
@@ -421,7 +429,7 @@ const state = {
   tab:"week", teacher:"", selectedDay:null,
   weekAnchor: TODAY, monthAnchor: TODAY.slice(0,7)+"-01",
   pinOpen: localStorage.getItem("pinOpen") !== "0",
-  logDate: TODAY,
+  taskDate: TODAY,
 };
 
 /* ================= Toast ================= */
@@ -505,6 +513,18 @@ async function loadAllData(){
   }catch(err){
     showError(err.message || String(err));
   }
+  await loadTasks();
+}
+async function loadTasks(){
+  if(!CSV_URL_TASKS){ tasksStatus="nocfg"; tasks=[]; reindexTasks(); return; }
+  tasksStatus = "loading";
+  try{
+    const rows = await fetchCSV(CSV_URL_TASKS);
+    tasks = buildTasks(rows); reindexTasks(); tasksStatus = "ok";
+  }catch(err){
+    tasks = []; reindexTasks(); tasksStatus = "error"; tasksError = err.message || String(err);
+  }
+  renderAll();
 }
 document.getElementById("refreshBtn").addEventListener("click", loadAllData);
 
@@ -570,7 +590,7 @@ function nextLessonFrom(iso){
   for(const d of dates){ if(IDX.byDate[d].length) return IDX.byDate[d].slice().sort(sortLessons)[0]; }
   return null;
 }
-function pendingCountFor(dateIso){ return (workLog[dateIso]||[]).filter(t=>!t.done).length; }
+function taskCountFor(dateIso){ return (TASKIDX[dateIso]||[]).length; }
 function renderPin(){
   const inRange = IDX.MIN_DATE && TODAY >= IDX.MIN_DATE && TODAY <= IDX.MAX_DATE;
   document.getElementById("pinDate").textContent = weekdayNameOf(TODAY) + ", " + fmtVN(TODAY);
@@ -588,11 +608,11 @@ function renderPin(){
     p.textContent = next ? ("Buổi học gần nhất: "+fmtVN(next.date)+" ("+weekdayNameOf(next.date)+") — "+next.subject) : "Không còn buổi học nào trong dữ liệu.";
     body.appendChild(p);
   }
-  const pending = pendingCountFor(TODAY);
+  const pending = taskCountFor(TODAY);
   const linkBtn = document.createElement("button");
   linkBtn.className = "pin-tasklink";
-  linkBtn.textContent = pending ? ("📝 "+pending+" việc cần triển khai hôm nay →") : "📝 Ghi công việc triển khai hôm nay →";
-  linkBtn.addEventListener("click", (e)=>{ e.stopPropagation(); document.querySelector('.tab[data-tab="log"]').click(); state.logDate=TODAY; renderLog(); });
+  linkBtn.textContent = pending ? ("📝 "+pending+" công việc triển khai hôm nay →") : "📝 Xem công việc triển khai →";
+  linkBtn.addEventListener("click", (e)=>{ e.stopPropagation(); state.taskDate=TODAY; document.querySelector('.tab[data-tab="tasks"]').click(); });
   body.appendChild(linkBtn);
   body.style.display = state.pinOpen ? "" : "none";
   document.getElementById("pinToggle").textContent = state.pinOpen ? "▾" : "▸";
@@ -611,13 +631,13 @@ document.querySelectorAll(".tab").forEach(btn=>{
     document.getElementById("view-week").style.display = state.tab==="week" ? "" : "none";
     document.getElementById("view-month").style.display = state.tab==="month" ? "" : "none";
     document.getElementById("view-stats").style.display = state.tab==="stats" ? "" : "none";
-    document.getElementById("view-log").style.display = state.tab==="log" ? "" : "none";
+    document.getElementById("view-tasks").style.display = state.tab==="tasks" ? "" : "none";
     renderAll();
   });
 });
 document.getElementById("todayBtn").addEventListener("click", ()=>{
   const anchor = (IDX.MIN_DATE && IDX.MIN_DATE<=TODAY && TODAY<=IDX.MAX_DATE) ? TODAY : (IDX.MIN_DATE||TODAY);
-  state.weekAnchor = mondayOf(anchor); state.monthAnchor = anchor.slice(0,7)+"-01"; state.selectedDay = anchor; state.logDate = TODAY;
+  state.weekAnchor = mondayOf(anchor); state.monthAnchor = anchor.slice(0,7)+"-01"; state.selectedDay = anchor; state.taskDate = TODAY;
   renderAll();
   document.getElementById("pinToday").scrollIntoView({behavior:"smooth", block:"start"});
 });
@@ -683,6 +703,16 @@ function renderMonth(){
   navGroup.appendChild(prev); navGroup.appendChild(next); bar.appendChild(navGroup);
   root.appendChild(bar);
 
+  const mine = (l)=> state.teacher && l.teacherCode && l.teacherCode.toLowerCase()===state.teacher.toLowerCase();
+  if(state.teacher){
+    const tName = (teachers.find(t=>t.code.toLowerCase()===state.teacher.toLowerCase())||{}).name || state.teacher;
+    const prefix = state.monthAnchor.slice(0,7);
+    const mm = lessons.filter(l=>l.date.startsWith(prefix) && mine(l));
+    const nDays = new Set(mm.map(l=>l.date)).size;
+    const banner = document.createElement("div"); banner.className="teach-banner";
+    banner.textContent = "Đang tô sáng ngày dạy của "+tName+": "+nDays+" ngày · "+mm.length+" buổi trong tháng "+m+"/"+y+".";
+    root.appendChild(banner);
+  }
   const scrollWrap = document.createElement("div"); scrollWrap.className="month-scroll";
   const grid = document.createElement("div"); grid.className="month-grid";
   ["T2","T3","T4","T5","T6","T7","CN"].forEach(l=>{ const el=document.createElement("div"); el.className="wd-label"; el.textContent=l; grid.appendChild(el); });
@@ -693,7 +723,9 @@ function renderMonth(){
     const inMonth = iso.slice(0,7) === state.monthAnchor.slice(0,7);
     const cell = document.createElement("div");
     cell.className = "month-cell"+(inMonth?"":" out")+(iso===TODAY?" is-today":"")+(iso===state.selectedDay?" selected":"");
-    const dayLessons = IDX.byDate[iso]||[];
+    const allDay = IDX.byDate[iso]||[];
+    const dayLessons = state.teacher ? allDay.filter(mine) : allDay;
+    if(state.teacher){ cell.classList.add(dayLessons.length ? "teach-hit" : "teach-off"); }
     const num = document.createElement("div"); num.className="num"; num.textContent=String(parseISO(iso).getDate());
     cell.appendChild(num);
     if(dayLessons.length){
@@ -703,6 +735,10 @@ function renderMonth(){
       cell.appendChild(dots);
       const cnt = document.createElement("div"); cnt.className="month-count"; cnt.textContent=dayLessons.length+" buổi";
       cell.appendChild(cnt);
+    }
+    if(taskCountFor(iso)){
+      const tk = document.createElement("div"); tk.className="month-task"; tk.textContent="📝 "+taskCountFor(iso);
+      cell.appendChild(tk);
     }
     cell.addEventListener("click", ()=>{ state.selectedDay=iso; renderMonth(); renderDayDetail(); });
     grid.appendChild(cell);
@@ -723,6 +759,14 @@ function renderDayDetail(){
   if(lessonsHere.length) lessonsHere.forEach(l=>wrap.appendChild(chipEl(l)));
   else { const e=document.createElement("div"); e.className="pin-empty"; e.textContent="Không có lịch học ngày này."; wrap.appendChild(e); }
   panel.appendChild(wrap);
+  const dayTasks = TASKIDX[iso]||[];
+  if(dayTasks.length){
+    const tb = document.createElement("div"); tb.className="task-block";
+    tb.innerHTML = "<h3>Công việc triển khai</h3>";
+    const tl = document.createElement("div"); tl.className="task-list"; tl.style.marginTop="8px"; tl.style.marginBottom="0";
+    dayTasks.forEach(t=>tl.appendChild(taskItemEl(t)));
+    tb.appendChild(tl); panel.appendChild(tb);
+  }
   el.innerHTML=""; el.appendChild(panel);
 }
 
@@ -780,82 +824,91 @@ function renderStats(){
   root.appendChild(nextPanel);
 }
 
-/* ================= Nhat ky (personal notes — local to this browser only) ================= */
-const LS_LOG = "khoaSchedule.worklog.v1";
-let workLog = {};
-try{ workLog = JSON.parse(localStorage.getItem(LS_LOG) || "{}"); }catch(e){ workLog = {}; }
-let nextLogId = 1;
-Object.values(workLog).forEach(arr=>arr.forEach(t=>{ if(t.id>=nextLogId) nextLogId=t.id+1; }));
-function persistLog(){ try{ localStorage.setItem(LS_LOG, JSON.stringify(workLog)); }catch(e){} }
-
-function renderLog(){
-  const root = document.getElementById("view-log");
+/* ================= Cong viec theo ngay (doc tu Google Sheet, chi xem) ================= */
+let tasks = [];
+let TASKIDX = {};
+let tasksStatus = CSV_URL_TASKS ? "loading" : "nocfg";   // loading | ok | error | nocfg
+let tasksError = "";
+function buildTasks(rows){
+  const out = [];
+  rows.forEach(r=>{
+    const date = normalizeDate(r["Ngày"]||r["Ngay"]||"");
+    const title = (r["Nội dung công việc"]||r["Noi dung cong viec"]||"").trim();
+    if(!date || !title) return;
+    out.push({
+      date, title,
+      people: (r["Thành phần"]||r["Thanh phan"]||"").trim(),
+      note: (r["Ghi chú"]||r["Ghi chu"]||"").trim(),
+    });
+  });
+  return out;
+}
+function reindexTasks(){
+  TASKIDX = {};
+  tasks.forEach(t=>{ (TASKIDX[t.date] = TASKIDX[t.date] || []).push(t); });
+}
+function taskItemEl(t){
+  const el = document.createElement("div"); el.className = "task-item";
+  let h = "<div class='task-title'>"+escapeHtml(t.title)+"</div>";
+  if(t.people) h += "<div class='task-meta'><span class='k'>Thành phần</span>"+escapeHtml(t.people)+"</div>";
+  if(t.note) h += "<div class='task-note'><span class='k'>Ghi chú</span>"+escapeHtml(t.note)+"</div>";
+  el.innerHTML = h;
+  return el;
+}
+function renderTasks(){
+  const root = document.getElementById("view-tasks");
   root.innerHTML = "";
   const bar = document.createElement("div"); bar.className="bar";
-  bar.innerHTML = "<h2>Nhật ký công việc triển khai</h2>";
+  bar.innerHTML = "<h2>Công việc triển khai theo ngày</h2>";
   root.appendChild(bar);
+
+  if(tasksStatus === "nocfg"){
+    root.insertAdjacentHTML("beforeend","<div class='status-panel setup'><h3>Chưa kết nối sheet công việc</h3><p>Dán link CSV của sheet <code>CongViec</code> vào biến <code>CSV_URL_TASKS</code> ở đầu phần &lt;script&gt;.</p></div>");
+    return;
+  }
+  if(tasksStatus === "loading"){
+    root.insertAdjacentHTML("beforeend","<div class='status-panel'><div class='spinner'></div><p>Đang tải công việc…</p></div>");
+    return;
+  }
+  if(tasksStatus === "error"){
+    root.insertAdjacentHTML("beforeend","<div class='status-panel error'><h3>Không tải được công việc</h3><p>"+escapeHtml(tasksError)+"</p><p>Kiểm tra sheet <code>CongViec</code> đã được \"Xuất bản lên web\" (CSV) và link đúng gid chưa, rồi bấm Làm mới.</p></div>");
+    return;
+  }
   const note = document.createElement("p"); note.className="log-note";
-  note.textContent = "Ghi chú này chỉ lưu trên trình duyệt của bạn (riêng tư), không đồng bộ với Google Sheet hay hiển thị cho người khác.";
+  note.textContent = "Nội dung do Trưởng khoa ghi trong Google Sheet (sheet CongViec); trang này chỉ hiển thị.";
   root.appendChild(note);
 
   const nav = document.createElement("div"); nav.className="log-nav";
   const prev = document.createElement("button"); prev.className="iconbtn"; prev.textContent="‹";
   const next = document.createElement("button"); next.className="iconbtn"; next.textContent="›";
-  prev.addEventListener("click", ()=>{ state.logDate=addDays(state.logDate,-1); renderLog(); });
-  next.addEventListener("click", ()=>{ state.logDate=addDays(state.logDate,1); renderLog(); });
+  prev.addEventListener("click", ()=>{ state.taskDate=addDays(state.taskDate,-1); renderTasks(); });
+  next.addEventListener("click", ()=>{ state.taskDate=addDays(state.taskDate,1); renderTasks(); });
   const label = document.createElement("div"); label.className="datelabel";
-  label.textContent = weekdayNameOf(state.logDate)+", "+fmtVN(state.logDate)+(state.logDate===TODAY?"  ·  Hôm nay":"");
+  label.textContent = weekdayNameOf(state.taskDate)+", "+fmtVN(state.taskDate)+(state.taskDate===TODAY?"  ·  Hôm nay":"");
   nav.appendChild(prev); nav.appendChild(label); nav.appendChild(next);
   root.appendChild(nav);
 
-  if(state.logDate !== TODAY){
+  if(state.taskDate !== TODAY){
     const jump = document.createElement("button"); jump.className="btn btn-outline btn-sm"; jump.style.marginBottom="12px"; jump.textContent="Về hôm nay";
-    jump.addEventListener("click", ()=>{ state.logDate=TODAY; renderLog(); });
+    jump.addEventListener("click", ()=>{ state.taskDate=TODAY; renderTasks(); });
     root.appendChild(jump);
   }
 
-  const addRow = document.createElement("div"); addRow.className="log-add-row";
-  const input = document.createElement("input"); input.type="text"; input.placeholder="Nhập công việc cần triển khai ngày này…";
-  const addB = document.createElement("button"); addB.className="btn btn-gold"; addB.textContent="Thêm";
-  function commitAdd(){
-    const text = input.value.trim(); if(!text) return;
-    if(!workLog[state.logDate]) workLog[state.logDate] = [];
-    workLog[state.logDate].push({id:nextLogId++, text, done:false});
-    persistLog(); input.value=""; renderLog(); renderPin();
-  }
-  addB.addEventListener("click", commitAdd);
-  input.addEventListener("keydown", (e)=>{ if(e.key==="Enter") commitAdd(); });
-  addRow.appendChild(input); addRow.appendChild(addB);
-  root.appendChild(addRow);
-
-  const list = document.createElement("div"); list.className="log-list";
-  const entries = (workLog[state.logDate]||[]).slice().sort((a,b)=>(a.done-b.done)||(a.id-b.id));
-  if(!entries.length){
-    const e=document.createElement("div"); e.className="log-empty"; e.textContent="Chưa có công việc nào được ghi cho ngày này."; list.appendChild(e);
-  } else {
-    entries.forEach(t=>{
-      const item=document.createElement("div"); item.className="log-item"+(t.done?" done":"");
-      const cb=document.createElement("input"); cb.type="checkbox"; cb.checked=t.done;
-      cb.addEventListener("change", ()=>{ t.done=cb.checked; persistLog(); renderLog(); renderPin(); });
-      const txt=document.createElement("div"); txt.className="txt"; txt.textContent=t.text; txt.contentEditable="true";
-      txt.addEventListener("blur", ()=>{ const v=txt.textContent.trim(); if(v && v!==t.text){ t.text=v; persistLog(); } else txt.textContent=t.text; });
-      txt.addEventListener("keydown", (e)=>{ if(e.key==="Enter"){ e.preventDefault(); txt.blur(); } });
-      const del=document.createElement("button"); del.className="del"; del.innerHTML="&times;";
-      del.addEventListener("click", ()=>{ workLog[state.logDate]=(workLog[state.logDate]||[]).filter(x=>x.id!==t.id); persistLog(); renderLog(); renderPin(); });
-      item.appendChild(cb); item.appendChild(txt); item.appendChild(del);
-      list.appendChild(item);
-    });
-  }
+  const list = document.createElement("div"); list.className="task-list";
+  const items = TASKIDX[state.taskDate] || [];
+  if(!items.length){
+    const e=document.createElement("div"); e.className="task-empty"; e.textContent="Không có công việc nào được ghi cho ngày này."; list.appendChild(e);
+  } else items.forEach(t=>list.appendChild(taskItemEl(t)));
   root.appendChild(list);
 
-  const pendingDays = Object.keys(workLog).map(d=>({date:d, n:pendingCountFor(d)})).filter(x=>x.n>0 && x.date!==state.logDate).sort((a,b)=>a.date.localeCompare(b.date));
-  if(pendingDays.length){
+  const upDates = Object.keys(TASKIDX).filter(d=>d>=TODAY && d!==state.taskDate).sort().slice(0,20);
+  if(upDates.length){
     const panel=document.createElement("div"); panel.className="panel";
-    panel.innerHTML = "<h3>Các ngày khác còn việc chưa xong</h3>";
-    pendingDays.forEach(x=>{
-      const row=document.createElement("div"); row.className="bar-row"; row.style.cursor="pointer";
-      row.innerHTML = "<div class='name' style='width:auto;flex:1'>"+weekdayNameOf(x.date)+", "+fmtVN(x.date)+"</div><div class='n' style='color:var(--gold);font-weight:700'>"+x.n+"</div>";
-      row.addEventListener("click", ()=>{ state.logDate=x.date; renderLog(); });
+    panel.innerHTML = "<h3>Các ngày sắp tới có công việc</h3>";
+    upDates.forEach(d=>{
+      const row=document.createElement("div"); row.className="upcoming-row";
+      row.innerHTML = "<div class='d'>"+weekdayNameOf(d)+", "+fmtVN(d)+"</div><div class='n'>"+TASKIDX[d].length+" việc</div>";
+      row.addEventListener("click", ()=>{ state.taskDate=d; renderTasks(); window.scrollTo({top:0,behavior:"smooth"}); });
       panel.appendChild(row);
     });
     root.appendChild(panel);
@@ -872,7 +925,7 @@ function renderAll(){
   if(state.tab==="week") renderWeek();
   if(state.tab==="month") renderMonth();
   if(state.tab==="stats") renderStats();
-  if(state.tab==="log") renderLog();
+  if(state.tab==="tasks") renderTasks();
 }
 
 loadAllData();
