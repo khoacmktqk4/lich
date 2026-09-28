@@ -91,7 +91,10 @@ main{max-width:1080px; margin:0 auto; padding:16px 14px 60px;}
 .chip-track-tag{font-size:12px; font-weight:700;}
 .chip-code{font-size:12px; color:var(--muted); font-weight:500; margin-top:1px;}
 .chip-subject{font-size:14.5px; font-weight:600; margin-top:3px; line-height:1.35;}
-.chip-teacher{font-size:13px; color:var(--ink-2); margin-top:4px; font-weight:500;}
+.chip-teacher{display:inline-block; margin-top:7px; font-size:14px; font-weight:700; color:var(--on-hl); background:var(--hl); padding:3px 12px; border-radius:999px; line-height:1.4;}
+.chip-teacher:empty{display:none;}
+.chip.match .chip-teacher{background:var(--gold); color:#fff;}
+.slot-count{font-size:12.5px; font-weight:600; color:var(--muted);}
 .chip.track-P301{border-left-color:var(--p301); background:linear-gradient(90deg,var(--p301-soft),var(--card) 55%);} .track-P301 .chip-track-tag{color:var(--p301);}
 .chip.track-P303{border-left-color:var(--p303); background:linear-gradient(90deg,var(--p303-soft),var(--card) 55%);} .track-P303 .chip-track-tag{color:var(--p303);}
 .chip.track-P302{border-left-color:var(--p302); background:linear-gradient(90deg,var(--p302-soft),var(--card) 55%);} .track-P302 .chip-track-tag{color:var(--p302);}
@@ -722,14 +725,10 @@ function renderWeek(){
       const periodLabel = slotLessons[0].period;
       const block = document.createElement("div"); block.className="slot-block";
       const headline = (slot.key==="s3"?"Chiều":"Sáng")+", tiết "+periodLabel;
-      const sk = iso+"|"+slot.key; const isOpen = !!state.openSlots[sk];
-      block.innerHTML = "<div class='slot-head'><span>"+escapeHtml(headline)+"</span><button class='slot-toggle' aria-expanded='"+isOpen+"'>"+slotLessons.length+" buổi "+(isOpen?"▾":"▸")+"</button></div>";
-      block.querySelector(".slot-toggle").addEventListener("click", ()=>{ state.openSlots[sk]=!isOpen; renderWeek(); });
-      if(isOpen){
-        const chips = document.createElement("div"); chips.className="slot-chips";
-        slotLessons.forEach(l=>chips.appendChild(chipEl(l)));
-        block.appendChild(chips);
-      }
+      block.innerHTML = "<div class='slot-head'><span>"+escapeHtml(headline)+"</span><span class='slot-count'>"+slotLessons.length+" buổi</span></div>";
+      const chips = document.createElement("div"); chips.className="slot-chips";
+      slotLessons.forEach(l=>chips.appendChild(chipEl(l)));
+      block.appendChild(chips);
       card.appendChild(block);
     });
     if(!dayLessons.length){
