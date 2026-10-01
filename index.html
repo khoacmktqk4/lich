@@ -367,6 +367,33 @@ body{padding-top:var(--hdr-h);}
 .day-head{padding:10px 4px;}
 .day-head .dd{font-size:22px;}
 .slot-empty{padding:10px !important;}
+
+/* ===== Ô chọn giáo viên ngắn + đồng hồ số ===== */
+.top-row{align-items:center; gap:10px;}
+.brand{min-width:0; flex:1 1 auto;}
+select.sel{flex:0 1 190px; min-width:0; padding:8px 12px; text-overflow:ellipsis;}
+.clock{flex:0 0 auto; text-align:center; background:linear-gradient(160deg,#00000052,#00000030); border:1px solid #FFC46B55; border-radius:14px; padding:6px 12px 5px; box-shadow:0 0 18px rgba(255,160,50,.22), inset 0 1px 0 #ffffff1a;}
+.clock-time{font-weight:800; font-size:24px; line-height:1.1; letter-spacing:.04em; color:#FFC46B; text-shadow:0 0 10px rgba(255,170,60,.65),0 0 24px rgba(255,140,30,.35); font-variant-numeric:tabular-nums; white-space:nowrap;}
+.clock-time .colon{animation:blink 1s steps(1,end) infinite; padding:0 1px;}
+@keyframes blink{50%{opacity:.25;}}
+.clock-date{font-size:10.5px; font-weight:600; color:#DCEFF4; letter-spacing:.03em; margin-top:2px; white-space:nowrap;}
+@media (prefers-reduced-motion:reduce){.clock-time .colon{animation:none;}}
+@media (min-width:641px){ .clock-time{font-size:30px;} .clock-date{font-size:12px;} .clock{padding:7px 16px 6px;} }
+@media (max-width:640px){
+  .toolbar{flex-wrap:nowrap;}
+  select.sel{flex:1 1 120px; max-width:none;}
+  .toolbar .btn{flex:0 0 auto; padding:8px 11px;}
+  #themeBtn{flex:0 0 auto;}
+  #refreshBtn .lbl{display:none;}
+  #refreshBtn{font-size:16px; padding:8px 13px;}
+}
+@media (max-width:400px){
+  .brand-logo{display:none;}
+  .brand h1{font-size:19px;}
+  .brand-eyebrow{font-size:9.5px; letter-spacing:.05em;}
+  .clock{padding:5px 9px 4px;}
+  .clock-time{font-size:19px;}
+}
 </style>
 </head>
 <body>
@@ -380,12 +407,16 @@ body{padding-top:var(--hdr-h);}
         <h1>Lịch giảng dạy <span class="yr">năm 2026</span></h1>
       </div>
     </div>
+    <div class="clock" id="clock" title="Giờ hiện tại">
+      <div class="clock-time" id="clockTime">--<span class="colon">:</span>--<span class="colon">:</span>--</div>
+      <div class="clock-date" id="clockDate"></div>
+    </div>
   </div>
   <div class="toolbar-wrap" id="toolbarWrap"><div class="toolbar">
     <select id="teacherSelect" class="sel" aria-label="Lọc theo giáo viên"><option value="">Tất cả giáo viên</option></select>
-    <button class="btn btn-ghost" id="refreshBtn">⟳ Làm mới</button>
+    <button class="btn btn-ghost" id="refreshBtn" aria-label="Làm mới">⟳<span class="lbl"> Làm mới</span></button>
     <button class="btn btn-ghost" id="todayBtn">Hôm nay</button>
-    <button class="btn btn-ghost" id="themeBtn">◐</button>
+    <button class="btn btn-ghost" id="themeBtn" aria-label="Đổi giao diện sáng/tối">◐</button>
   </div></div>
   <nav class="tabs" role="tablist">
     <button class="tab" role="tab" data-tab="week" aria-selected="true">Theo tuần</button>
@@ -1165,6 +1196,20 @@ function renderAll(){
   if(window.ResizeObserver) new ResizeObserver(measure).observe(hdr);
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
   measure();
+})();
+
+/* ================= Đồng hồ số ================= */
+(function(){
+  const t = document.getElementById("clockTime"), d = document.getElementById("clockDate");
+  if(!t || !d) return;
+  const pad = n => String(n).padStart(2,"0");
+  function tick(){
+    const now = new Date();
+    t.innerHTML = pad(now.getHours()) + '<span class="colon">:</span>' + pad(now.getMinutes()) + '<span class="colon">:</span>' + pad(now.getSeconds());
+    d.textContent = weekdayNameOf(toISO(now)) + ", " + pad(now.getDate()) + "/" + pad(now.getMonth()+1);
+  }
+  tick();
+  setInterval(tick, 1000);
 })();
 
 loadAllData();
