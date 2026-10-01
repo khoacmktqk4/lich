@@ -850,6 +850,37 @@ header.top .top-row{margin-bottom:6px !important; gap:12px !important;}
 header.top .clock{padding:6px 12px 5px !important;}
 header.top .clock-date{margin-top:2px !important;}
 header.top .toolbar{gap:8px !important; margin-top:2px;}
+
+/* ===== HÀI HÒA MÀU: chủ đạo xanh lá tươi, điểm nhấn vàng ===== */
+:root{--gold:#D18B00; --gold-soft:#FFF3C7;}
+:root[data-theme="dark"]{--gold:#FFC83D; --gold-soft:#3A3010;}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){--gold:#FFC83D; --gold-soft:#3A3010;} }
+
+/* Tiêu đề trang */
+header.top{background:linear-gradient(135deg,#0B5E2E 0%,#15803D 55%,#22B24C 100%) !important; border-bottom:3px solid #FFD84D !important; box-shadow:0 8px 24px rgba(11,79,42,.35) !important; color:#fff !important;}
+header.top .brand-eyebrow{background:#fff !important; color:#0B5E2E !important; border:none !important; box-shadow:0 3px 10px rgba(0,0,0,.22) !important;}
+header.top .brand-eyebrow::before{content:"★ "; color:#E8A800;}
+header.top .brand h1{color:#fff !important; text-shadow:0 1px 6px rgba(0,0,0,.2) !important;}
+header.top .brand h1 .yr{color:#FFE066 !important;}
+header.top .clock{background:linear-gradient(160deg,#00000052,#0000002e) !important; border:1px solid #FFE06680 !important; box-shadow:0 4px 14px rgba(0,0,0,.25) !important;}
+header.top .clock-time{color:#FFE066 !important; text-shadow:0 0 10px rgba(255,214,80,.4) !important;}
+header.top .clock-date{color:#E6F7EA !important; font-weight:600 !important;}
+header.top .btn-ghost, header.top select.sel{background:#ffffff26 !important; border:1px solid #ffffff59 !important; color:#fff !important; box-shadow:none !important; font-weight:700 !important;}
+header.top .btn-ghost:hover{background:#ffffff3d !important;}
+header.top select.sel option{color:#0F2417 !important; background:#fff;}
+header.top #refreshBtn, header.top #themeBtn{color:#fff !important;}
+header.top #todayBtn{color:#FFE066 !important; font-weight:800 !important;}
+
+/* Thanh 3 tab */
+nav.tabs{background:linear-gradient(135deg,#0B5E2E 0%,#15803D 55%,#22B24C 100%) !important; border:1px solid #ffffff40 !important; box-shadow:0 10px 26px rgba(11,79,42,.45) !important;}
+nav.tabs .tab{color:#DDF4E4 !important;}
+nav.tabs .tab[aria-selected="true"]{background:#fff !important; color:#0B5E2E !important; border:none !important; box-shadow:0 4px 12px rgba(0,0,0,.25) !important;}
+:root[data-theme="dark"] header.top, :root[data-theme="dark"] nav.tabs{background:linear-gradient(135deg,#052E16 0%,#0B5E2E 55%,#15803D 100%) !important;}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) header.top, :root:not([data-theme="light"]) nav.tabs{background:linear-gradient(135deg,#052E16 0%,#0B5E2E 55%,#15803D 100%) !important;} }
+
+/* Điểm nhấn cam -> vàng/xanh cho đồng bộ */
+.tbl-title::before{background:linear-gradient(180deg,#FFD84D,#15A04F) !important;}
+.cd.near{background:linear-gradient(135deg,#FFE066,#FFB800) !important; color:#3A2A00 !important; box-shadow:0 1px 5px rgba(209,139,0,.4) !important;}
 </style>
 </head>
 <body>
