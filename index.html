@@ -394,6 +394,28 @@ select.sel{flex:0 1 190px; min-width:0; padding:8px 12px; text-overflow:ellipsis
   .clock{padding:5px 9px 4px;}
   .clock-time{font-size:19px;}
 }
+
+/* ===== Ô ghim hôm nay: không thu gọn, không ngày tháng ===== */
+.pin-head{cursor:default; justify-content:flex-start;}
+.pin-title{color:#fff; font-weight:800; font-size:16px; letter-spacing:-.01em;}
+.pin-body{margin-top:12px;}
+.pin-lessons{cursor:default; justify-content:flex-start; margin-top:12px; font-size:14px; font-weight:700;}
+.pin-lessons.none{font-weight:500; color:#D5EAF0;}
+
+/* ===== Tiêu đề mỗi dòng 1 hàng ===== */
+.brand-text{min-width:0;}
+.brand-eyebrow, .brand h1{white-space:nowrap;}
+@media (max-width:640px){
+  .brand-eyebrow{font-size:min(10px,2.8vw); letter-spacing:.04em; padding:2px 8px;}
+  .brand h1{font-size:min(20px,4.3vw); overflow:hidden; text-overflow:ellipsis;}
+  .brand-text{overflow:hidden;}
+}
+@media (max-width:520px){ .brand-logo{display:none;} }
+@media (max-width:400px){
+  .brand h1{font-size:4.2vw;}
+  .brand-eyebrow{font-size:2.7vw;}
+  .clock-time{font-size:17px;}
+}
 </style>
 </head>
 <body>
@@ -432,10 +454,8 @@ select.sel{flex:0 1 190px; min-width:0; padding:8px 12px; text-overflow:ellipsis
     <div class="pin-head" id="pinHead">
       <div class="pin-head-left">
         <span class="pin-tag">Hôm nay</span>
-        <span class="pin-date" id="pinDate">—</span>
-        <span class="pin-sub" id="pinSub"></span>
+        <span class="pin-title">Công việc triển khai</span>
       </div>
-      <button class="pin-toggle" id="pinToggle" aria-label="Thu gọn">▾</button>
     </div>
     <div class="pin-body" id="pinBody"></div>
   </section>
@@ -803,51 +823,30 @@ function nextLessonFrom(iso){
 function taskCountFor(dateIso){ return (TASKIDX[dateIso]||[]).length; }
 function renderPin(){
   const inRange = IDX.MIN_DATE && TODAY >= IDX.MIN_DATE && TODAY <= IDX.MAX_DATE;
-  document.getElementById("pinDate").textContent = weekdayNameOf(TODAY) + ", " + fmtVN(TODAY);
   const todays = (IDX.byDate[TODAY] || []).slice().sort(sortLessons);
   const nT = taskCountFor(TODAY);
-  document.getElementById("pinSub").textContent = (nT ? nT+" công việc triển khai" : "Chưa có công việc triển khai") + (inRange ? (todays.length ? ", "+todays.length+" buổi học" : ", không có buổi học") : "");
   const body = document.getElementById("pinBody");
   body.innerHTML = "";
-  const h = document.createElement("div"); h.className="pin-h"; h.textContent="Công việc triển khai hôm nay"; body.appendChild(h);
   if(nT){
     const tl = document.createElement("div"); tl.className="task-list";
-    TASKIDX[TODAY].forEach(t=>tl.appendChild(taskItemEl(t)));
+    TASKIDX[TODAY].forEach((t,i)=>tl.appendChild(taskItemEl(t,i)));
     body.appendChild(tl);
   } else {
     const p = document.createElement("div"); p.className="pin-empty";
     p.textContent = tasksStatus==="nocfg" ? "Chưa kết nối sheet công việc." : "Hôm nay chưa có công việc nào được ghi.";
     body.appendChild(p);
   }
-  if(todays.length){
-    const btn = document.createElement("button"); btn.className="pin-lessons";
-    btn.innerHTML = "<span>📚 "+todays.length+" buổi học hôm nay</span><span>"+(state.pinLessons?"▾":"▸")+"</span>";
-    btn.addEventListener("click", (e)=>{ e.stopPropagation(); state.pinLessons=!state.pinLessons; renderPin(); });
-    body.appendChild(btn);
-    if(state.pinLessons){
-      const wrap = document.createElement("div"); wrap.className="pin-grid";
-      todays.forEach(l=>wrap.appendChild(chipEl(l)));
-      body.appendChild(wrap);
-    }
-  } else if(inRange){
-    const next = nextLessonFrom(TODAY);
-    const p = document.createElement("div"); p.className="pin-empty"; p.style.marginTop="10px";
-    p.textContent = next ? ("Buổi học gần nhất: "+fmtVN(next.date)+" ("+weekdayNameOf(next.date)+"), "+next.subject) : "Không còn buổi học nào trong dữ liệu.";
-    body.appendChild(p);
+  if(inRange){
+    const line = document.createElement("div"); line.className = "pin-lessons" + (todays.length ? "" : " none");
+    line.innerHTML = "<span>📚 " + (todays.length ? todays.length + " buổi học hôm nay" : "Hôm nay không có buổi học") + "</span>";
+    body.appendChild(line);
   }
   const linkBtn = document.createElement("button");
   linkBtn.className = "pin-tasklink";
   linkBtn.textContent = "Xem tất cả công việc";
   linkBtn.addEventListener("click", (e)=>{ e.stopPropagation(); state.taskDate=TODAY; document.querySelector('.tab[data-tab="tasks"]').click(); });
   body.appendChild(linkBtn);
-  body.style.display = state.pinOpen ? "" : "none";
-  document.getElementById("pinToggle").textContent = state.pinOpen ? "▾" : "▸";
 }
-document.getElementById("pinHead").addEventListener("click", ()=>{
-  state.pinOpen = !state.pinOpen;
-  try{ localStorage.setItem("pinOpen", state.pinOpen?"1":"0"); }catch(e){}
-  renderPin();
-});
 
 /* ================= Tabs ================= */
 document.querySelectorAll(".tab").forEach(btn=>{
