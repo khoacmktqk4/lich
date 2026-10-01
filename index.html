@@ -751,6 +751,22 @@ select.sel{padding:5px 12px !important; font-size:13px !important; min-height:30
 #view-month .month-cell .num{font-size:12px !important; line-height:1.2;}
 #view-month .month-cell .month-task{font-size:10px !important; line-height:1.2;}
 #view-month .month-cell.teach-hit .num{font-size:13px !important;}
+
+/* ===== Thiết kế mới ô "Hôm nay – Công việc triển khai" ===== */
+.pin{background:linear-gradient(145deg,var(--pin-a) 0%,var(--pin-b) 100%) !important; border:1px solid #ffffff2e !important; border-radius:22px !important; padding:12px 14px !important; box-shadow:0 14px 32px color-mix(in srgb,var(--pin-b) 55%,transparent) !important; position:relative; overflow:hidden;}
+.pin::after{display:block !important; content:""; position:absolute; right:-50px; top:-50px; width:180px; height:180px; border-radius:50%; background:radial-gradient(circle,#ffffff2a,transparent 70%); pointer-events:none;}
+.pin > *{position:relative; z-index:1;}
+.pin-title{color:#fff !important; font-size:15px !important;}
+.pin-tag{background:linear-gradient(135deg,#FFD27A,#FFB347) !important; color:#3A2400 !important; box-shadow:0 2px 8px rgba(0,0,0,.25) !important;}
+.pin-lessons{background:#ffffff1f !important; color:#fff !important; border:1px solid #ffffff38 !important;}
+.pin-lessons b{color:#FFD27A !important;}
+.pin-lessons.none{color:#DFF2E5 !important;}
+.pin-empty{color:#E4F5EA !important;}
+.pin .task-item{background:var(--card) !important; border:none !important; border-radius:16px !important; box-shadow:0 8px 20px rgba(0,0,0,.22) !important;}
+.pin .task-num{background:linear-gradient(135deg,#FFD27A,#FFB347) !important; color:#3A2400 !important;}
+.pin-noterow{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:4px;}
+.pin-noterow .task-note{margin:0 !important; flex:1 1 auto; min-width:0;}
+.pin-noterow .pin-tasklink{margin:0 0 0 auto !important; flex:0 0 auto; white-space:nowrap; display:inline-block; font-size:12.5px !important; font-weight:700; color:var(--hl) !important; background:color-mix(in srgb,var(--hl) 14%,transparent); padding:4px 11px; border-radius:999px;}
 </style>
 </head>
 <body>
@@ -1179,9 +1195,19 @@ function renderPin(){
   }
   const linkBtn = document.createElement("button");
   linkBtn.className = "pin-tasklink";
-  linkBtn.textContent = "Xem tất cả công việc";
+  linkBtn.textContent = "Xem tất cả";
+  linkBtn.setAttribute("aria-label","Xem tất cả công việc");
   linkBtn.addEventListener("click", (e)=>{ e.stopPropagation(); state.taskDate=TODAY; document.querySelector('.tab[data-tab="tasks"]').click(); });
-  body.appendChild(linkBtn);
+  const lastBody = body.querySelector(".task-item:last-child .task-body");
+  if(lastBody){
+    const row = document.createElement("div"); row.className = "pin-noterow";
+    const note = lastBody.querySelector(".task-note");
+    if(note) row.appendChild(note);
+    row.appendChild(linkBtn);
+    lastBody.appendChild(row);
+  } else {
+    body.appendChild(linkBtn);
+  }
 }
 
 /* ================= Tabs ================= */
