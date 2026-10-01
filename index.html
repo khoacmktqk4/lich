@@ -6,7 +6,7 @@
 <title>Lịch giảng dạy — Khoa Chuyên môn Kỹ thuật</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Chakra+Petch:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&family=Chakra+Petch:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --ink:#13202D; --ink-2:#3B4C5E; --paper:#F1F5F9; --paper-2:#E6ECF3; --card:#FFFFFF;
@@ -465,7 +465,7 @@ select.sel{flex:0 1 190px; min-width:0; padding:8px 12px; text-overflow:ellipsis
    GIAO DIỆN MỚI v2 — Nunito · xanh lá
    ===================================================== */
 :root{
-  --font:'Nunito','Be Vietnam Pro',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font:'Mulish','Be Vietnam Pro',system-ui,-apple-system,'Segoe UI',sans-serif;
   --font-serif:var(--font); --font-sans:var(--font); --font-mono:'Chakra Petch',var(--font);
   --ink:#0F2417; --ink-2:#3E5A48; --muted:#688574; --paper:#F1F7F2; --paper-2:#E0EEE3; --card:#FFFFFF; --line:#D3E4D8; --line-soft:#E4EFE7;
   --brand:#0B4F2A; --brand-2:#16A04F; --hl:#15803D; --on-hl:#fff;
@@ -695,6 +695,14 @@ select.sel{padding:5px 12px !important; font-size:13px !important; min-height:30
   .tbl tbody tr{margin-bottom:12px !important;}
   .tbl td.c-main{width:auto !important; margin:6px 12px 4px !important; padding:8px 12px !important; border-radius:10px !important; text-align:center; font-size:16.5px !important; font-weight:800 !important;}
 }
+
+/* ===== Cỡ chữ công việc sắp tới = ô hôm nay; giãn đều dòng tiêu đề ===== */
+.tbl td.c-main{font-size:15px !important; font-weight:700 !important;}
+@media (max-width:640px){
+  .tbl td.c-main{font-size:15px !important; font-weight:700 !important;}
+}
+.brand-eyebrow{margin-bottom:6px !important;}
+.top-row{margin-bottom:2px !important;}
 </style>
 </head>
 <body>
@@ -705,7 +713,7 @@ select.sel{padding:5px 12px !important; font-size:13px !important; min-height:30
       <div class="brand-logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M8 14h3M13 14h3M8 17.2h3" stroke="#FFD29A"/></svg></div>
       <div class="brand-text">
         <div class="brand-eyebrow">Khoa Chuyên môn Kỹ thuật</div>
-        <h1>Lịch giảng dạy <span class="yr"><span class="nam">năm </span>2026</span></h1>
+        <h1>Lịch công tác <span class="yr"><span class="nam">năm </span>2026</span></h1>
       </div>
     </div>
     <div class="clock" id="clock" title="Giờ hiện tại">
