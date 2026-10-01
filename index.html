@@ -815,6 +815,41 @@ header.top .clock{background:linear-gradient(160deg,#ffffffd9,#fff4c9d9) !import
 header.top .clock-time{color:#C4121A !important; text-shadow:none !important;}
 header.top .clock-date{color:#7A1014 !important; font-weight:700 !important;}
 header.top #todayBtn{color:#C4121A !important; font-weight:800 !important;}
+
+/* ===== LÀM LẠI tiêu đề trang: nền vàng – đỏ cờ, gọn và đồng bộ ===== */
+header.top{background:linear-gradient(180deg,#FFE05A 0%,#FFC72C 100%) !important; border-bottom:3px solid #C4121A !important; box-shadow:0 6px 18px rgba(196,18,26,.22) !important; color:#7A1014 !important;}
+/* Khối tên: nhãn đỏ chữ vàng + tiêu đề đỏ */
+header.top .brand-eyebrow{background:linear-gradient(135deg,#D3161E,#A80F16) !important; color:#FFE066 !important; border:none !important; box-shadow:0 2px 6px rgba(168,15,22,.35) !important; font-weight:800 !important;}
+header.top .brand-eyebrow::before{content:"★ "; color:#FFE066;}
+header.top .brand h1, header.top .brand h1 .yr{color:#C4121A !important; text-shadow:none !important;}
+/* Đồng hồ: thẻ trắng viền đỏ, số đỏ */
+header.top .clock{background:#fff !important; border:1.5px solid #C4121A !important; border-radius:12px !important; box-shadow:0 3px 0 rgba(168,15,22,.28) !important;}
+header.top .clock-time{color:#C4121A !important; text-shadow:none !important;}
+header.top .clock-date{color:#7A1014 !important; font-weight:700 !important;}
+/* Hàng điều khiển: các nút đồng bộ, trắng – viền vàng đậm, chữ đỏ sẫm */
+header.top .btn-ghost, header.top select.sel{background:#fff !important; border:1.5px solid #E2A90F !important; color:#7A1014 !important; font-weight:700 !important; backdrop-filter:none !important; -webkit-backdrop-filter:none !important; box-shadow:0 2px 0 rgba(176,118,0,.25) !important;}
+header.top .btn-ghost:hover{background:#FFF6D6 !important;}
+header.top #todayBtn, header.top #refreshBtn, header.top #themeBtn{color:#C4121A !important; font-weight:800 !important;}
+/* Thanh 3 tab: cùng nền vàng, tab chọn đỏ chữ vàng */
+nav.tabs{background:linear-gradient(180deg,#FFE05A 0%,#FFC72C 100%) !important; border:1.5px solid #E2A90F !important; box-shadow:0 8px 22px rgba(176,118,0,.4) !important;}
+nav.tabs .tab{color:#7A1014 !important;}
+nav.tabs .tab[aria-selected="true"]{background:linear-gradient(135deg,#D3161E,#A80F16) !important; color:#FFE066 !important; border:none !important; box-shadow:0 4px 12px rgba(168,15,22,.45) !important;}
+
+/* ===== Hàng nút ở tiêu đề: thu nhỏ cho gọn ===== */
+.toolbar .btn, .toolbar select.sel, .toolbar .iconbtn{height:26px !important; min-height:26px !important; font-size:12px !important; border-radius:10px !important;}
+.toolbar .btn{padding-left:10px !important; padding-right:10px !important;}
+.toolbar select.sel{padding-left:10px !important; padding-right:6px !important; font-size:12.5px !important;}
+#refreshBtn, #themeBtn{width:34px !important; padding-left:0 !important; padding-right:0 !important; font-size:13px !important;}
+.toolbar{gap:5px !important;}
+
+/* ===== Tiêu đề trang: nới khoảng cách cho thoáng ===== */
+header.top{padding:calc(env(safe-area-inset-top,0px) + 12px) 14px 14px !important;}
+header.top .brand-eyebrow{margin-bottom:9px !important; padding:4px 12px !important;}
+header.top .brand h1{line-height:1.2 !important;}
+header.top .top-row{margin-bottom:6px !important; gap:12px !important;}
+header.top .clock{padding:6px 12px 5px !important;}
+header.top .clock-date{margin-top:2px !important;}
+header.top .toolbar{gap:8px !important; margin-top:2px;}
 </style>
 </head>
 <body>
