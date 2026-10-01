@@ -767,6 +767,30 @@ select.sel{padding:5px 12px !important; font-size:13px !important; min-height:30
 .pin-noterow{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:4px;}
 .pin-noterow .task-note{margin:0 !important; flex:1 1 auto; min-width:0;}
 .pin-noterow .pin-tasklink{margin:0 0 0 auto !important; flex:0 0 auto; white-space:nowrap; display:inline-block; font-size:12.5px !important; font-weight:700; color:var(--hl) !important; background:color-mix(in srgb,var(--hl) 14%,transparent); padding:4px 11px; border-radius:999px;}
+
+/* ===== Tiêu đề trang: nền khác, các nút cao bằng nhau ===== */
+header.top{background:linear-gradient(135deg,#062B33 0%,#0A4F55 52%,#10897A 100%) !important; border-bottom:1px solid #ffffff22 !important; box-shadow:0 8px 28px rgba(6,43,51,.35) !important;}
+.toolbar{align-items:center !important;}
+.toolbar .btn, .toolbar select.sel, .toolbar .iconbtn{height:32px !important; min-height:32px !important; padding-top:0 !important; padding-bottom:0 !important; line-height:1 !important; align-self:center;}
+.toolbar .btn{padding-left:12px !important; padding-right:12px !important;}
+#refreshBtn, #themeBtn{width:44px; padding-left:0 !important; padding-right:0 !important; font-size:15px !important;}
+
+/* ===== Công việc các ngày sắp tới: thẻ gọn hơn, bố cục + màu mới ===== */
+@media (max-width:640px){
+  .tbl tbody tr[data-date]{display:flex !important; flex-wrap:wrap; align-items:center; padding:0 0 8px !important; margin-bottom:9px !important; background:var(--card) !important; border:1.5px solid color-mix(in srgb,var(--hl) 38%,var(--line)) !important; border-radius:16px !important; overflow:hidden; box-shadow:var(--shadow) !important;}
+  .tbl tbody tr[data-date] td{background:none !important; border:0 !important;}
+  .tbl tbody tr[data-date] td.c-date{flex:0 0 100%; width:100% !important; padding:5px 12px !important; font-size:13px !important; font-weight:800 !important; color:var(--hl) !important; background:color-mix(in srgb,var(--hl) 12%,var(--card)) !important; border-bottom:1px solid color-mix(in srgb,var(--hl) 20%,var(--line)) !important;}
+  .tbl tbody tr[data-date] td.c-main{flex:0 0 calc(100% - 20px); width:calc(100% - 20px) !important; margin:7px 10px 3px !important; padding:6px 12px !important; background:var(--task-soft) !important; border-radius:10px !important; font-size:15px !important; line-height:1.3;}
+  .tbl tbody tr[data-date] td[data-label="Thành phần"]{flex:0 0 auto; width:auto !important; padding:2px 6px 0 12px !important; margin:0 !important; font-size:13px !important;}
+  .tbl tbody tr[data-date] td[data-label="Ghi chú"]{flex:1 1 0; min-width:40%; width:auto !important; padding:2px 12px 0 6px !important; font-size:13px !important;}
+  .tbl tbody tr[data-date] td[data-label]::before{font-size:11px !important; letter-spacing:.04em;}
+  .tbl tbody tr[data-date] td.c-main::before, .tbl tbody tr[data-date] td.c-date::before{display:none !important;}
+}
+
+/* ===== Thanh 3 tab: cùng màu với tiêu đề trang ===== */
+nav.tabs{background:linear-gradient(135deg,#062B33 0%,#0A4F55 52%,#10897A 100%) !important; border:1px solid #ffffff2e !important; box-shadow:0 10px 28px rgba(6,43,51,.45) !important; -webkit-backdrop-filter:none !important; backdrop-filter:none !important;}
+nav.tabs .tab{color:#CFE8E4 !important; background:transparent !important; box-shadow:none !important;}
+nav.tabs .tab[aria-selected="true"]{background:#ffffff2e !important; color:#fff !important; border:1px solid #ffffff55 !important; box-shadow:0 4px 14px rgba(0,0,0,.28), inset 0 1px 0 #ffffff33 !important;}
 </style>
 </head>
 <body>
