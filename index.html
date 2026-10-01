@@ -791,6 +791,30 @@ header.top{background:linear-gradient(135deg,#062B33 0%,#0A4F55 52%,#10897A 100%
 nav.tabs{background:linear-gradient(135deg,#062B33 0%,#0A4F55 52%,#10897A 100%) !important; border:1px solid #ffffff2e !important; box-shadow:0 10px 28px rgba(6,43,51,.45) !important; -webkit-backdrop-filter:none !important; backdrop-filter:none !important;}
 nav.tabs .tab{color:#CFE8E4 !important; background:transparent !important; box-shadow:none !important;}
 nav.tabs .tab[aria-selected="true"]{background:#ffffff2e !important; color:#fff !important; border:1px solid #ffffff55 !important; box-shadow:0 4px 14px rgba(0,0,0,.28), inset 0 1px 0 #ffffff33 !important;}
+
+/* ===== Tiêu đề trang + thanh tab: nền vàng ===== */
+header.top{background:linear-gradient(135deg,#FFE066 0%,#FFCB2E 55%,#F7A91B 100%) !important; border-bottom:1px solid #00000014 !important; box-shadow:0 8px 26px rgba(176,118,0,.35) !important; color:#1B3A12 !important;}
+header.top .brand h1{color:#15321A !important;}
+header.top .brand h1 .yr{color:#B4470B !important;}
+header.top .brand-eyebrow{background:linear-gradient(135deg,#0B4F2A,#15803D) !important; color:#fff !important; border:1px solid #0B4F2A !important; box-shadow:0 3px 10px rgba(11,79,42,.35) !important;}
+header.top .clock{background:linear-gradient(160deg,#0B3D1E,#14532D) !important; border:1px solid #0B4F2A !important; box-shadow:0 4px 12px rgba(11,61,30,.35) !important;}
+header.top .clock-time{color:#FFD76A !important;}
+header.top .clock-date{color:#E6F4EA !important;}
+header.top .btn-ghost, header.top select.sel{background:#ffffff73 !important; color:#15321A !important; border:1px solid #00000026 !important; font-weight:700;}
+header.top .btn-ghost:hover{background:#ffffff99 !important;}
+header.top select.sel option{color:#15321A !important; background:#fff;}
+nav.tabs{background:linear-gradient(135deg,#FFE066 0%,#FFCB2E 55%,#F7A91B 100%) !important; border:1px solid #00000018 !important; box-shadow:0 10px 26px rgba(176,118,0,.4) !important;}
+nav.tabs .tab{color:#5A4300 !important;}
+nav.tabs .tab[aria-selected="true"]{background:linear-gradient(135deg,#0B4F2A,#15803D) !important; color:#fff !important; border:1px solid #0B4F2A !important; box-shadow:0 4px 12px rgba(11,79,42,.4) !important;}
+:root[data-theme="dark"] header.top, :root[data-theme="dark"] nav.tabs{background:linear-gradient(135deg,#E6B800 0%,#D79A00 55%,#C27F00 100%) !important;}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) header.top, :root:not([data-theme="light"]) nav.tabs{background:linear-gradient(135deg,#E6B800 0%,#D79A00 55%,#C27F00 100%) !important;} }
+
+/* ===== Phong cách cờ đỏ sao vàng: chữ đỏ trên nền vàng ===== */
+header.top .brand h1, header.top .brand h1 .yr{color:#C4121A !important; text-shadow:0 1px 0 #ffffff59;}
+header.top .clock{background:linear-gradient(160deg,#ffffffd9,#fff4c9d9) !important; border:1px solid #C4121A55 !important; box-shadow:0 4px 12px rgba(150,20,20,.25) !important;}
+header.top .clock-time{color:#C4121A !important; text-shadow:none !important;}
+header.top .clock-date{color:#7A1014 !important; font-weight:700 !important;}
+header.top #todayBtn{color:#C4121A !important; font-weight:800 !important;}
 </style>
 </head>
 <body>
