@@ -629,6 +629,15 @@ body:not([data-tab="week"]) #pinToday{display:none !important;}
 .brand-eyebrow{background:linear-gradient(135deg,#FFFFFF,#E4F8EA) !important; color:var(--brand) !important; border:1px solid #ffffff !important; font-weight:800 !important; font-size:12.5px !important; letter-spacing:.07em !important; padding:4px 13px !important; margin-bottom:7px !important; box-shadow:0 3px 12px rgba(0,0,0,.28), 0 0 0 3px rgba(255,255,255,.14);}
 @media (max-width:640px){ .brand-eyebrow{font-size:min(11.5px,3vw) !important; letter-spacing:.04em !important; padding:3px 10px !important;} }
 @media (max-width:400px){ .brand-eyebrow{font-size:2.9vw !important; padding:3px 8px !important;} }
+
+/* ===== Nội dung công việc: chữ đậm nổi bật; đếm ngược sát phải thẻ ===== */
+.tbl td.c-main{font-weight:800 !important; font-size:16.5px !important; color:var(--ink); letter-spacing:-.01em; line-height:1.35;}
+@media (max-width:640px){
+  .tbl td.c-main{font-size:17px !important;}
+  .tbl td.c-date{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+  .tbl td.c-date::before{display:none !important;}
+  .tbl td.c-date .cd{margin:0 0 0 auto !important;}
+}
 </style>
 </head>
 <body>
@@ -947,11 +956,6 @@ async function loadAllData(){
     state.monthAnchor = anchor.slice(0,7)+"-01";
     refreshTeacherSelect();
     renderAll();
-    let msg = "Đã tải "+lessons.length+" buổi học.";
-    if(built.skippedNoDate || built.skippedNoCode){
-      msg += " (Bỏ qua "+(built.skippedNoDate+built.skippedNoCode)+" dòng thiếu ngày/mã môn.)";
-    }
-    toast(msg);
   }catch(err){
     showError(err.message || String(err));
   }
