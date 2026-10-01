@@ -703,6 +703,32 @@ select.sel{padding:5px 12px !important; font-size:13px !important; min-height:30
 }
 .brand-eyebrow{margin-bottom:6px !important;}
 .top-row{margin-bottom:2px !important;}
+
+/* ===== Ô ghim (tab theo tuần): số căn giữa chiều cao, cỡ chữ = tab Công việc ===== */
+.pin .task-item{align-items:center !important;}
+.pin .task-num{align-self:center !important;}
+.pin .task-title{font-size:15px !important; font-weight:700 !important;}
+/* Dòng Tuần + 2 nút tiến/lùi trên 1 hàng */
+#view-week .bar{flex-wrap:nowrap !important; gap:8px;}
+#view-week .bar h2{font-size:min(16px,4.2vw) !important; white-space:nowrap; min-width:0; overflow:hidden; text-overflow:ellipsis;}
+#view-week .bar .nav-group{flex-shrink:0; display:flex; gap:6px;}
+
+/* ===== Tab Theo tháng: chấm màu thẳng hàng, cuối tuần khác màu, bố cục mới ===== */
+.month-cell{padding:5px !important; border:1px solid var(--line);}
+.month-cell.is-today{border-width:2px !important; padding:4px !important;}
+.month-dots{margin-top:0 !important; flex-wrap:nowrap !important; gap:2px !important; min-height:6px; overflow:hidden;}
+.month-dots .dot{width:6px !important; height:6px !important; flex:0 0 auto;}
+.month-grid > .month-cell:nth-child(7n+6):not(.is-today):not(.selected):not(.teach-hit){background:color-mix(in srgb,#E9B949 16%,var(--card));}
+.month-grid > .month-cell:nth-child(7n):not(.is-today):not(.selected):not(.teach-hit){background:color-mix(in srgb,#EF7B5B 14%,var(--card));}
+.month-grid > .wd-label:nth-child(7n+6){color:#B7791F; font-weight:800;}
+.month-grid > .wd-label:nth-child(7n){color:#D2551F; font-weight:800;}
+#monthDayDetail{margin:0 0 14px;}
+.legend-month{margin:10px 0 0;}
+
+/* ===== Ô ngày đang chọn (tab Theo tháng): màu xanh, khác ô hôm nay (cam) ===== */
+.month-grid > .month-cell.selected{border:2px solid var(--hl) !important; padding:4px !important; box-shadow:0 0 0 3px color-mix(in srgb,var(--hl) 22%,transparent);}
+.month-grid > .month-cell.selected:not(.teach-hit){background:color-mix(in srgb,var(--hl) 20%,var(--card)) !important;}
+.month-grid > .month-cell.selected.is-today{box-shadow:0 0 0 3px color-mix(in srgb,var(--gold) 55%,transparent);}
 </style>
 </head>
 <body>
@@ -1092,8 +1118,9 @@ function chipEl(lesson){
 /* ================= Legend ================= */
 function renderLegend(){
   const lg = document.getElementById("legend");
-  lg.style.display = state.tab!=="month" ? "none" : "";
-  if(state.tab!=="month"){ lg.innerHTML=""; return; }
+  lg.style.display = "none";
+  lg.innerHTML = "";
+  return;
   lg.innerHTML = TRACKS.map(t=>"<span><span class='dot' style='background:var(--"+trackVar(t.key)+")'></span>"+t.label+"</span>").join("");
 }
 
@@ -1220,6 +1247,8 @@ function renderMonth(){
   prev.addEventListener("click", ()=>{ const d=new Date(y,m-2,1); state.monthAnchor=toISO(d).slice(0,7)+"-01"; renderAll(); });
   next.addEventListener("click", ()=>{ const d=new Date(y,m,1); state.monthAnchor=toISO(d).slice(0,7)+"-01"; renderAll(); });
   navGroup.appendChild(prev); navGroup.appendChild(next); bar.appendChild(navGroup);
+  const detail = document.createElement("div"); detail.className="day-detail"; detail.id="monthDayDetail";
+  root.appendChild(detail);
   root.appendChild(bar);
 
   const mine = (l)=> state.teacher && l.teacherCode && l.teacherCode.toLowerCase()===state.teacher.toLowerCase();
@@ -1247,13 +1276,15 @@ function renderMonth(){
     if(state.teacher){ cell.classList.add(dayLessons.length ? "teach-hit" : "teach-off"); }
     const num = document.createElement("div"); num.className="num"; num.textContent=String(parseISO(iso).getDate());
     cell.appendChild(num);
-    if(dayLessons.length){
+    {
       const dots = document.createElement("div"); dots.className="month-dots"; const seen={};
       dayLessons.forEach(l=>{ const k=l.isHoliday?"holiday":l.room; if(seen[k])return; seen[k]=1;
         const d=document.createElement("span"); d.className="dot"; d.style.background=l.isHoliday?"var(--red)":"var(--"+trackVar(l.room)+")"; dots.appendChild(d); });
       cell.appendChild(dots);
-      const cnt = document.createElement("div"); cnt.className="month-count"; cnt.textContent=dayLessons.length+" buổi";
-      cell.appendChild(cnt);
+      if(dayLessons.length){
+        const cnt = document.createElement("div"); cnt.className="month-count"; cnt.textContent=dayLessons.length+" buổi";
+        cell.appendChild(cnt);
+      }
     }
     if(taskCountFor(iso)){
       const tk = document.createElement("div"); tk.className="month-task"; tk.textContent="📝 "+taskCountFor(iso);
@@ -1263,8 +1294,9 @@ function renderMonth(){
     grid.appendChild(cell);
   }
   scrollWrap.appendChild(grid); root.appendChild(scrollWrap);
-  const detail = document.createElement("div"); detail.className="day-detail"; detail.id="monthDayDetail";
-  root.appendChild(detail);
+  const lgM = document.createElement("div"); lgM.className="legend legend-month";
+  lgM.innerHTML = TRACKS.map(t=>"<span><span class='dot' style='background:var(--"+trackVar(t.key)+")'></span>"+t.label+"</span>").join("");
+  root.appendChild(lgM);
   renderDayDetail();
 }
 function renderDayDetail(){
