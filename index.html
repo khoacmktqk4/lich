@@ -655,6 +655,16 @@ body:not([data-tab="week"]) #pinToday{display:none !important;}
 .brand h1{font-size:19px !important; text-align:center;}
 @media (max-width:640px){ .brand h1{font-size:min(18px,4.6vw) !important;} }
 @media (max-width:400px){ .brand h1{font-size:4.4vw !important;} }
+
+/* ===== Công việc sắp tới: bỏ viền cam bao ngoài, mỗi ngày một viền riêng ===== */
+.tbl{border:1px solid var(--line) !important; box-shadow:var(--shadow) !important;}
+@media (max-width:640px){
+  .tbl{border:none !important; box-shadow:none !important; background:none !important;}
+  .tbl tbody tr{border:1.5px solid color-mix(in srgb,var(--hl) 55%,var(--line)) !important; border-radius:16px; overflow:hidden; box-shadow:var(--shadow);}
+}
+/* Tiêu đề tab Công việc căn giữa */
+#view-tasks .bar{justify-content:center;}
+#view-tasks .bar h2{text-align:center; width:100%;}
 </style>
 </head>
 <body>
