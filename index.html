@@ -299,6 +299,59 @@ main{padding-top:18px;}
 .overlay{backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);}
 #toast{background:var(--ink); color:var(--paper);}
 ::selection{background:var(--hl); color:var(--on-hl);}
+
+/* ===== Header cố định + thanh công cụ tự ẩn khi cuộn ===== */
+:root{padding-top:0 !important; --hdr-h:190px;
+  --pin-a:#0E7C93; --pin-b:#0B3556; --task-soft:#DDF2F6;}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--pin-a:#0F6479; --pin-b:#08202F; --task-soft:#0F2F39;}}
+:root[data-theme="dark"]{--pin-a:#0F6479; --pin-b:#08202F; --task-soft:#0F2F39;}
+html{scroll-padding-top:calc(var(--hdr-h) + 10px);}
+header.top{position:fixed; top:0; left:0; right:0; z-index:40;}
+body{padding-top:var(--hdr-h);}
+.toolbar-wrap{display:grid; grid-template-rows:1fr; max-width:1080px; margin:0 auto; transition:grid-template-rows .28s ease, opacity .22s ease;}
+.toolbar-wrap > .toolbar{min-height:0; overflow:hidden; margin:0; max-width:none; padding:0;}
+.toolbar-wrap.is-hidden{grid-template-rows:0fr; opacity:0; pointer-events:none;}
+.top-row{margin-bottom:9px;}
+@media (prefers-reduced-motion:reduce){.toolbar-wrap{transition:none;}}
+
+/* ===== Ghim "Công việc hôm nay" nổi bật ===== */
+.pin{background:linear-gradient(135deg,var(--pin-a) 0%,var(--pin-b) 100%); border:1px solid #ffffff22; box-shadow:0 12px 32px rgba(11,53,86,.28);}
+.pin::before{height:5px; background:linear-gradient(90deg,#FFB35C,#FFE0B3,#FFB35C);}
+.pin::after{content:""; position:absolute; right:-40px; top:-40px; width:150px; height:150px; border-radius:50%; background:radial-gradient(circle,#ffffff22,transparent 70%); pointer-events:none;}
+.pin-date{color:#fff; font-weight:800;}
+.pin-sub{color:#CDE7EE;}
+.pin-tag{background:linear-gradient(135deg,#FF9A3D,#FFC27A); color:#3A1D00; box-shadow:0 2px 8px rgba(0,0,0,.25);}
+.pin-toggle{background:#ffffff26; color:#fff;}
+.pin-h{color:#BFE6EE; text-transform:uppercase; letter-spacing:.07em; font-size:12px;}
+.pin-empty{color:#D5EAF0;}
+.pin-tasklink{color:#FFD29A;}
+.pin-lessons{background:#ffffff1f; color:#fff; border:1px solid #ffffff2e;}
+.pin .task-item{border:none; background:var(--card); box-shadow:0 6px 16px rgba(0,0,0,.2);}
+.pin .task-item::before{background:linear-gradient(180deg,#FF9A3D,#E2761B); width:5px;}
+.pin .task-num{background:linear-gradient(135deg,#FF9A3D,#E2761B); color:#fff;}
+.pin .pin-grid .chip{box-shadow:0 4px 12px rgba(0,0,0,.18);}
+
+/* ===== Tab Công việc: danh sách trong ngày + sắp tới ===== */
+#view-tasks .log-nav{background:linear-gradient(135deg,var(--pin-a),var(--pin-b)); border:none; box-shadow:0 8px 22px rgba(11,53,86,.25);}
+#view-tasks .log-nav .datelabel{color:#fff; font-weight:800;}
+#view-tasks .log-nav .iconbtn{background:#ffffff26; border-color:#ffffff33; color:#fff; box-shadow:none;}
+#view-tasks .log-nav .iconbtn:hover{background:#ffffff3d;}
+#view-tasks .task-item{background:linear-gradient(90deg,var(--task-soft),var(--card) 75%); border:1px solid var(--line); box-shadow:var(--shadow);}
+#view-tasks .task-item::before{background:linear-gradient(180deg,var(--hl),var(--brand-2)); width:5px;}
+#view-tasks .task-num{background:var(--hl); color:var(--on-hl); box-shadow:0 2px 6px rgba(15,123,143,.35);}
+#view-tasks .task-title{font-weight:700;}
+#view-tasks .task-empty{background:var(--task-soft); border:1px dashed var(--hl); color:var(--ink-2);}
+.tbl-title{display:flex; align-items:center; gap:9px; font-size:16px; font-weight:800;}
+.tbl-title::before{content:""; width:5px; height:20px; border-radius:4px; background:linear-gradient(180deg,#FF9A3D,#E2761B);}
+.tbl{border-color:var(--gold); box-shadow:0 8px 22px rgba(226,118,27,.14);}
+.tbl th{background:linear-gradient(135deg,#D9680F,#F0A24B); color:#fff;}
+.tbl tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--gold-soft) 55%,var(--card));}
+.tbl tbody tr[data-date]:hover td{background:var(--gold-soft);}
+.tbl .c-date{color:var(--gold); font-weight:700;}
+@media (max-width:640px){
+  .tbl tbody tr{background:linear-gradient(90deg,var(--gold-soft),var(--card) 65%); border:1px solid var(--line); border-left:5px solid var(--gold); box-shadow:var(--shadow);}
+  .tbl tbody tr:nth-child(even) td, .tbl tbody tr[data-date]:hover td{background:none;}
+}
 </style>
 </head>
 <body>
@@ -313,12 +366,12 @@ main{padding-top:18px;}
       </div>
     </div>
   </div>
-  <div class="toolbar">
+  <div class="toolbar-wrap" id="toolbarWrap"><div class="toolbar">
     <select id="teacherSelect" class="sel" aria-label="Lọc theo giáo viên"><option value="">Tất cả giáo viên</option></select>
     <button class="btn btn-ghost" id="refreshBtn">⟳ Làm mới</button>
     <button class="btn btn-ghost" id="todayBtn">Hôm nay</button>
     <button class="btn btn-ghost" id="themeBtn">◐</button>
-  </div>
+  </div></div>
   <nav class="tabs" role="tablist">
     <button class="tab" role="tab" data-tab="week" aria-selected="true">Theo tuần</button>
     <button class="tab" role="tab" data-tab="month" aria-selected="false">Theo tháng</button>
@@ -689,7 +742,10 @@ function chipEl(lesson){
 
 /* ================= Legend ================= */
 function renderLegend(){
-  document.getElementById("legend").innerHTML = TRACKS.map(t=>"<span><span class='dot' style='background:var(--"+trackVar(t.key)+")'></span>"+t.label+"</span>").join("")
+  const lg = document.getElementById("legend");
+  lg.style.display = state.tab==="tasks" ? "none" : "";
+  if(state.tab==="tasks"){ lg.innerHTML=""; return; }
+  lg.innerHTML = TRACKS.map(t=>"<span><span class='dot' style='background:var(--"+trackVar(t.key)+")'></span>"+t.label+"</span>").join("")
     + "<span><span class='dot' style='background:var(--gold)'></span>Hôm nay</span>";
 }
 
@@ -1056,6 +1112,32 @@ function renderAll(){
   if(state.tab==="month") renderMonth();
   if(state.tab==="tasks") renderTasks();
 }
+
+/* ================= Header: ẩn thanh công cụ khi cuộn xuống ================= */
+(function(){
+  const hdr = document.querySelector("header.top"), wrap = document.getElementById("toolbarWrap");
+  if(!hdr || !wrap) return;
+  let hidden = false, busy = false, lastY = window.scrollY || 0, busyTimer = null;
+  function measure(){ if(hidden || busy) return; document.documentElement.style.setProperty("--hdr-h", hdr.offsetHeight + "px"); }
+  function setHidden(v){
+    if(v === hidden) return;
+    hidden = v; busy = true;
+    wrap.classList.toggle("is-hidden", hidden);
+    clearTimeout(busyTimer);
+    busyTimer = setTimeout(()=>{ busy = false; measure(); }, 340);
+  }
+  window.addEventListener("scroll", ()=>{
+    const y = Math.max(0, window.scrollY || 0), dy = y - lastY;
+    if(Math.abs(dy) < 6) return;
+    lastY = y;
+    if(y <= 24 || dy < 0) setHidden(false);
+    else if(y > 120 && dy > 0 && document.activeElement !== document.getElementById("teacherSelect")) setHidden(true);
+  }, {passive:true});
+  window.addEventListener("resize", ()=>{ setHidden(false); setTimeout(measure, 360); });
+  if(window.ResizeObserver) new ResizeObserver(measure).observe(hdr);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+  measure();
+})();
 
 loadAllData();
 
