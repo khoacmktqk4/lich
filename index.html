@@ -729,6 +729,28 @@ select.sel{padding:5px 12px !important; font-size:13px !important; min-height:30
 .month-grid > .month-cell.selected{border:2px solid var(--hl) !important; padding:4px !important; box-shadow:0 0 0 3px color-mix(in srgb,var(--hl) 22%,transparent);}
 .month-grid > .month-cell.selected:not(.teach-hit){background:color-mix(in srgb,var(--hl) 20%,var(--card)) !important;}
 .month-grid > .month-cell.selected.is-today{box-shadow:0 0 0 3px color-mix(in srgb,var(--gold) 55%,transparent);}
+
+/* ===== Tab Theo tháng: gọn để thấy công việc + toàn bộ lưới lịch khi chưa cuộn ===== */
+#monthDayDetail{margin:0 0 8px !important; max-height:150px; overflow-y:auto; border-radius:14px;}
+#monthLessonDetail{margin:10px 0 0 !important;}
+#monthDayDetail .panel{padding:9px 12px !important;}
+#monthDayDetail .panel h3{font-size:13.5px !important; margin:0 !important; line-height:1.3;}
+#monthDayDetail .pin-empty{font-size:13px; margin-top:4px;}
+#monthDayDetail .task-block{margin:0;}
+#monthDayDetail .task-item{padding:6px 10px !important; gap:8px !important;}
+#monthDayDetail .task-num{display:none !important;}
+#monthDayDetail .task-title{font-size:14px !important; padding:5px 10px !important;}
+#monthDayDetail .task-meta, #monthDayDetail .task-note{font-size:12.5px !important; margin-top:3px !important;}
+#view-month .bar{margin-bottom:6px !important; gap:8px;}
+#view-month .bar h2{font-size:17px !important;}
+#view-month .iconbtn{width:30px !important; height:30px !important; min-width:0 !important; font-size:15px !important; padding:0 !important;}
+#view-month .month-grid{gap:3px !important;}
+#view-month .month-grid .wd-label{font-size:11px !important; padding-bottom:0 !important;}
+#view-month .month-cell{min-height:40px !important; gap:1px !important; padding:3px 4px !important;}
+#view-month .month-cell.is-today, #view-month .month-grid > .month-cell.selected{padding:2px 3px !important;}
+#view-month .month-cell .num{font-size:12px !important; line-height:1.2;}
+#view-month .month-cell .month-task{font-size:10px !important; line-height:1.2;}
+#view-month .month-cell.teach-hit .num{font-size:13px !important;}
 </style>
 </head>
 <body>
@@ -1297,28 +1319,40 @@ function renderMonth(){
   const lgM = document.createElement("div"); lgM.className="legend legend-month";
   lgM.innerHTML = TRACKS.map(t=>"<span><span class='dot' style='background:var(--"+trackVar(t.key)+")'></span>"+t.label+"</span>").join("");
   root.appendChild(lgM);
+  const lessonDetail = document.createElement("div"); lessonDetail.className="day-detail"; lessonDetail.id="monthLessonDetail";
+  root.appendChild(lessonDetail);
   renderDayDetail();
 }
 function renderDayDetail(){
-  const el = document.getElementById("monthDayDetail");
-  if(!el) return;
+  const elT = document.getElementById("monthDayDetail");
+  const elL = document.getElementById("monthLessonDetail");
+  if(!elT && !elL) return;
   const iso = state.selectedDay || ((IDX.MIN_DATE && IDX.MIN_DATE<=TODAY && TODAY<=IDX.MAX_DATE)?TODAY:(IDX.MIN_DATE||TODAY));
-  const lessonsHere = (IDX.byDate[iso]||[]).slice().sort(sortLessons);
-  const panel = document.createElement("div"); panel.className="panel";
-  panel.innerHTML = "<h3>"+weekdayNameOf(iso)+", "+fmtVN(iso)+"</h3>";
-  const wrap = document.createElement("div"); wrap.className="pin-grid";
-  if(lessonsHere.length) lessonsHere.forEach(l=>wrap.appendChild(chipEl(l)));
-  else { const e=document.createElement("div"); e.className="pin-empty"; e.textContent="Không có lịch học ngày này."; wrap.appendChild(e); }
-  panel.appendChild(wrap);
-  const dayTasks = TASKIDX[iso]||[];
-  if(dayTasks.length){
-    const tb = document.createElement("div"); tb.className="task-block";
-    tb.innerHTML = "<h3>Công việc triển khai</h3>";
-    const tl = document.createElement("div"); tl.className="task-list"; tl.style.marginTop="8px"; tl.style.marginBottom="0";
-    dayTasks.forEach(t=>tl.appendChild(taskItemEl(t)));
-    tb.appendChild(tl); panel.appendChild(tb);
+  const dateLabel = weekdayNameOf(iso)+", "+fmtVN(iso);
+  if(elT){
+    const panel = document.createElement("div"); panel.className="panel panel-compact";
+    panel.innerHTML = "<h3>Công việc triển khai · "+dateLabel+"</h3>";
+    const dayTasks = TASKIDX[iso]||[];
+    if(dayTasks.length){
+      const tl = document.createElement("div"); tl.className="task-list"; tl.style.marginTop="6px"; tl.style.marginBottom="0";
+      dayTasks.forEach(t=>tl.appendChild(taskItemEl(t)));
+      panel.appendChild(tl);
+    } else {
+      const e=document.createElement("div"); e.className="pin-empty"; e.textContent="Không có công việc triển khai ngày này.";
+      panel.appendChild(e);
+    }
+    elT.innerHTML=""; elT.appendChild(panel);
   }
-  el.innerHTML=""; el.appendChild(panel);
+  if(elL){
+    const lessonsHere = (IDX.byDate[iso]||[]).slice().sort(sortLessons);
+    const panel = document.createElement("div"); panel.className="panel";
+    panel.innerHTML = "<h3>Lịch học · "+dateLabel+"</h3>";
+    const wrap = document.createElement("div"); wrap.className="pin-grid";
+    if(lessonsHere.length) lessonsHere.forEach(l=>wrap.appendChild(chipEl(l)));
+    else { const e=document.createElement("div"); e.className="pin-empty"; e.textContent="Không có lịch học ngày này."; wrap.appendChild(e); }
+    panel.appendChild(wrap);
+    elL.innerHTML=""; elL.appendChild(panel);
+  }
 }
 
 /* ================= Stats view ================= */
