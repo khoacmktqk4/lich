@@ -423,6 +423,43 @@ select.sel{flex:0 1 190px; min-width:0; padding:8px 12px; text-overflow:ellipsis
 .cd.soon{background:linear-gradient(135deg,#CC3A2E,#E8604F); box-shadow:0 1px 4px rgba(204,58,46,.4);}
 .cd.now{background:linear-gradient(135deg,#13966C,#2FD3A0); color:#06241B; box-shadow:0 1px 4px rgba(19,150,108,.4);}
 @media (max-width:640px){ .tbl td.c-date .cd{margin:0 0 0 8px;} }
+
+/* ===== Tiêu đề điện thoại: bỏ chữ "năm" để không bị cắt ===== */
+@media (max-width:640px){
+  .brand h1 .nam{display:none;}
+  .brand h1{font-size:min(21px,5.2vw); text-overflow:clip;}
+}
+@media (max-width:400px){ .brand h1{font-size:5vw;} }
+
+/* ===== Ô ghim hôm nay: bảng màu tím chàm – hồng ===== */
+:root{--pin2-a:#5B3FD8; --pin2-b:#2A2380; --people-ink:#5B3FD8;}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--pin2-a:#4B3BB5; --pin2-b:#1A1550; --people-ink:#B7A4FF;}}
+:root[data-theme="dark"]{--pin2-a:#4B3BB5; --pin2-b:#1A1550; --people-ink:#B7A4FF;}
+.pin{background:linear-gradient(140deg,var(--pin2-a) 0%,var(--pin2-b) 100%); border:1px solid #ffffff2a; box-shadow:0 14px 34px rgba(42,35,128,.35);}
+.pin::before{height:5px; background:linear-gradient(90deg,#FFB347,#FF6FA8,#8E7BFF);}
+.pin::after{background:radial-gradient(circle,#FF6FA838,transparent 70%);}
+.pin-sub{color:#DAD4FF;}
+.pin-h{color:#D4CCFF;}
+.pin-empty{color:#E3DEFF;}
+.pin-tag{background:linear-gradient(135deg,#FFB347,#FF8A3D); color:#3A1D00;}
+.pin .task-item{background:var(--card); box-shadow:0 8px 20px rgba(10,8,60,.28);}
+.pin .task-item::before{background:linear-gradient(180deg,#8E7BFF,#FF6FA8);}
+.pin .task-num{background:linear-gradient(135deg,#8E7BFF,#FF6FA8); color:#fff; box-shadow:0 2px 8px rgba(142,123,255,.45);}
+.pin-lessons{display:flex; align-items:center; gap:12px; background:linear-gradient(135deg,#ffffff2e,#ffffff14); border:1px solid #ffffff3d; border-radius:14px; padding:10px 14px; color:#fff; box-shadow:inset 0 1px 0 #ffffff33;}
+.pin-lessons .pl-ico{width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg,#FFB347,#FF8A3D); display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; box-shadow:0 2px 8px rgba(255,138,61,.45);}
+.pin-lessons .pl-txt{font-size:14px; font-weight:600;}
+.pin-lessons b{font-size:20px; font-weight:800; color:#FFD27A; margin-right:3px; text-shadow:0 0 12px rgba(255,190,90,.5);}
+.pin-lessons.none{color:#E3DEFF;}
+.pin-tasklink{color:#FFD9A0;}
+
+/* ===== "Thành phần" nổi bật ===== */
+.task-meta{display:block; background:var(--khi-soft); border-left:4px solid var(--khi); border-radius:8px; padding:6px 10px; margin-top:7px; font-weight:600; color:var(--ink);}
+.task-meta .k{color:var(--people-ink); font-weight:800; font-size:11px; text-transform:uppercase; letter-spacing:.06em; margin-right:6px;}
+.tbl tbody tr td[data-label="Thành phần"]{background:var(--khi-soft); color:var(--ink); font-weight:600; box-shadow:inset 3px 0 0 var(--khi);}
+@media (max-width:640px){
+  .tbl tbody tr td[data-label="Thành phần"]{margin:2px 0; padding:6px 14px; box-shadow:inset 4px 0 0 var(--khi);}
+  .tbl td[data-label="Thành phần"]::before{color:var(--people-ink); font-weight:800; text-transform:uppercase; font-size:11px; letter-spacing:.06em;}
+}
 </style>
 </head>
 <body>
@@ -433,7 +470,7 @@ select.sel{flex:0 1 190px; min-width:0; padding:8px 12px; text-overflow:ellipsis
       <div class="brand-logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M8 14h3M13 14h3M8 17.2h3" stroke="#FFD29A"/></svg></div>
       <div class="brand-text">
         <div class="brand-eyebrow">Khoa Chuyên môn Kỹ thuật</div>
-        <h1>Lịch giảng dạy <span class="yr">năm 2026</span></h1>
+        <h1>Lịch giảng dạy <span class="yr"><span class="nam">năm </span>2026</span></h1>
       </div>
     </div>
     <div class="clock" id="clock" title="Giờ hiện tại">
@@ -845,7 +882,9 @@ function renderPin(){
   }
   if(inRange){
     const line = document.createElement("div"); line.className = "pin-lessons" + (todays.length ? "" : " none");
-    line.innerHTML = "<span>📚 " + (todays.length ? todays.length + " buổi học hôm nay" : "Hôm nay không có buổi học") + "</span>";
+    line.innerHTML = todays.length
+      ? "<span class='pl-ico'>📚</span><span class='pl-txt'><b>" + todays.length + "</b> buổi học hôm nay</span>"
+      : "<span class='pl-ico'>📚</span><span class='pl-txt'>Hôm nay không có buổi học</span>";
     body.appendChild(line);
   }
   const linkBtn = document.createElement("button");
