@@ -352,6 +352,21 @@ body{padding-top:var(--hdr-h);}
   .tbl tbody tr{background:linear-gradient(90deg,var(--gold-soft),var(--card) 65%); border:1px solid var(--line); border-left:5px solid var(--gold); box-shadow:var(--shadow);}
   .tbl tbody tr:nth-child(even) td, .tbl tbody tr[data-date]:hover td{background:none;}
 }
+
+/* ===== Thẻ tiết học gọn hơn ===== */
+.chip{padding:7px 10px; min-height:0;}
+.chip-top{display:flex; align-items:center; flex-wrap:wrap; gap:3px 8px;}
+.chip-top .chip-code{margin:0; font-size:11.5px;}
+.chip-top .chip-teacher{margin:0 0 0 auto; font-size:12.5px; padding:1px 10px;}
+.chip-subject{font-size:13.5px; margin-top:3px; line-height:1.3;}
+.slot-block{padding:8px 10px;}
+.slot-head{margin-bottom:6px; font-size:12px;}
+.slot-chips{gap:6px;}
+.slot-chips > .chip{flex:1 1 210px;}
+.day-card{margin-bottom:10px; grid-template-columns:64px 1fr;}
+.day-head{padding:10px 4px;}
+.day-head .dd{font-size:22px;}
+.slot-empty{padding:10px !important;}
 </style>
 </head>
 <body>
@@ -728,10 +743,10 @@ function chipEl(lesson){
   const trackInfo = TRACKS.find(t=>t.key===lesson.room);
   const tagText = lesson.isHoliday ? "NGHỈ" : (trackInfo ? trackInfo.label.replace("Quân y · ","").replace("Quân ","Q.") : lesson.room);
   el.innerHTML =
-    "<div class='chip-top'><span class='chip-track-tag'>"+escapeHtml(tagText)+"</span></div>" +
-    "<div class='chip-code'>"+escapeHtml(lesson.code)+", tiết "+escapeHtml(lesson.period||"")+"</div>" +
-    "<div class='chip-subject'>"+escapeHtml(lesson.subject)+"</div>" +
-    "<div class='chip-teacher'>"+escapeHtml(lesson.teacher || (lesson.isHoliday? "" : "GV: chưa rõ"))+"</div>";
+    "<div class='chip-top'><span class='chip-track-tag'>"+escapeHtml(tagText)+"</span>" +
+    "<span class='chip-code'>"+escapeHtml(lesson.code)+", tiết "+escapeHtml(lesson.period||"")+"</span>" +
+    "<span class='chip-teacher'>"+escapeHtml(lesson.teacher || (lesson.isHoliday? "" : "GV: chưa rõ"))+"</span></div>" +
+    "<div class='chip-subject'>"+escapeHtml(lesson.subject)+"</div>";
   if(state.teacher){
     if(lesson.teacherCode && lesson.teacherCode.toLowerCase() === state.teacher.toLowerCase()) el.classList.add("match");
     else el.classList.add("dim");
@@ -745,8 +760,7 @@ function renderLegend(){
   const lg = document.getElementById("legend");
   lg.style.display = state.tab==="tasks" ? "none" : "";
   if(state.tab==="tasks"){ lg.innerHTML=""; return; }
-  lg.innerHTML = TRACKS.map(t=>"<span><span class='dot' style='background:var(--"+trackVar(t.key)+")'></span>"+t.label+"</span>").join("")
-    + "<span><span class='dot' style='background:var(--gold)'></span>Hôm nay</span>";
+  lg.innerHTML = TRACKS.map(t=>"<span><span class='dot' style='background:var(--"+trackVar(t.key)+")'></span>"+t.label+"</span>").join("");
 }
 
 /* ================= Pinned today ================= */
@@ -819,7 +833,15 @@ document.getElementById("todayBtn").addEventListener("click", ()=>{
   const anchor = (IDX.MIN_DATE && IDX.MIN_DATE<=TODAY && TODAY<=IDX.MAX_DATE) ? TODAY : (IDX.MIN_DATE||TODAY);
   state.weekAnchor = mondayOf(anchor); state.monthAnchor = anchor.slice(0,7)+"-01"; state.selectedDay = anchor; state.taskDate = TODAY;
   renderAll();
-  document.getElementById("pinToday").scrollIntoView({behavior:"smooth", block:"start"});
+  requestAnimationFrame(()=>{
+    let target = null;
+    if(state.tab === "week") target = document.querySelector("#view-week .day-card.is-today") || document.querySelector("#view-week .bar");
+    if(!target) target = document.getElementById("pinToday");
+    const hdr = document.querySelector("header.top");
+    const offset = (hdr ? hdr.offsetHeight : 0) + 10;
+    const top = target.getBoundingClientRect().top + (window.scrollY || 0) - offset;
+    window.scrollTo({top:Math.max(0, top), behavior:"smooth"});
+  });
 });
 
 /* ================= Week view ================= */
@@ -1105,7 +1127,13 @@ function taskTable(items, withDate){
 }
 
 /* ================= Orchestrator ================= */
+function updateTaskTabLabel(){
+  const n = (typeof taskCountFor === "function" && tasksStatus === "ok") ? taskCountFor(TODAY) : 0;
+  const tab = document.querySelector('.tab[data-tab="tasks"]');
+  if(tab) tab.textContent = "Công việc" + (n ? " ("+n+")" : "");
+}
 function renderAll(){
+  updateTaskTabLabel();
   renderLegend();
   renderPin();
   if(state.tab==="week") renderWeek();
