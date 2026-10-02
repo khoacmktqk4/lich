@@ -881,6 +881,19 @@ nav.tabs .tab[aria-selected="true"]{background:#fff !important; color:#0B5E2E !i
 /* Điểm nhấn cam -> vàng/xanh cho đồng bộ */
 .tbl-title::before{background:linear-gradient(180deg,#FFD84D,#15A04F) !important;}
 .cd.near{background:linear-gradient(135deg,#FFE066,#FFB800) !important; color:#3A2A00 !important; box-shadow:0 1px 5px rgba(209,139,0,.4) !important;}
+
+/* ===== Công việc sắp tới: ngày tháng chữ vàng; Thành phần / Ghi chú cùng kiểu ===== */
+@media (max-width:640px){
+  .tbl tbody tr[data-date] td.c-date{background:linear-gradient(135deg,#0B5E2E,#15803D) !important; color:#FFE066 !important; border-bottom:none !important;}
+  .tbl tbody tr[data-date] td.c-date .cd{background:#ffffff2e !important; color:#fff !important; box-shadow:none !important; border:1px solid #ffffff59;}
+  .tbl tbody tr[data-date] td.c-date .cd.near{background:linear-gradient(135deg,#FFE066,#FFB800) !important; color:#3A2A00 !important; border:none;}
+  .tbl tbody tr[data-date] td.c-date .cd.soon{background:linear-gradient(135deg,#E5484D,#F97316) !important; color:#fff !important; border:none;}
+  .tbl tbody tr[data-date] td.c-date .cd.now{background:#fff !important; color:#0B5E2E !important; border:none;}
+  .tbl tbody tr[data-date] td[data-label="Thành phần"], .tbl tbody tr[data-date] td[data-label="Ghi chú"]{font-size:13.5px !important; font-weight:600 !important; color:var(--ink) !important;}
+}
+.tbl td[data-label="Thành phần"]::before, .tbl td[data-label="Ghi chú"]::before,
+.task-meta .k, .task-note .k{text-transform:uppercase !important; font-size:11px !important; font-weight:800 !important; letter-spacing:.05em !important; color:var(--hl) !important;}
+.task-meta, .task-note{font-size:14px; font-weight:600 !important; color:var(--ink) !important;}
 </style>
 </head>
 <body>
