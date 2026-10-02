@@ -894,6 +894,24 @@ nav.tabs .tab[aria-selected="true"]{background:#fff !important; color:#0B5E2E !i
 .tbl td[data-label="Thành phần"]::before, .tbl td[data-label="Ghi chú"]::before,
 .task-meta .k, .task-note .k{text-transform:uppercase !important; font-size:11px !important; font-weight:800 !important; letter-spacing:.05em !important; color:var(--hl) !important;}
 .task-meta, .task-note{font-size:14px; font-weight:600 !important; color:var(--ink) !important;}
+
+/* ===== Dải ngày tháng: nền vàng nhạt, chữ vàng đậm ===== */
+@media (max-width:640px){
+  .tbl tbody tr[data-date] td.c-date{background:linear-gradient(135deg,#FFF8DB,#FFEFB0) !important; color:#A86B00 !important; border-bottom:1px solid #F3DC8A !important;}
+  .tbl tbody tr[data-date] td.c-date .cd{background:linear-gradient(135deg,#15803D,#22B24C) !important; color:#fff !important; border:none !important; box-shadow:0 1px 4px rgba(21,128,61,.35) !important;}
+  .tbl tbody tr[data-date] td.c-date .cd.near{background:linear-gradient(135deg,#FFD84D,#F5A800) !important; color:#3A2A00 !important;}
+  .tbl tbody tr[data-date] td.c-date .cd.soon{background:linear-gradient(135deg,#E5484D,#F97316) !important; color:#fff !important;}
+  .tbl tbody tr[data-date] td.c-date .cd.now{background:linear-gradient(135deg,#0B5E2E,#15803D) !important; color:#fff !important;}
+}
+:root[data-theme="dark"] .tbl tbody tr[data-date] td.c-date{background:linear-gradient(135deg,#3A3010,#2C2508) !important; color:#FFD76A !important; border-bottom-color:#5A4A12 !important;}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .tbl tbody tr[data-date] td.c-date{background:linear-gradient(135deg,#3A3010,#2C2508) !important; color:#FFD76A !important; border-bottom-color:#5A4A12 !important;} }
+
+/* ===== Thanh 3 tab: nền vàng, chữ xanh ===== */
+nav.tabs{background:linear-gradient(180deg,#FFE680 0%,#FFD43B 100%) !important; border:1.5px solid #E8B800 !important; box-shadow:0 10px 24px rgba(176,118,0,.38) !important;}
+nav.tabs .tab{color:#0B5E2E !important;}
+nav.tabs .tab[aria-selected="true"]{background:linear-gradient(135deg,#0B5E2E,#15803D) !important; color:#FFE066 !important; border:none !important; box-shadow:0 4px 12px rgba(11,79,42,.4) !important;}
+:root[data-theme="dark"] nav.tabs{background:linear-gradient(180deg,#E6B800 0%,#D79A00 100%) !important; border-color:#B88400 !important;}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) nav.tabs{background:linear-gradient(180deg,#E6B800 0%,#D79A00 100%) !important; border-color:#B88400 !important;} }
 </style>
 </head>
 <body>
