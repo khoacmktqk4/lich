@@ -912,6 +912,20 @@ nav.tabs .tab{color:#0B5E2E !important;}
 nav.tabs .tab[aria-selected="true"]{background:linear-gradient(135deg,#0B5E2E,#15803D) !important; color:#FFE066 !important; border:none !important; box-shadow:0 4px 12px rgba(11,79,42,.4) !important;}
 :root[data-theme="dark"] nav.tabs{background:linear-gradient(180deg,#E6B800 0%,#D79A00 100%) !important; border-color:#B88400 !important;}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) nav.tabs{background:linear-gradient(180deg,#E6B800 0%,#D79A00 100%) !important; border-color:#B88400 !important;} }
+
+/* ===== Tiêu đề trang: nền vàng, chữ xanh ===== */
+header.top{background:linear-gradient(180deg,#FFE680 0%,#FFD43B 100%) !important; border-bottom:3px solid #15803D !important; box-shadow:0 8px 22px rgba(176,118,0,.32) !important; color:#0B5E2E !important;}
+header.top .brand-eyebrow{background:linear-gradient(135deg,#0B5E2E,#15803D) !important; color:#FFE066 !important; box-shadow:0 3px 8px rgba(11,79,42,.35) !important;}
+header.top .brand-eyebrow::before{content:"★ "; color:#FFE066;}
+header.top .brand h1, header.top .brand h1 .yr{color:#0B5E2E !important; text-shadow:none !important;}
+header.top .clock{background:linear-gradient(160deg,#0B5E2E,#14733A) !important; border:1px solid #0B5E2E !important; box-shadow:0 4px 12px rgba(11,79,42,.35) !important;}
+header.top .clock-time{color:#FFE066 !important; text-shadow:none !important;}
+header.top .clock-date{color:#E6F7EA !important;}
+header.top .btn-ghost, header.top select.sel{background:#fff !important; border:1.5px solid #E0B000 !important; color:#0B5E2E !important; box-shadow:0 2px 0 rgba(176,118,0,.25) !important;}
+header.top .btn-ghost:hover{background:#FFF6D6 !important;}
+header.top #refreshBtn, header.top #themeBtn, header.top #todayBtn{color:#0B5E2E !important;}
+:root[data-theme="dark"] header.top{background:linear-gradient(180deg,#E6B800 0%,#D79A00 100%) !important;}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) header.top{background:linear-gradient(180deg,#E6B800 0%,#D79A00 100%) !important;} }
 </style>
 </head>
 <body>
