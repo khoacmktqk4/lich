@@ -306,6 +306,22 @@ body:not([data-tab="week"]) #pinToday{display:none !important;}
 .pin .task-title{color:#fff;} .pin .task-title:empty{display:none;}
 .pin .task-meta{color:#fff;} .pin .task-note{color:#D3DDF5;}
 .pin .task-meta .k,.pin .task-note .k{color:var(--amber);}
+
+/* ===== Tab Công việc: ô theo ngày có viền + đổ bóng 3D ===== */
+#view-tasks{--edge:color-mix(in srgb,var(--hl) 55%,var(--line)); --edge-deep:color-mix(in srgb,var(--hl) 38%,var(--line));
+  --raise:0 1px 0 #ffffff80 inset,0 4px 0 var(--edge-deep),0 14px 24px color-mix(in srgb,var(--hl) 22%,transparent);}
+#view-tasks .task-item{border:1.5px solid var(--edge); box-shadow:var(--raise); margin-bottom:4px; transition:transform .25s var(--ease),box-shadow .25s var(--ease);}
+@media (max-width:640px){
+  #view-tasks .tbl tbody tr{margin-bottom:16px; border:1.5px solid var(--edge); box-shadow:var(--raise); transition:transform .25s var(--ease),box-shadow .25s var(--ease);}
+}
+@media (min-width:641px){
+  #view-tasks .tbl{border:1.5px solid var(--edge); box-shadow:var(--raise);}
+  #view-tasks .tbl td{border-top:1px solid var(--edge-deep);} #view-tasks .tbl tbody tr:first-child td{border-top:none;}
+}
+@media (hover:hover){
+  #view-tasks .task-item:hover,#view-tasks .tbl tbody tr[data-date]:hover{transform:translateY(-3px);}
+}
+#view-tasks .task-item:active,#view-tasks .tbl tbody tr[data-date]:active{transform:translateY(3px); box-shadow:0 1px 0 #ffffff80 inset,0 1px 0 var(--edge-deep),0 4px 10px color-mix(in srgb,var(--hl) 18%,transparent);}
 </style>
 </head>
 <body>
