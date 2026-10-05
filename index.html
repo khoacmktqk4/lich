@@ -162,8 +162,8 @@ body:not([data-tab="week"]) #pinToday{display:none !important;}
   background:linear-gradient(90deg,color-mix(in srgb,var(--tc) 13%,var(--card)),var(--card) 72%); transition:transform .22s var(--ease),box-shadow .22s var(--ease),opacity .3s;}
 .chip::before{content:""; position:absolute; left:6px; top:8px; bottom:8px; width:4px; border-radius:4px; background:var(--tc);}
 .chip:active{transform:scale(.985);}
-.chip.track-P301,.chip.track-P302,.chip.track-P303{--tc:var(--p301);}
-.chip-loc{margin-top:3px; font-size:12.5px; font-weight:500; line-height:1.3; color:var(--ink-2);}
+.chip.track-P301,.chip.track-P302,.chip.track-P303,.chip.track-QY{--tc:var(--p301);} .chip.track-TChinh{--tc:var(--p303);}
+.chip-loc{margin-top:4px; font-size:13px; font-weight:700; line-height:1.3; color:var(--gold);}
 .chip.track-QNhu{--tc:var(--nhu);} .chip.track-QKhi{--tc:var(--khi);} .chip.holiday{--tc:var(--red); background:var(--red-soft);}
 .chip-top{display:flex; align-items:center; flex-wrap:wrap; gap:3px 8px;}
 .chip-track-tag{font-size:12px; font-weight:800; color:var(--tc);}
@@ -478,7 +478,8 @@ function buildLessons(rows, subjMap, teachMap){
     if(["P301","P303","P302"].includes(lop)) room = lop;
     else if(/quân nhu|quan nhu/i.test(nhom)) room = "QNhu";
     else if(/quân khí|quan khi/i.test(nhom)) room = "QKhi";
-    else room = lop || "P301";
+    else if(/tài chính|tai chinh/i.test(nhom) || /tài chính|tai chinh/i.test(lop)) room = "TChinh";
+    else room = "QY";
 
     const teacherCodeRaw = (r["Mã GV"]||r["Ma GV"]||"").trim();
     const subjFromMap = subjMap[code.toLowerCase()];
@@ -525,16 +526,19 @@ const TRACKS = [
   {key:"P301", label:"Quân y · L1 (P301)"},
   {key:"P303", label:"Quân y · L2 (P303)"},
   {key:"P302", label:"Quân y · L3 (P302)"},
+  {key:"QY", label:"Quân y"},
   {key:"QNhu", label:"Quân nhu"},
   {key:"QKhi", label:"Quân khí"},
+  {key:"TChinh", label:"Tài chính"},
 ];
+const QUAN_Y = ["P301","P302","P303","QY"];
 const SLOTS = [
   {key:"s1", periods:["1-3","2-3"]},
   {key:"s2", periods:["4-5"]},
   {key:"s3", periods:["6-8"]},
 ];
 function slotOf(period){ return SLOTS.find(s=>s.periods.includes(period)) || SLOTS[0]; }
-function trackVar(key){ return {P301:"p301", P303:"p301", P302:"p301", QNhu:"nhu", QKhi:"khi"}[key]; }
+function trackVar(key){ return {P301:"p301", P303:"p301", P302:"p301", QY:"p301", QNhu:"nhu", QKhi:"khi", TChinh:"p303"}[key] || "p301"; }
 function todayISO(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
 function parseISO(s){ const [y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d); }
 function toISO(d){ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
@@ -695,7 +699,7 @@ function chipEl(lesson){
   const trackClass = lesson.isHoliday ? "holiday" : "track-"+lesson.room;
   el.className = "chip " + trackClass;
   const trackInfo = TRACKS.find(t=>t.key===lesson.room);
-  const tagText = lesson.isHoliday ? "NGHỈ" : (trackInfo ? trackInfo.label.replace("Quân y · ","").replace("Quân ","Q.") : lesson.room);
+  const tagText = lesson.isHoliday ? "NGHỈ" : (QUAN_Y.includes(lesson.room) ? "Quân y" : (trackInfo ? trackInfo.label.replace("Quân ","Q.") : lesson.room));
   el.innerHTML =
     "<div class='chip-top'><span class='chip-track-tag'>"+escapeHtml(tagText)+"</span>" +
     "<span class='chip-code'>"+escapeHtml(lesson.code)+", tiết "+escapeHtml(lesson.period||"")+"</span>" +
@@ -900,7 +904,7 @@ function renderMonth(){
   }
   scrollWrap.appendChild(grid); root.appendChild(scrollWrap);
   const lgM = document.createElement("div"); lgM.className="legend legend-month";
-  lgM.innerHTML = [["p301","Quân y"],["nhu","Quân nhu"],["khi","Quân khí"]].map(([v,label])=>"<span><span class='dot' style='background:var(--"+v+")'></span>"+label+"</span>").join("");
+  lgM.innerHTML = [["p301","Quân y"],["nhu","Quân nhu"],["khi","Quân khí"],["p303","Tài chính"]].map(([v,label])=>"<span><span class='dot' style='background:var(--"+v+")'></span>"+label+"</span>").join("");
   root.appendChild(lgM);
   const lessonDetail = document.createElement("div"); lessonDetail.className="day-detail"; lessonDetail.id="monthLessonDetail";
   root.appendChild(lessonDetail);
