@@ -323,6 +323,39 @@ body:not([data-tab="week"]) #pinToday{display:none !important;}
   #view-tasks .task-item:hover,#view-tasks .tbl tbody tr[data-date]:hover{transform:translateY(-3px);}
 }
 #view-tasks .task-item:active,#view-tasks .tbl tbody tr[data-date]:active{transform:translateY(3px); box-shadow:0 1px 0 #ffffff80 inset,0 1px 0 var(--edge-deep),0 4px 10px color-mix(in srgb,var(--hl) 18%,transparent);}
+
+/* ===== Tab Công cụ ===== */
+.tool-filters{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin-bottom:12px;}
+.tool-filters label{display:flex; flex-direction:column; gap:4px; min-width:0; font-size:12px; font-weight:700; color:var(--muted);}
+.tool-filters select,.tool-filters input{width:100%; min-width:0; height:38px; padding:0 10px; font:600 13.5px var(--font); color:var(--ink); background:var(--paper); border:1px solid var(--line); border-radius:12px;}
+.tool-actions{display:flex; flex-wrap:wrap; gap:8px;}
+.tool-pdf{margin-left:auto;}
+#view-tools .panel .tbl-wrap{margin-bottom:0;}
+@media (min-width:641px){#view-tools .tbl .c-num{width:96px; text-align:center; font-weight:700;}}
+@media (max-width:420px){.tab{font-size:12px; padding:11px 2px;}}
+
+/* ===== In / xuất PDF ===== */
+#printArea{display:none;}
+@media print{
+  @page{size:A4; margin:14mm 12mm;}
+  html,body{height:auto !important; padding:0 !important; background:#fff !important;}
+  body > *:not(#printArea){display:none !important;}
+  #printArea{display:block !important; color:#000; font:11px/1.45 var(--font); -webkit-print-color-adjust:exact; print-color-adjust:exact;}
+  #printArea h1{margin:0; font-size:20px; text-align:center; letter-spacing:.03em;}
+  #printArea .pr-sub{margin:2px 0 10px; font-size:12px; text-align:center;}
+  #printArea .pr-filter{margin:8px 0; padding:6px 10px; font-size:11px; border:1px solid #999;}
+  #printArea .pr-stats{display:flex; gap:8px; margin:10px 0;}
+  #printArea .pr-stats div{flex:1; padding:6px; text-align:center; border:1px solid #999;}
+  #printArea .pr-stats b{display:block; font-size:18px;}
+  #printArea h2{margin:14px 0 6px; padding-bottom:2px; font-size:13px; border-bottom:1.5px solid #000; break-after:avoid;}
+  #printArea table{width:100%; border-collapse:collapse; font-size:10.5px;}
+  #printArea th,#printArea td{padding:3px 5px; text-align:left; vertical-align:top; border:1px solid #777;}
+  #printArea th{background:#e5e5e5 !important;}
+  #printArea .ctr{text-align:center;}
+  #printArea thead{display:table-header-group;}
+  #printArea tr{break-inside:avoid;}
+  #printArea .pr-foot{margin-top:12px; font-size:10px; text-align:right; color:#444;}
+}
 </style>
 </head>
 <body>
@@ -351,6 +384,7 @@ body:not([data-tab="week"]) #pinToday{display:none !important;}
     <button class="tab" role="tab" data-tab="week" aria-selected="true">Theo tuần</button>
     <button class="tab" role="tab" data-tab="month" aria-selected="false">Theo tháng</button>
     <button class="tab" role="tab" data-tab="tasks" aria-selected="false">Công việc</button>
+    <button class="tab" role="tab" data-tab="tools" aria-selected="false">Công cụ</button>
   </nav>
 </header>
 
@@ -372,7 +406,9 @@ body:not([data-tab="week"]) #pinToday{display:none !important;}
   <section id="view-week"></section>
   <section id="view-month" style="display:none"></section>
   <section id="view-tasks" style="display:none"></section>
+  <section id="view-tools" style="display:none"></section>
 </main>
+<div id="printArea" aria-hidden="true"></div>
 
 
 <div class="overlay" id="detailOverlay">
@@ -569,6 +605,7 @@ const state = {
   weekAnchor: TODAY, monthAnchor: TODAY.slice(0,7)+"-01",
   pinOpen: localStorage.getItem("pinOpen") !== "0",
   taskDate: TODAY, openSlots: {}, pinLessons: false,
+  tool: {teacher:"", group:"", from:"", to:""},
 };
 
 /* ================= Toast ================= */
@@ -779,6 +816,7 @@ document.querySelectorAll(".tab").forEach(btn=>{
     document.getElementById("view-week").style.display = state.tab==="week" ? "" : "none";
     document.getElementById("view-month").style.display = state.tab==="month" ? "" : "none";
     document.getElementById("view-tasks").style.display = state.tab==="tasks" ? "" : "none";
+    document.getElementById("view-tools").style.display = state.tab==="tools" ? "" : "none";
     renderAll();
   });
 });
@@ -1103,6 +1141,160 @@ function taskTable(items, withDate){
   return wrap;
 }
 
+/* ================= Công cụ: thống kê, lọc theo giáo viên, xuất PDF ================= */
+const GROUPS = [
+  {key:"QY", label:"Quân y", v:"p301"}, {key:"QNhu", label:"Quân nhu", v:"nhu"},
+  {key:"QKhi", label:"Quân khí", v:"khi"}, {key:"TChinh", label:"Tài chính", v:"p303"},
+];
+function groupOf(l){ return QUAN_Y.includes(l.room) ? "QY" : l.room; }
+function groupLabel(l){ const g = GROUPS.find(x=>x.key===groupOf(l)); return g ? g.label : (l.room||"—"); }
+function periodCount(p){
+  const m = String(p||"").match(/(\d+)\s*-\s*(\d+)/);
+  if(m) return Math.max(1, (+m[2]) - (+m[1]) + 1);
+  return p ? 1 : 0;
+}
+function teacherNameOf(code){ const t = teachers.find(x=>x.code.toLowerCase()===String(code).toLowerCase()); return t ? t.name : code; }
+function toolData(){
+  const f = state.tool;
+  const rows = lessons.filter(l=>{
+    if(l.isHoliday) return false;
+    if(f.teacher && !(l.teacherCode && l.teacherCode.toLowerCase()===f.teacher.toLowerCase())) return false;
+    if(f.group && groupOf(l)!==f.group) return false;
+    if(f.from && l.date<f.from) return false;
+    if(f.to && l.date>f.to) return false;
+    return true;
+  }).sort((a,b)=> a.date<b.date?-1 : a.date>b.date?1 : sortLessons(a,b));
+  const sumP = rows.reduce((s,l)=>s+periodCount(l.period),0);
+  const days = new Set(rows.map(l=>l.date)).size;
+  const byT = {};
+  rows.forEach(l=>{ const k=l.teacher||"Chưa rõ"; const o = byT[k] || (byT[k]={name:k,n:0,p:0,d:new Set()}); o.n++; o.p+=periodCount(l.period); o.d.add(l.date); });
+  const tRows = Object.values(byT).sort((a,b)=> b.p-a.p || a.name.localeCompare(b.name,"vi"));
+  const gRows = GROUPS.map(g=>{
+    const rs = rows.filter(l=>groupOf(l)===g.key);
+    return {key:g.key, label:g.label, v:g.v, n:rs.length, p:rs.reduce((s,l)=>s+periodCount(l.period),0)};
+  });
+  const gl = f.group ? (GROUPS.find(g=>g.key===f.group)||{}).label : "Tất cả";
+  const filterText = [
+    "Giáo viên: " + (f.teacher ? teacherNameOf(f.teacher) : "Tất cả"),
+    "Ngành: " + gl,
+    "Thời gian: " + ((f.from||f.to) ? ((f.from?fmtVN(f.from):"…") + " – " + (f.to?fmtVN(f.to):"…")) : "Toàn bộ"),
+  ].join("  ·  ");
+  return {rows, sumP, days, tRows, gRows, filterText, nTeachers: tRows.filter(t=>t.name!=="Chưa rõ").length};
+}
+function renderTools(){
+  const root = document.getElementById("view-tools");
+  root.innerHTML = "";
+  const bar = document.createElement("div"); bar.className = "bar";
+  bar.innerHTML = "<h2>Công cụ thống kê &amp; xuất báo cáo</h2>";
+  root.appendChild(bar);
+  if(!IDX.MIN_DATE){
+    root.insertAdjacentHTML("beforeend","<div class='status-panel'><p>Chưa có dữ liệu lịch học. Hãy bấm Làm mới khi dữ liệu đã tải xong.</p></div>");
+    return;
+  }
+  const f = state.tool;
+  const teacherOpts = '<option value="">Tất cả giáo viên</option>' + teachers.slice().sort((a,b)=>a.name.localeCompare(b.name,"vi"))
+    .map(t=>"<option value='"+escapeHtml(t.code)+"'"+(t.code.toLowerCase()===f.teacher.toLowerCase()?" selected":"")+">"+escapeHtml(t.name)+"</option>").join("");
+  const groupOpts = '<option value="">Tất cả ngành</option>' + GROUPS.map(g=>"<option value='"+g.key+"'"+(g.key===f.group?" selected":"")+">"+g.label+"</option>").join("");
+  const fp = document.createElement("div"); fp.className = "panel";
+  fp.innerHTML =
+    "<h3>Bộ lọc</h3><div class='tool-filters'>" +
+    "<label>Giáo viên<select id='tlTeacher'>"+teacherOpts+"</select></label>" +
+    "<label>Ngành<select id='tlGroup'>"+groupOpts+"</select></label>" +
+    "<label>Từ ngày<input type='date' id='tlFrom' value='"+(f.from||"")+"'></label>" +
+    "<label>Đến ngày<input type='date' id='tlTo' value='"+(f.to||"")+"'></label></div>" +
+    "<div class='tool-actions'>" +
+    "<button class='btn btn-outline btn-sm' data-preset='week'>Tuần này</button>" +
+    "<button class='btn btn-outline btn-sm' data-preset='month'>Tháng này</button>" +
+    "<button class='btn btn-outline btn-sm' data-preset='all'>Toàn bộ</button>" +
+    "<button class='btn btn-outline btn-sm' data-preset='reset'>Xóa lọc</button>" +
+    "<button class='btn btn-gold btn-sm tool-pdf' id='tlPdf'>⬇ Xuất PDF</button></div>";
+  root.appendChild(fp);
+  const bind = (id, key)=>{ fp.querySelector(id).addEventListener("change", e=>{ f[key] = e.target.value; renderTools(); }); };
+  bind("#tlTeacher","teacher"); bind("#tlGroup","group"); bind("#tlFrom","from"); bind("#tlTo","to");
+  fp.querySelectorAll("[data-preset]").forEach(b=>b.addEventListener("click", ()=>{
+    const p = b.dataset.preset;
+    if(p==="week"){ f.from = mondayOf(TODAY); f.to = addDays(mondayOf(TODAY),6); }
+    else if(p==="month"){ const [y,m]=TODAY.split("-").map(Number); f.from = toISO(new Date(y,m-1,1)); f.to = toISO(new Date(y,m,0)); }
+    else if(p==="all"){ f.from = ""; f.to = ""; }
+    else { f.teacher = ""; f.group = ""; f.from = ""; f.to = ""; }
+    renderTools();
+  }));
+  fp.querySelector("#tlPdf").addEventListener("click", exportToolsPDF);
+
+  const d = toolData();
+  const sg = document.createElement("div"); sg.className = "stat-grid";
+  [[d.rows.length,"Số buổi dạy"],[d.sumP,"Tổng số tiết"],[d.days,"Số ngày có lịch"],[d.nTeachers,"Số giáo viên"]].forEach(([n,l])=>{
+    const c = document.createElement("div"); c.className = "stat-card";
+    c.innerHTML = "<div class='stat-num'>"+n+"</div><div class='stat-label'>"+l+"</div>";
+    sg.appendChild(c);
+  });
+  root.appendChild(sg);
+
+  if(!d.rows.length){
+    const e = document.createElement("div"); e.className = "task-empty"; e.textContent = "Không có buổi học nào khớp với bộ lọc.";
+    root.appendChild(e);
+    return;
+  }
+
+  const tp = document.createElement("div"); tp.className = "panel";
+  tp.innerHTML = "<h3>Thống kê theo giáo viên</h3>";
+  const tw = document.createElement("div"); tw.className = "tbl-wrap"; tw.style.marginBottom = "0";
+  tw.innerHTML = "<table class='tbl'><thead><tr><th>Giáo viên</th><th class='c-num'>Số buổi</th><th class='c-num'>Số tiết</th><th class='c-num'>Số ngày</th></tr></thead><tbody>" +
+    d.tRows.map(t=>"<tr><td class='c-main' data-label='Giáo viên'>"+escapeHtml(t.name)+"</td><td class='c-num' data-label='Số buổi'>"+t.n+"</td><td class='c-num' data-label='Số tiết'>"+t.p+"</td><td class='c-num' data-label='Số ngày'>"+t.d.size+"</td></tr>").join("") +
+    "</tbody></table>";
+  tp.appendChild(tw);
+  root.appendChild(tp);
+
+  const gp = document.createElement("div"); gp.className = "panel";
+  gp.innerHTML = "<h3>Số tiết theo ngành</h3>";
+  const maxP = Math.max(1, ...d.gRows.map(g=>g.p));
+  d.gRows.forEach(g=>{
+    const row = document.createElement("div"); row.className = "bar-row";
+    row.innerHTML = "<div class='name'>"+g.label+"</div><div class='track'><div class='fill' style='width:"+(g.p/maxP*100)+"%; background:var(--"+g.v+")'></div></div><div class='n' style='width:auto; min-width:78px'>"+g.p+" tiết · "+g.n+" buổi</div>";
+    gp.appendChild(row);
+  });
+  root.appendChild(gp);
+
+  const dh = document.createElement("h3"); dh.className = "tbl-title"; dh.textContent = "Lịch dạy chi tiết";
+  root.appendChild(dh);
+  const dw = document.createElement("div"); dw.className = "tbl-wrap";
+  dw.innerHTML = "<table class='tbl'><thead><tr><th class='c-date'>Ngày</th><th>Tiết</th><th>Ngành</th><th>Môn học</th><th>Giáo viên</th><th>Địa điểm</th></tr></thead><tbody>" +
+    d.rows.map(l=>"<tr data-date='"+l.date+"'><td class='c-date' data-label='Ngày'>"+escapeHtml(weekdayNameOf(l.date)+", "+fmtVN(l.date))+"</td>" +
+      "<td data-label='Tiết'>"+escapeHtml(l.period||"–")+"</td><td data-label='Ngành'>"+escapeHtml(groupLabel(l))+"</td>" +
+      "<td class='c-main' data-label='Môn học'>"+escapeHtml(l.subject)+"</td><td data-label='Giáo viên'>"+escapeHtml(l.teacher||"Chưa rõ")+"</td>" +
+      "<td data-label='Địa điểm'>"+escapeHtml(l.location||"–")+"</td></tr>").join("") +
+    "</tbody></table>";
+  dw.querySelectorAll("tr[data-date]").forEach(tr=>tr.addEventListener("click", ()=>{
+    state.weekAnchor = mondayOf(tr.dataset.date); state.selectedDay = tr.dataset.date;
+    document.querySelector('.tab[data-tab="week"]').click(); window.scrollTo({top:0, behavior:"smooth"});
+  }));
+  root.appendChild(dw);
+}
+function exportToolsPDF(){
+  const d = toolData();
+  if(!d.rows.length){ toast("Không có dữ liệu để xuất"); return; }
+  const now = new Date(), pad = n=>String(n).padStart(2,"0");
+  const stamp = pad(now.getDate())+"/"+pad(now.getMonth()+1)+"/"+now.getFullYear()+" "+pad(now.getHours())+":"+pad(now.getMinutes());
+  const stat = (n,l)=>"<div><b>"+n+"</b>"+l+"</div>";
+  const pa = document.getElementById("printArea");
+  pa.innerHTML =
+    "<h1>LỊCH GIẢNG DẠY</h1><div class='pr-sub'>Khoa Chuyên môn Kỹ thuật</div>" +
+    "<div class='pr-filter'>"+escapeHtml(d.filterText)+"</div>" +
+    "<div class='pr-stats'>"+stat(d.rows.length,"Số buổi dạy")+stat(d.sumP,"Tổng số tiết")+stat(d.days,"Số ngày có lịch")+stat(d.nTeachers,"Số giáo viên")+"</div>" +
+    "<h2>Thống kê theo giáo viên</h2><table><thead><tr><th>Giáo viên</th><th class='ctr'>Số buổi</th><th class='ctr'>Số tiết</th><th class='ctr'>Số ngày</th></tr></thead><tbody>" +
+    d.tRows.map(t=>"<tr><td>"+escapeHtml(t.name)+"</td><td class='ctr'>"+t.n+"</td><td class='ctr'>"+t.p+"</td><td class='ctr'>"+t.d.size+"</td></tr>").join("") + "</tbody></table>" +
+    "<h2>Thống kê theo ngành</h2><table><thead><tr><th>Ngành</th><th class='ctr'>Số buổi</th><th class='ctr'>Số tiết</th></tr></thead><tbody>" +
+    d.gRows.map(g=>"<tr><td>"+g.label+"</td><td class='ctr'>"+g.n+"</td><td class='ctr'>"+g.p+"</td></tr>").join("") + "</tbody></table>" +
+    "<h2>Lịch dạy chi tiết</h2><table><thead><tr><th class='ctr'>STT</th><th>Ngày</th><th class='ctr'>Tiết</th><th>Ngành</th><th>Môn học</th><th>Giáo viên</th><th>Địa điểm</th></tr></thead><tbody>" +
+    d.rows.map((l,i)=>"<tr><td class='ctr'>"+(i+1)+"</td><td>"+escapeHtml(weekdayNameOf(l.date)+", "+fmtVN(l.date))+"</td><td class='ctr'>"+escapeHtml(l.period||"–")+"</td><td>"+escapeHtml(groupLabel(l))+"</td><td>"+escapeHtml(l.subject)+"</td><td>"+escapeHtml(l.teacher||"Chưa rõ")+"</td><td>"+escapeHtml(l.location||"–")+"</td></tr>").join("") + "</tbody></table>" +
+    "<div class='pr-foot'>Xuất lúc "+stamp+"</div>";
+  const oldTitle = document.title;
+  document.title = "Lich-giang-day-" + TODAY;
+  const restore = ()=>{ document.title = oldTitle; window.removeEventListener("afterprint", restore); };
+  window.addEventListener("afterprint", restore);
+  setTimeout(()=>window.print(), 150);
+}
+
 /* ================= Orchestrator ================= */
 function updateTaskTabLabel(){
   const n = (typeof taskCountFor === "function" && tasksStatus === "ok") ? taskCountFor(TODAY) : 0;
@@ -1117,6 +1309,7 @@ function renderAll(){
   if(state.tab==="week") renderWeek();
   if(state.tab==="month") renderMonth();
   if(state.tab==="tasks") renderTasks();
+  if(state.tab==="tools") renderTools();
 }
 
 /* ================= Header: ẩn thanh công cụ khi cuộn xuống ================= */
