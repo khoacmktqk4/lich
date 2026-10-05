@@ -865,7 +865,7 @@ function renderWeek(){
       const periodLabel = slotLessons[0].period;
       const block = document.createElement("div"); block.className="slot-block";
       const headline = (slot.key==="s3"?"Chiều":"Sáng")+", tiết "+periodLabel;
-      block.innerHTML = "<div class='slot-head'><span>"+escapeHtml(headline)+"</span><span class='slot-count'>"+slotLessons.length+" buổi</span></div>";
+      block.innerHTML = "<div class='slot-head'><span>"+escapeHtml(headline)+"</span><span class='slot-count'>"+periodCount(periodLabel)+" tiết</span></div>";
       const chips = document.createElement("div"); chips.className="slot-chips";
       slotLessons.forEach(l=>chips.appendChild(chipEl(l)));
       block.appendChild(chips);
