@@ -354,24 +354,48 @@ body:not([data-tab="week"]) #pinToday{display:none !important;}
 /* ===== In / xuất PDF ===== */
 #printArea{display:none;}
 @media print{
-  @page{size:A4; margin:14mm 12mm;}
+  @page{size:A4; margin:12mm 11mm 13mm;}
   html,body{height:auto !important; padding:0 !important; background:#fff !important;}
   body > *:not(#printArea){display:none !important;}
-  #printArea{display:block !important; color:#000; font:11px/1.45 var(--font); -webkit-print-color-adjust:exact; print-color-adjust:exact;}
-  #printArea h1{margin:0; font-size:20px; text-align:center; letter-spacing:.03em;}
-  #printArea .pr-sub{margin:2px 0 10px; font-size:12px; text-align:center;}
-  #printArea .pr-filter{margin:8px 0; padding:6px 10px; font-size:11px; border:1px solid #999;}
-  #printArea .pr-stats{display:flex; gap:8px; margin:10px 0;}
-  #printArea .pr-stats div{flex:1; padding:6px; text-align:center; border:1px solid #999;}
-  #printArea .pr-stats b{display:block; font-size:18px;}
-  #printArea h2{margin:14px 0 6px; padding-bottom:2px; font-size:13px; border-bottom:1.5px solid #000; break-after:avoid;}
-  #printArea table{width:100%; border-collapse:collapse; font-size:10.5px;}
-  #printArea th,#printArea td{padding:3px 5px; text-align:left; vertical-align:top; border:1px solid #777;}
-  #printArea th{background:#e5e5e5 !important;}
+  #printArea{display:block !important; color:#0B1F2A; font:10.5px/1.45 var(--font); -webkit-print-color-adjust:exact; print-color-adjust:exact;}
+  #printArea *{-webkit-print-color-adjust:exact; print-color-adjust:exact;}
+  .pr-band{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:11px 16px; color:#fff; border-radius:10px;
+    background:linear-gradient(120deg,#05303A 0%,#0B5563 55%,#0E8C8A 100%) !important;}
+  .pr-band h1{margin:0; font-size:18px; letter-spacing:.06em; color:#fff;}
+  .pr-band .pr-org{font-size:11px; font-weight:700; padding:3px 10px; color:#05303A; background:#F2B33D !important; border-radius:999px;}
+  .pr-band .pr-sub{font-size:10px; color:#CFEDEB; margin-top:2px;}
+  .pr-who{margin:12px 0 4px; padding:10px 14px; border:1px solid #CFE3E3; border-left:5px solid #0E8C8A; border-radius:8px; background:#F3FAF9 !important;}
+  .pr-who .pr-label{font-size:9.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#5B7B80;}
+  .pr-who .pr-name{margin-top:1px; font-size:19px; font-weight:800; color:#05303A;}
+  .pr-who .pr-meta{display:flex; flex-wrap:wrap; gap:6px 18px; margin-top:9px; padding-top:7px; border-top:1px dashed #BFD8D8; font-size:10.5px; color:#2F4A50;}
+  .pr-who .pr-meta b{color:#0B5563;}
+  .pr-stats{display:flex; gap:8px; margin:10px 0 4px;}
+  .pr-stat{flex:1; padding:8px 6px 7px; text-align:center; border-radius:8px; color:#fff;}
+  .pr-stat b{display:block; font:700 19px/1.1 var(--font-num);}
+  .pr-stat span{font-size:9.5px; font-weight:600; opacity:.95;}
+  .pr-stat.s1{background:#0E8C8A !important;} .pr-stat.s2{background:#0B6FA4 !important;} .pr-stat.s3{background:#D97706 !important;} .pr-stat.s4{background:#7C3AED !important;}
+  #printArea h2{display:flex; align-items:center; gap:7px; margin:14px 0 6px; font-size:12.5px; color:#05303A; break-after:avoid;}
+  #printArea h2::before{content:""; width:4px; height:13px; border-radius:2px; background:#F2B33D !important;}
+  #printArea h2 small{font-weight:600; font-size:10px; color:#5B7B80;}
+  #printArea table{width:100%; border-collapse:separate; border-spacing:0; font-size:10px; border:1px solid #C9DCDC; border-radius:8px; overflow:hidden;}
+  #printArea th,#printArea td{padding:4px 6px; text-align:left; vertical-align:top; border-bottom:1px solid #DDE9E9;}
+  #printArea th{color:#fff; font-weight:700; background:#0B5563 !important; border-bottom:none;}
+  #printArea tbody tr:last-child td{border-bottom:none;}
+  #printArea tr.alt td{background:#F3F8F8 !important;}
+  #printArea tr.newday td{border-top:1.5px solid #9CC7C6;}
+  #printArea td.dt{font-weight:700; color:#0B5563; white-space:nowrap;}
+  #printArea td.code{font-weight:700;}
   #printArea .ctr{text-align:center;}
+  #printArea .gtag{display:inline-block; padding:0 7px; font-size:9.5px; font-weight:700; color:#fff; border-radius:999px;}
+  #printArea .pbar{height:6px; background:#E3EEEE !important; border-radius:999px; overflow:hidden;}
+  #printArea .pbar i{display:block; height:100%; border-radius:999px;}
+  #printArea tr.zero td{color:#9AAFB2;}
   #printArea thead{display:table-header-group;}
   #printArea tr{break-inside:avoid;}
-  #printArea .pr-foot{margin-top:12px; font-size:10px; text-align:right; color:#444;}
+  #printArea .pr-sign{display:flex; justify-content:flex-end; margin-top:16px; break-inside:avoid;}
+  #printArea .pr-sign div{width:220px; text-align:center; font-size:10.5px;}
+  #printArea .pr-sign b{display:block; margin-bottom:40px;}
+  #printArea .pr-foot{margin-top:10px; padding-top:5px; font-size:9px; text-align:right; color:#5B7B80; border-top:1px solid #DDE9E9;}
 }
 
 /* ===== Gọn nhẹ: tiêu đề, ô ghim, dải ngày, thẻ lịch ===== */
@@ -635,6 +659,72 @@ nav.tabs{isolation:isolate;}
   .donut-legend{min-width:0;}
 }
 .dl-val{white-space:nowrap;}
+
+/* =====================================================================
+   BẢNG MÀU CHÍNH: xanh ngọc đậm + vàng đồng
+   ===================================================================== */
+:root{
+  --ink:#0A1F26; --ink-2:#2E4A52; --muted:#61797F; --paper:#EFF5F4; --paper-2:#E1ECEA; --card:#FFFFFF; --line:#D2E2DF; --line-soft:#E4EEEC;
+  --brand:#04222A; --brand-2:#0A4A57; --brand-3:#0E8C8A;
+  --hl:#0B8A8C; --hl-2:#0A6FA6; --on-hl:#fff; --hl-soft:#DDF1EF; --task-soft:#E8F5F3; --grid:rgba(11,138,140,.05);
+  --amber:#F2B33D; --gold:#B7660A; --gold-soft:#FDF0D6;
+  --p301:#16A34A; --p301-soft:#DCF5E4;
+  --shadow:0 1px 2px rgba(4,34,42,.05),0 8px 22px rgba(4,60,70,.09); --shadow-lg:0 18px 40px rgba(4,60,70,.2);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --ink:#E4F1EF; --ink-2:#B3CBC8; --muted:#7F9A98; --paper:#041214; --paper-2:#0B1F22; --card:#0A1A1D; --line:#18343A; --line-soft:#12292E;
+  --brand:#021317; --brand-2:#063640; --brand-3:#0A6B6A;
+  --hl:#3FD1C6; --hl-2:#4FB3F2; --on-hl:#03201F; --hl-soft:#0E3333; --task-soft:#0C2A2A; --grid:rgba(63,209,198,.05);
+  --p301:#4ADE80; --p301-soft:#0D2C1A;}}
+:root[data-theme="dark"]{
+  --ink:#E4F1EF; --ink-2:#B3CBC8; --muted:#7F9A98; --paper:#041214; --paper-2:#0B1F22; --card:#0A1A1D; --line:#18343A; --line-soft:#12292E;
+  --brand:#021317; --brand-2:#063640; --brand-3:#0A6B6A;
+  --hl:#3FD1C6; --hl-2:#4FB3F2; --on-hl:#03201F; --hl-soft:#0E3333; --task-soft:#0C2A2A; --grid:rgba(63,209,198,.05);
+  --p301:#4ADE80; --p301-soft:#0D2C1A;}
+
+body{background:
+  radial-gradient(60% 40% at 100% 0%, color-mix(in srgb,var(--hl-2) 11%,transparent), transparent 70%) fixed,
+  radial-gradient(50% 35% at 0% 30%, color-mix(in srgb,var(--amber) 9%,transparent), transparent 70%) fixed,
+  linear-gradient(var(--grid) 1px,transparent 1px) 0 0/28px 28px, linear-gradient(90deg,var(--grid) 1px,transparent 1px) 0 0/28px 28px, var(--paper);}
+header.top{background:
+  radial-gradient(60% 140% at 100% 0%, #F2B33D33, transparent 60%),
+  linear-gradient(120deg,var(--brand) 0%,var(--brand-2) 58%,var(--brand-3) 100%);
+  box-shadow:0 10px 30px rgba(4,34,42,.35);}
+header.top::after{background:linear-gradient(90deg,transparent,#F2B33D,#FFE08A,#3FD1C6,transparent);}
+
+/* Ô ghim: xanh lục bảo – ngọc, viền vàng */
+.pin{border:1px solid #F2B33D55; box-shadow:0 14px 34px rgba(6,95,70,.32);
+  background:
+    radial-gradient(80% 120% at 100% 0%, #F2B33D40, transparent 55%),
+    radial-gradient(70% 90% at 0% 100%, #22D3EE30, transparent 60%),
+    linear-gradient(150deg,#0F766E 0%,#065F46 55%,#053B32 100%);}
+.pin-lessons,.pin .task-item{background:#ffffff1a; border-color:#ffffff30;}
+.pin-sub,.pin-empty,.pin-h{color:#C9EDE4;}
+
+/* Thành phần dùng màu nhấn mới */
+.tab-ind{background:#fff;}
+@media (max-width:640px){.tab-ind{background:linear-gradient(135deg,#0B8A8C,#0A6FA6) !important; box-shadow:0 6px 18px rgba(11,138,140,.45);}}
+:root[data-theme="dark"] .tab-ind{background:var(--hl);}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tab-ind{background:var(--hl);}}
+.ws-day.active{box-shadow:0 10px 22px color-mix(in srgb,var(--hl) 38%,transparent);}
+.kpi.k1{--kc:#0B8A8C; --kc2:#0A6FA6;} .kpi.k2{--kc:#0A6FA6; --kc2:#6366F1;} .kpi.k3{--kc:#E08A0B; --kc2:#DC4B2E;} .kpi.k4{--kc:#7C3AED; --kc2:#DB2777;}
+.tcard.u-far{--uc:#0B8A8C; --uc2:#0A6FA6;}
+.viz-panel h3::before,.tbl-title::before{background:linear-gradient(180deg,var(--hl),var(--amber));}
+.btn-gold{color:#3A2400;}
+
+/* Tab tháng: lịch học chi tiết có ô tiết */
+#monthLessonDetail .panel{padding:12px 10px 8px;}
+#monthLessonDetail .panel h3{padding:0 4px; margin-bottom:8px;}
+.md-slots .slot-block{grid-template-columns:46px 1fr; gap:6px; padding:6px 0; border-top:1px solid var(--line-soft);}
+.md-slots .slot-block:first-child{border-top:none; padding-top:0;}
+.md-slots .slot-period{border-radius:10px; padding:4px 1px;}
+.md-slots .slot-period .sp-k{font-size:9px;} .md-slots .slot-period .sp-n{font-size:14px;} .md-slots .slot-period .sp-s{font-size:9.5px;}
+.md-slots .slot-chips{gap:5px;}
+.md-slots .chip{padding:5px 8px 5px 14px; border-radius:11px;}
+.md-slots .chip::before{left:5px; top:6px; bottom:6px; width:3px;}
+.md-slots .chip-track-tag{font-size:11px;} .md-slots .chip-subject{font-size:13px; margin-top:1px;}
+.md-slots .chip-teacher{font-size:11.5px; padding:0 8px;} .md-slots .chip-right{gap:2px;} .md-slots .chip-right .chip-loc{font-size:11px;}
+@media (min-width:641px){.md-slots .slot-block{grid-template-columns:62px 1fr;}}
 </style>
 </head>
 <body>
@@ -1301,10 +1391,21 @@ function renderDayDetail(){
     const lessonsHere = (IDX.byDate[iso]||[]).slice().sort(sortLessons);
     const panel = document.createElement("div"); panel.className="panel";
     panel.innerHTML = "<h3>Lịch học · "+dateLabel+"</h3>";
-    const wrap = document.createElement("div"); wrap.className="pin-grid";
-    if(lessonsHere.length) lessonsHere.forEach(l=>wrap.appendChild(chipEl(l)));
-    else { const e=document.createElement("div"); e.className="pin-empty"; e.textContent="Không có lịch học ngày này."; wrap.appendChild(e); }
+    const wrap = document.createElement("div"); wrap.className="md-slots";
+    SLOTS.forEach(slot=>{
+      const sl = lessonsHere.filter(l=>l.period && slotOf(l.period).key===slot.key);
+      if(!sl.length) return;
+      const block = document.createElement("div"); block.className="slot-block";
+      block.innerHTML = "<div class='slot-period'><span class='sp-k'>Tiết</span><span class='sp-n'>"+escapeHtml(sl[0].period)+"</span><span class='sp-s'>"+(slot.key==="s3"?"Chiều":"Sáng")+"</span></div>";
+      const chips = document.createElement("div"); chips.className="slot-chips";
+      sl.forEach(l=>chips.appendChild(chipEl(l)));
+      block.appendChild(chips); wrap.appendChild(block);
+    });
+    const noPeriod = lessonsHere.filter(l=>!l.period);
+    if(noPeriod.length){ const g=document.createElement("div"); g.className="pin-grid"; noPeriod.forEach(l=>g.appendChild(chipEl(l))); wrap.appendChild(g); }
+    if(!lessonsHere.length){ const e=document.createElement("div"); e.className="pin-empty"; e.textContent="Không có lịch học ngày này."; wrap.appendChild(e); }
     panel.appendChild(wrap);
+    if(wrap.animate) wrap.animate([{opacity:0,transform:"translateY(8px)"},{opacity:1,transform:"none"}],{duration:350,easing:"cubic-bezier(.22,.8,.24,1)"});
     elL.innerHTML=""; elL.appendChild(panel);
   }
 }
@@ -1625,7 +1726,7 @@ function renderTools(){
   const tp = document.createElement("div"); tp.className = "panel viz-panel";
   tp.innerHTML = "<h3>Thống kê theo giáo viên</h3>";
   const maxP = Math.max(1, ...d.tRows.map(t=>t.p));
-  const hues = [245,265,200,160,330,25,290,185];
+  const hues = [178,200,150,28,330,262,215,48];
   const lst = document.createElement("div"); lst.className = "rank-list";
   d.tRows.forEach((t,i)=>{
     const ini = t.name==="Chưa rõ" ? "?" : t.name.replace(/^.*[.\s]\s*/,"").slice(0,1).toUpperCase() || t.name.slice(0,1);
@@ -1651,23 +1752,42 @@ function countUp(scope){
   });
 }
 function exportToolsPDF(){
-  const d = toolData();
+  const d = toolData(), f = state.tool;
   if(!d.rows.length){ toast("Không có dữ liệu để xuất"); return; }
   const now = new Date(), pad = n=>String(n).padStart(2,"0");
   const stamp = pad(now.getDate())+"/"+pad(now.getMonth()+1)+"/"+now.getFullYear()+" "+pad(now.getHours())+":"+pad(now.getMinutes());
-  const stat = (n,l)=>"<div><b>"+n+"</b>"+l+"</div>";
-  const pa = document.getElementById("printArea");
-  pa.innerHTML =
-    "<h1>LỊCH GIẢNG DẠY</h1><div class='pr-sub'>Khoa Chuyên môn Kỹ thuật</div>" +
-    "<div class='pr-filter'>"+escapeHtml(d.filterText)+"</div>" +
-    "<div class='pr-stats'>"+stat(d.rows.length,"Số buổi dạy")+stat(d.sumP,"Tổng số tiết")+stat(d.days,"Số ngày có lịch")+stat(d.nTeachers,"Số giáo viên")+"</div>" +
-    "<h2>Thống kê theo giáo viên</h2><table><thead><tr><th>Giáo viên</th><th class='ctr'>Số buổi</th><th class='ctr'>Số tiết</th><th class='ctr'>Số ngày</th></tr></thead><tbody>" +
-    d.tRows.map(t=>"<tr><td>"+escapeHtml(t.name)+"</td><td class='ctr'>"+t.n+"</td><td class='ctr'>"+t.p+"</td><td class='ctr'>"+t.d.size+"</td></tr>").join("") + "</tbody></table>" +
-    "<h2>Thống kê theo ngành</h2><table><thead><tr><th>Ngành</th><th class='ctr'>Số buổi</th><th class='ctr'>Số tiết</th></tr></thead><tbody>" +
-    d.gRows.map(g=>"<tr><td>"+g.label+"</td><td class='ctr'>"+g.n+"</td><td class='ctr'>"+g.p+"</td></tr>").join("") + "</tbody></table>" +
-    "<div class='pr-foot'>Xuất lúc "+stamp+"</div>";
+  const GC = {QY:"#16A34A", QNhu:"#DB2777", QKhi:"#7C3AED", TChinh:"#D97706"};
+  const one = !!f.teacher;
+  const tName = one ? teacherNameOf(f.teacher) : "Tất cả giáo viên";
+  const gl = f.group ? (GROUPS.find(g=>g.key===f.group)||{}).label : "Tất cả";
+  const period = (f.from||f.to) ? ((f.from?fmtVN(f.from):"…")+" – "+(f.to?fmtVN(f.to):"…")) : "Toàn bộ ("+fmtVN(d.rows[0].date)+" – "+fmtVN(d.rows[d.rows.length-1].date)+")";
+  const stat = (n,l,k)=>"<div class='pr-stat "+k+"'><b>"+n+"</b><span>"+l+"</span></div>";
+  const gtag = (key,label)=>"<span class='gtag' style='background:"+(GC[key]||"#5B7B80")+"'>"+escapeHtml(label)+"</span>";
+  let h =
+    "<div class='pr-band'><div><h1>LỊCH GIẢNG DẠY</h1><div class='pr-sub'>Báo cáo thống kê giờ giảng</div></div><span class='pr-org'>K.CMKT/TQS</span></div>" +
+    "<div class='pr-who'><div class='pr-label'>Giáo viên</div><div class='pr-name'>"+escapeHtml(tName)+"</div>" +
+    "<div class='pr-meta'><span>Ngành: <b>"+escapeHtml(gl)+"</b></span><span>Thời gian: <b>"+escapeHtml(period)+"</b></span></div></div>" +
+    "<div class='pr-stats'>"+stat(d.rows.length,"Số buổi dạy","s1")+stat(d.sumP,"Tổng số tiết","s2")+stat(d.days,"Số ngày có lịch","s3")+(one?"":stat(d.nTeachers,"Số giáo viên","s4"))+"</div>";
+  if(!one){
+    const mx = Math.max(1,...d.tRows.map(t=>t.p));
+    h += "<h2>Thống kê theo giáo viên</h2><table><thead><tr><th class='ctr' style='width:34px'>STT</th><th>Giáo viên</th><th class='ctr'>Số buổi</th><th class='ctr'>Số tiết</th><th class='ctr'>Số ngày</th><th style='width:28%'>Tỷ lệ tiết</th></tr></thead><tbody>" +
+      d.tRows.map((t,i)=>"<tr"+(i%2?" class='alt'":"")+"><td class='ctr'>"+(i+1)+"</td><td><b>"+escapeHtml(t.name)+"</b></td><td class='ctr'>"+t.n+"</td><td class='ctr'><b>"+t.p+"</b></td><td class='ctr'>"+t.d.size+"</td><td><div class='pbar'><i style='width:"+(t.p/mx*100)+"%; background:#0E8C8A'></i></div></td></tr>").join("") + "</tbody></table>";
+  }
+  const gTot = Math.max(1, d.sumP);
+  h += "<h2>Thống kê theo ngành</h2><table><thead><tr><th>Ngành</th><th class='ctr'>Số buổi</th><th class='ctr'>Số tiết</th><th class='ctr'>Tỷ lệ</th><th style='width:32%'></th></tr></thead><tbody>" +
+    d.gRows.map((g,i)=>"<tr class='"+(i%2?"alt":"")+(g.p?"":" zero")+"'><td>"+gtag(g.key,g.label)+"</td><td class='ctr'>"+g.n+"</td><td class='ctr'><b>"+g.p+"</b></td><td class='ctr'>"+Math.round(g.p/gTot*100)+"%</td><td><div class='pbar'><i style='width:"+(g.p/gTot*100)+"%; background:"+GC[g.key]+"'></i></div></td></tr>").join("") + "</tbody></table>";
+  let lastDate = "", dayIdx = -1;
+  h += "<h2>Lịch dạy chi tiết <small>("+d.rows.length+" buổi · "+d.sumP+" tiết)</small></h2><table><thead><tr><th class='ctr' style='width:30px'>STT</th><th>Ngày</th><th class='ctr'>Tiết</th><th class='ctr'>Số tiết</th><th>Ngành</th><th>Ký hiệu môn</th>"+(one?"":"<th>Giáo viên</th>")+"<th>Địa điểm</th></tr></thead><tbody>" +
+    d.rows.map((l,i)=>{
+      const nd = l.date !== lastDate; if(nd){ dayIdx++; lastDate = l.date; }
+      const cls = [(dayIdx%2?"alt":""),(nd && i?"newday":"")].join(" ").trim();
+      return "<tr"+(cls?" class='"+cls+"'":"")+"><td class='ctr'>"+(i+1)+"</td><td class='dt'>"+(nd?escapeHtml(weekdayNameOf(l.date)+", "+fmtVN(l.date)):"")+"</td><td class='ctr'>"+escapeHtml(l.period||"–")+"</td><td class='ctr'>"+periodCount(l.period)+"</td><td>"+gtag(groupOf(l),groupLabel(l))+"</td><td class='code'>"+escapeHtml(l.code)+"</td>"+(one?"":"<td>"+escapeHtml(l.teacher||"Chưa rõ")+"</td>")+"<td>"+escapeHtml(l.location||"–")+"</td></tr>";
+    }).join("") + "</tbody></table>";
+  h += "<div class='pr-sign'><div><i>Ngày ..... tháng ..... năm "+now.getFullYear()+"</i><b>NGƯỜI LẬP</b></div></div>";
+  h += "<div class='pr-foot'>Xuất từ Lịch công tác K.CMKT/TQS lúc "+stamp+"</div>";
+  document.getElementById("printArea").innerHTML = h;
   const oldTitle = document.title;
-  document.title = "Lich-giang-day-" + TODAY;
+  document.title = "Lich-giang-day-" + (one ? tName.replace(/[^\p{L}\p{N}]+/gu,"-") + "-" : "") + TODAY;
   const restore = ()=>{ document.title = oldTitle; window.removeEventListener("afterprint", restore); };
   window.addEventListener("afterprint", restore);
   setTimeout(()=>window.print(), 150);
