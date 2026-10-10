@@ -174,6 +174,23 @@ body:not([data-tab="week"]) #pinToday{display:none !important;}
 .chip.match{box-shadow:0 0 0 2px var(--hl);} .chip.match .chip-teacher{background:var(--amber); color:#2B1A00;}
 .chip.dim{opacity:.28;}
 
+/* ===== Ô tiết + bố cục thẻ ===== */
+.slot-block{display:grid; grid-template-columns:58px 1fr; gap:8px; align-items:stretch; padding:8px 10px 8px 8px;}
+.slot-period{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px; padding:6px 2px; text-align:center;
+  background:var(--hl-soft); border:1.5px solid color-mix(in srgb,var(--hl) 45%,var(--line)); border-radius:12px;}
+.slot-period .sp-k{font-size:10.5px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.04em;}
+.slot-period .sp-n{font:700 17px/1.1 var(--font-num); color:var(--hl); white-space:nowrap;}
+.slot-period .sp-s{font-size:11px; font-weight:600; color:var(--ink-2);}
+.slot-block .slot-chips{flex-direction:column;}
+.slot-block .slot-chips > .chip{flex:none;}
+.slot-block .chip-code{display:none;}
+.chip-grid{display:flex; align-items:flex-start; justify-content:space-between; gap:8px;}
+.chip-left{min-width:0; flex:1 1 auto;}
+.chip-right{flex:0 1 auto; max-width:58%; display:flex; flex-direction:column; align-items:flex-end; gap:4px; text-align:right;}
+.chip-right .chip-teacher{margin-left:0;}
+.chip-right .chip-loc{margin-top:0; font-size:12px; text-align:right; word-break:break-word;}
+@media (min-width:641px){.slot-block .slot-chips{flex-direction:row; flex-wrap:wrap;} .slot-block .slot-chips > .chip{flex:1 1 230px;} .slot-block{grid-template-columns:70px 1fr;}}
+
 /* ===== Tháng ===== */
 .month-scroll{margin:0;}
 .month-grid{display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:3px;}
@@ -739,11 +756,12 @@ function chipEl(lesson){
   const trackInfo = TRACKS.find(t=>t.key===lesson.room);
   const tagText = lesson.isHoliday ? "NGHỈ" : (SHORT_GROUP[groupOf(lesson)] || lesson.room);
   el.innerHTML =
-    "<div class='chip-top'><span class='chip-track-tag'>"+escapeHtml(tagText)+"</span>" +
-    "<span class='chip-code'>tiết "+escapeHtml(lesson.period||"")+"</span>" +
-    "<span class='chip-teacher'>"+escapeHtml(lesson.teacher || (lesson.isHoliday? "" : "GV: chưa rõ"))+"</span></div>" +
-    "<div class='chip-subject'>"+escapeHtml(lesson.isHoliday ? lesson.subject : lesson.code)+"</div>" +
-    (lesson.location ? "<div class='chip-loc'>📍 "+escapeHtml(lesson.location)+"</div>" : "");
+    "<div class='chip-grid'>" +
+    "<div class='chip-left'><div class='chip-top'><span class='chip-track-tag'>"+escapeHtml(tagText)+"</span>" +
+    "<span class='chip-code'>tiết "+escapeHtml(lesson.period||"")+"</span></div>" +
+    "<div class='chip-subject'>"+escapeHtml(lesson.isHoliday ? lesson.subject : lesson.code)+"</div></div>" +
+    "<div class='chip-right'><span class='chip-teacher'>"+escapeHtml(lesson.teacher || (lesson.isHoliday? "" : "GV: chưa rõ"))+"</span>" +
+    (lesson.location ? "<div class='chip-loc'>📍 "+escapeHtml(lesson.location)+"</div>" : "") + "</div></div>";
   if(state.teacher){
     if(lesson.teacherCode && lesson.teacherCode.toLowerCase() === state.teacher.toLowerCase()) el.classList.add("match");
     else el.classList.add("dim");
@@ -865,8 +883,7 @@ function renderWeek(){
       if(!slotLessons.length) return;
       const periodLabel = slotLessons[0].period;
       const block = document.createElement("div"); block.className="slot-block";
-      const headline = (slot.key==="s3"?"Chiều":"Sáng")+", tiết "+periodLabel;
-      block.innerHTML = "<div class='slot-head'><span>"+escapeHtml(headline)+"</span><span class='slot-count'>"+periodCount(periodLabel)+" tiết</span></div>";
+      block.innerHTML = "<div class='slot-period'><span class='sp-k'>Tiết</span><span class='sp-n'>"+escapeHtml(periodLabel)+"</span><span class='sp-s'>"+(slot.key==="s3"?"Chiều":"Sáng")+"</span></div>";
       const chips = document.createElement("div"); chips.className="slot-chips";
       slotLessons.forEach(l=>chips.appendChild(chipEl(l)));
       block.appendChild(chips);
@@ -1256,20 +1273,6 @@ function renderTools(){
   });
   root.appendChild(gp);
 
-  const dh = document.createElement("h3"); dh.className = "tbl-title"; dh.textContent = "Lịch dạy chi tiết";
-  root.appendChild(dh);
-  const dw = document.createElement("div"); dw.className = "tbl-wrap";
-  dw.innerHTML = "<table class='tbl'><thead><tr><th class='c-date'>Ngày</th><th>Tiết</th><th>Ngành</th><th>Môn học</th><th>Giáo viên</th><th>Địa điểm</th></tr></thead><tbody>" +
-    d.rows.map(l=>"<tr data-date='"+l.date+"'><td class='c-date' data-label='Ngày'>"+escapeHtml(weekdayNameOf(l.date)+", "+fmtVN(l.date))+"</td>" +
-      "<td data-label='Tiết'>"+escapeHtml(l.period||"–")+"</td><td data-label='Ngành'>"+escapeHtml(groupLabel(l))+"</td>" +
-      "<td class='c-main' data-label='Môn học'>"+escapeHtml(l.subject)+"</td><td data-label='Giáo viên'>"+escapeHtml(l.teacher||"Chưa rõ")+"</td>" +
-      "<td data-label='Địa điểm'>"+escapeHtml(l.location||"–")+"</td></tr>").join("") +
-    "</tbody></table>";
-  dw.querySelectorAll("tr[data-date]").forEach(tr=>tr.addEventListener("click", ()=>{
-    state.weekAnchor = mondayOf(tr.dataset.date); state.selectedDay = tr.dataset.date;
-    document.querySelector('.tab[data-tab="week"]').click(); window.scrollTo({top:0, behavior:"smooth"});
-  }));
-  root.appendChild(dw);
 }
 function exportToolsPDF(){
   const d = toolData();
@@ -1286,8 +1289,6 @@ function exportToolsPDF(){
     d.tRows.map(t=>"<tr><td>"+escapeHtml(t.name)+"</td><td class='ctr'>"+t.n+"</td><td class='ctr'>"+t.p+"</td><td class='ctr'>"+t.d.size+"</td></tr>").join("") + "</tbody></table>" +
     "<h2>Thống kê theo ngành</h2><table><thead><tr><th>Ngành</th><th class='ctr'>Số buổi</th><th class='ctr'>Số tiết</th></tr></thead><tbody>" +
     d.gRows.map(g=>"<tr><td>"+g.label+"</td><td class='ctr'>"+g.n+"</td><td class='ctr'>"+g.p+"</td></tr>").join("") + "</tbody></table>" +
-    "<h2>Lịch dạy chi tiết</h2><table><thead><tr><th class='ctr'>STT</th><th>Ngày</th><th class='ctr'>Tiết</th><th>Ngành</th><th>Môn học</th><th>Giáo viên</th><th>Địa điểm</th></tr></thead><tbody>" +
-    d.rows.map((l,i)=>"<tr><td class='ctr'>"+(i+1)+"</td><td>"+escapeHtml(weekdayNameOf(l.date)+", "+fmtVN(l.date))+"</td><td class='ctr'>"+escapeHtml(l.period||"–")+"</td><td>"+escapeHtml(groupLabel(l))+"</td><td>"+escapeHtml(l.subject)+"</td><td>"+escapeHtml(l.teacher||"Chưa rõ")+"</td><td>"+escapeHtml(l.location||"–")+"</td></tr>").join("") + "</tbody></table>" +
     "<div class='pr-foot'>Xuất lúc "+stamp+"</div>";
   const oldTitle = document.title;
   document.title = "Lich-giang-day-" + TODAY;
