@@ -436,6 +436,117 @@ select.sel{flex:0 1 170px;}
   #refreshBtn{padding:0 10px; font-size:12.5px;}
   #todayBtn{padding:0 10px; font-size:12.5px;}
 }
+
+/* =====================================================================
+   GIAO DIỆN MỚI — bảng màu, dải ngày, hiệu ứng
+   ===================================================================== */
+:root{
+  --ink:#0B1530; --ink-2:#334064; --muted:#6A7696; --paper:#F1F4FB; --paper-2:#E6EBF7; --card:#FFFFFF; --line:#D9E0F0; --line-soft:#E8ECF7;
+  --brand:#0A1236; --brand-2:#1B2F8F; --brand-3:#0C7FA8;
+  --hl:#4A4DE8; --hl-2:#7A3FF0; --on-hl:#fff; --hl-soft:#ECEBFF; --task-soft:#F0EFFF; --grid:rgba(74,77,232,.045);
+  --amber:#FFB21E; --gold:#C46A00; --gold-soft:#FFF1D6;
+  --p301:#0FAF7E; --p301-soft:#DDF7EE; --nhu:#E5337C; --nhu-soft:#FDE2EE; --khi:#8247F0; --khi-soft:#EEE5FF; --p303:#E99100; --p303-soft:#FFF0D3; --red:#E5413A; --red-soft:#FDE3E1;
+  --shadow:0 1px 2px rgba(11,21,48,.05),0 8px 22px rgba(36,44,120,.08); --shadow-lg:0 18px 40px rgba(36,44,120,.18);
+  --ease:cubic-bezier(.22,.8,.24,1); --spring:cubic-bezier(.34,1.32,.5,1);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --ink:#E9EEFB; --ink-2:#BAC5E0; --muted:#8792B2; --paper:#060A1A; --paper-2:#0F1630; --card:#0C1328; --line:#1E2847; --line-soft:#151E3A;
+  --brand:#040820; --brand-2:#14216A; --brand-3:#0A5F80;
+  --hl:#8F93FF; --hl-2:#B48CFF; --on-hl:#0A0E2E; --hl-soft:#1A1D4E; --task-soft:#15183F; --grid:rgba(143,147,255,.05);
+  --gold:#FFBE4D; --p301:#34D8A2; --nhu:#FF6BA8; --khi:#AE8BFF; --p303:#FFB938; --red:#FF7A72;
+  --p301-soft:#0D2C25; --nhu-soft:#34142A; --khi-soft:#221A46; --p303-soft:#33270C; --red-soft:#3A1718;
+  --shadow:0 1px 2px rgba(0,0,0,.45),0 8px 22px rgba(0,0,0,.4); --shadow-lg:0 18px 40px rgba(0,0,0,.6);}}
+:root[data-theme="dark"]{
+  --ink:#E9EEFB; --ink-2:#BAC5E0; --muted:#8792B2; --paper:#060A1A; --paper-2:#0F1630; --card:#0C1328; --line:#1E2847; --line-soft:#151E3A;
+  --brand:#040820; --brand-2:#14216A; --brand-3:#0A5F80;
+  --hl:#8F93FF; --hl-2:#B48CFF; --on-hl:#0A0E2E; --hl-soft:#1A1D4E; --task-soft:#15183F; --grid:rgba(143,147,255,.05);
+  --gold:#FFBE4D; --p301:#34D8A2; --nhu:#FF6BA8; --khi:#AE8BFF; --p303:#FFB938; --red:#FF7A72;
+  --p301-soft:#0D2C25; --nhu-soft:#34142A; --khi-soft:#221A46; --p303-soft:#33270C; --red-soft:#3A1718;
+  --shadow:0 1px 2px rgba(0,0,0,.45),0 8px 22px rgba(0,0,0,.4); --shadow-lg:0 18px 40px rgba(0,0,0,.6);}
+
+body{background:
+  radial-gradient(60% 40% at 100% 0%, color-mix(in srgb,var(--hl-2) 12%,transparent), transparent 70%) fixed,
+  radial-gradient(50% 35% at 0% 30%, color-mix(in srgb,var(--brand-3) 11%,transparent), transparent 70%) fixed,
+  linear-gradient(var(--grid) 1px,transparent 1px) 0 0/28px 28px, linear-gradient(90deg,var(--grid) 1px,transparent 1px) 0 0/28px 28px, var(--paper);}
+
+/* Header & ô ghim: dải màu xanh đêm → lam → ngọc */
+header.top{background:
+  radial-gradient(70% 140% at 100% 0%, #7A3FF055, transparent 60%),
+  linear-gradient(120deg,var(--brand) 0%,var(--brand-2) 58%,var(--brand-3) 100%);
+  box-shadow:0 10px 30px rgba(10,18,54,.32);}
+header.top::after{content:""; position:absolute; left:0; right:0; bottom:-1px; height:2px; background:linear-gradient(90deg,transparent,var(--amber),#FF6BA8,var(--hl-2),transparent); opacity:.85;}
+.brand-eyebrow{background:linear-gradient(135deg,#ffffff2e,#ffffff0d);}
+.pin{background:
+  radial-gradient(90% 120% at 100% 0%, #7A3FF066, transparent 55%),
+  radial-gradient(70% 90% at 0% 100%, #0C7FA855, transparent 60%),
+  linear-gradient(150deg,var(--brand-2),var(--brand));
+  box-shadow:0 14px 34px rgba(27,47,143,.32);}
+
+/* Nút & thanh điều hướng */
+.iconbtn{transition:transform .25s var(--spring),background .2s,border-color .2s,box-shadow .2s;}
+.iconbtn:hover{box-shadow:0 6px 16px color-mix(in srgb,var(--hl) 25%,transparent);}
+.btn-gold{background:linear-gradient(135deg,#FFC94A,#FF9F1C);}
+.stat-num{background:linear-gradient(135deg,var(--hl),var(--hl-2)); -webkit-background-clip:text; background-clip:text; color:transparent;}
+.bar-row .fill{background:linear-gradient(90deg,var(--hl),var(--hl-2));}
+.tbl th{background:linear-gradient(120deg,var(--brand),var(--brand-2) 70%,var(--brand-3));}
+.log-nav{background:linear-gradient(120deg,var(--brand-2),var(--brand) 60%,var(--brand-3));}
+.chip-teacher{background:linear-gradient(135deg,var(--hl),var(--hl-2));}
+
+/* Tab: viên chọn trượt mượt */
+nav.tabs{isolation:isolate;}
+@media (min-width:641px){nav.tabs{position:relative;}}
+.tab{position:relative; z-index:1; background:transparent !important; box-shadow:none !important; transition:color .3s var(--ease),transform .2s var(--ease);}
+.tab-ind{position:absolute; z-index:0; top:4px; bottom:4px; left:4px; width:calc((100% - 8px - 12px) / 4); border-radius:11px; background:#fff;
+  box-shadow:0 4px 14px rgba(0,0,0,.25); transform:translateX(calc(var(--ti,0) * (100% + 4px))); transition:transform .5s var(--spring);}
+:root[data-theme="dark"] .tab-ind{background:var(--hl);}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tab-ind{background:var(--hl);}}
+@media (max-width:640px){
+  .tab-ind{top:5px; bottom:5px; left:5px; width:calc((100% - 10px - 12px) / 4); border-radius:17px !important;
+    background:linear-gradient(135deg,#4A4DE8,#7A3FF0) !important; box-shadow:0 6px 18px rgba(74,77,232,.45);}
+  .tab[aria-selected="true"]{color:#fff !important;}
+}
+
+/* Dải ô ngày (Cả tuần + T2…T6) */
+.week-strip{grid-template-columns:repeat(6,minmax(0,1fr)); gap:5px;}
+.ws-day{position:relative; gap:1px; padding:6px 1px 5px; border-radius:13px; overflow:hidden;
+  transition:transform .3s var(--spring),border-color .25s,background .25s,box-shadow .25s,color .25s;}
+.ws-day:active{transform:scale(.92);}
+.ws-wd{font-size:11px;} .ws-dd{font-size:13.5px;} .ws-n{font-size:9.5px;}
+.ws-bars{display:flex; gap:2px; height:5px; width:72%; margin:2px 0 1px;}
+.ws-bars i{flex:1; border-radius:3px; box-shadow:0 0 0 .5px #00000012;}
+.ws-bars i.none{background:var(--line);}
+.ws-day.empty{opacity:.55;}
+.ws-all .ws-wd{color:var(--ink-2);} .ws-all .ws-dd{font:800 12.5px/1.25 var(--font); text-transform:uppercase; letter-spacing:.02em;}
+.ws-day.is-today{background:linear-gradient(170deg,#FFF3D0,#FFE2A6); border-color:var(--amber); color:#3A2400;}
+:root[data-theme="dark"] .ws-day.is-today{background:linear-gradient(170deg,#3A2A08,#2A1E06); color:#FFD27A;}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .ws-day.is-today{background:linear-gradient(170deg,#3A2A08,#2A1E06); color:#FFD27A;}}
+.ws-day.is-today .ws-wd,.ws-day.is-today .ws-n{color:inherit; opacity:.85;}
+.ws-day.active{background:linear-gradient(150deg,var(--hl),var(--hl-2)); border-color:transparent; color:#fff; opacity:1;
+  transform:translateY(-2px); box-shadow:0 10px 22px color-mix(in srgb,var(--hl) 40%,transparent);}
+.ws-day.active .ws-wd,.ws-day.active .ws-n{color:#fff; opacity:.9;}
+.ws-day.active .ws-bars i{box-shadow:0 0 0 1.5px #ffffffd0;}
+.ws-day.active.is-today::after{content:""; position:absolute; top:4px; right:4px; width:6px; height:6px; border-radius:50%; background:var(--amber); box-shadow:0 0 0 2px #fff;}
+
+/* Thẻ ngày & buổi học */
+#view-week > *{animation:none;}
+.week-cards{will-change:transform,opacity;}
+.week-cards .day-card{animation:cardIn .5s var(--ease) both; animation-delay:calc(var(--i,0) * 45ms);}
+@keyframes cardIn{from{opacity:0; transform:translateY(12px);}to{opacity:1; transform:none;}}
+.day-card{border-color:var(--line-soft);}
+.day-head{background:linear-gradient(180deg,var(--paper-2),color-mix(in srgb,var(--hl-soft) 60%,var(--paper-2)));}
+.day-card.is-today .day-head{background:linear-gradient(170deg,#FFCF5C,#FF9A1F);}
+.slot-period{background:linear-gradient(170deg,var(--hl-soft),color-mix(in srgb,var(--hl-2) 10%,var(--card))); border-color:color-mix(in srgb,var(--hl) 35%,var(--line));}
+.slot-period .sp-n{background:linear-gradient(135deg,var(--hl),var(--hl-2)); -webkit-background-clip:text; background-clip:text; color:transparent;}
+.chip{background:linear-gradient(95deg,color-mix(in srgb,var(--tc) 16%,var(--card)),var(--card) 78%); border-color:color-mix(in srgb,var(--tc) 22%,var(--line-soft));}
+.chip::before{background:linear-gradient(180deg,var(--tc),color-mix(in srgb,var(--tc) 55%,#fff));}
+.chip-track-tag{letter-spacing:.02em;}
+@media (hover:hover){.chip:hover{box-shadow:0 8px 18px color-mix(in srgb,var(--tc) 22%,transparent);}}
+
+/* Cửa sổ chi tiết mượt hơn */
+.overlay.show{animation:fadeIn .3s ease both;}
+.modal{animation:sheet .45s var(--spring) both;}
+.kv .v{color:var(--ink);}
+@media (prefers-reduced-motion:reduce){.tab-ind,.ws-day{transition:none !important;}}
 </style>
 </head>
 <body>
@@ -459,7 +570,7 @@ select.sel{flex:0 1 170px;}
     <button class="btn btn-ghost" id="todayBtn">Hôm nay</button>
     <button class="btn btn-ghost" id="themeBtn" aria-label="Đổi giao diện sáng/tối">◐</button>
   </div></div>
-  <nav class="tabs" role="tablist">
+  <nav class="tabs" role="tablist"><span class="tab-ind" aria-hidden="true"></span>
     <button class="tab" role="tab" data-tab="week" aria-selected="true">Theo tuần</button>
     <button class="tab" role="tab" data-tab="month" aria-selected="false">Theo tháng</button>
     <button class="tab" role="tab" data-tab="tasks" aria-selected="false">Công việc</button>
@@ -684,7 +795,7 @@ const state = {
   tab:"week", teacher:"", selectedDay:null,
   weekAnchor: TODAY, monthAnchor: TODAY.slice(0,7)+"-01",
   pinOpen: localStorage.getItem("pinOpen") !== "0",
-  taskDate: TODAY, openSlots: {}, pinLessons: false,
+  taskDate: TODAY, openSlots: {}, pinLessons: false, weekDay: null, slideDir: 0,
   tool: {teacher:"", group:"", from:"", to:""},
 };
 
@@ -759,6 +870,7 @@ async function loadAllData(){
     document.getElementById("pinToday").style.display = "";
     const anchor = (IDX.MIN_DATE && IDX.MIN_DATE<=TODAY && TODAY<=IDX.MAX_DATE) ? TODAY : (IDX.MIN_DATE||TODAY);
     state.weekAnchor = mondayOf(anchor);
+    state.weekDay = defaultWeekDay(state.weekAnchor);
     state.monthAnchor = anchor.slice(0,7)+"-01";
     refreshTeacherSelect();
     renderAll();
@@ -898,12 +1010,14 @@ document.querySelectorAll(".tab").forEach(btn=>{
     document.getElementById("view-month").style.display = state.tab==="month" ? "" : "none";
     document.getElementById("view-tasks").style.display = state.tab==="tasks" ? "" : "none";
     document.getElementById("view-tools").style.display = state.tab==="tools" ? "" : "none";
+    setTabIndicator();
     renderAll();
+    animIn(document.getElementById("view-"+state.tab), 0);
   });
 });
 document.getElementById("todayBtn").addEventListener("click", ()=>{
   const anchor = (IDX.MIN_DATE && IDX.MIN_DATE<=TODAY && TODAY<=IDX.MAX_DATE) ? TODAY : (IDX.MIN_DATE||TODAY);
-  state.weekAnchor = mondayOf(anchor); state.monthAnchor = anchor.slice(0,7)+"-01"; state.selectedDay = anchor; state.taskDate = TODAY;
+  state.weekAnchor = mondayOf(anchor); state.weekDay = defaultWeekDay(state.weekAnchor); state.monthAnchor = anchor.slice(0,7)+"-01"; state.selectedDay = anchor; state.taskDate = TODAY;
   renderAll();
   requestAnimationFrame(()=>{
     let target = null;
@@ -917,62 +1031,93 @@ document.getElementById("todayBtn").addEventListener("click", ()=>{
 });
 
 /* ================= Week view ================= */
+function lessonColor(l){ return l.isHoliday ? "red" : trackVar(l.room); }
+function weekDaysOf(anchor){ return [0,1,2,3,4].map(i=>addDays(anchor,i)); }
+function defaultWeekDay(anchor){ return weekDaysOf(anchor).includes(TODAY) ? TODAY : null; }
+function animIn(el, dir){
+  if(!el || !el.animate || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  el.animate([{opacity:0, transform:"translate3d("+(dir*28)+"px,"+(dir?0:10)+"px,0) scale(.99)"},{opacity:1, transform:"none"}],
+    {duration:420, easing:"cubic-bezier(.22,.8,.24,1)"});
+}
 function renderWeek(){
   const root = document.getElementById("view-week");
   root.innerHTML = "";
   if(!IDX.MIN_DATE) return;
-  const bar = document.createElement("div"); bar.className="bar";
-  const weekEnd = addDays(state.weekAnchor,4);
-  bar.innerHTML = "<h2>Tuần "+fmtVN(state.weekAnchor)+" – "+fmtVN(weekEnd)+"</h2>";
-  const navGroup = document.createElement("div"); navGroup.className="nav-group";
-  const prev = document.createElement("button"); prev.className="iconbtn"; prev.textContent="‹";
-  const next = document.createElement("button"); next.className="iconbtn"; next.textContent="›";
-  prev.addEventListener("click", ()=>{ state.weekAnchor=addDays(state.weekAnchor,-7); renderAll(); });
-  next.addEventListener("click", ()=>{ state.weekAnchor=addDays(state.weekAnchor,7); renderAll(); });
-  navGroup.appendChild(prev); navGroup.appendChild(next); bar.appendChild(navGroup);
+  const days = weekDaysOf(state.weekAnchor);
+  if(state.weekDay && !days.includes(state.weekDay)) state.weekDay = null;
+  const dir = state.slideDir || 0; state.slideDir = 0;
+
+  /* --- Hàng ô chọn ngày --- */
   const strip = document.createElement("div"); strip.className="week-strip";
-  for(let i=0;i<5;i++){
-    const iso = addDays(state.weekAnchor, i), n = (IDX.byDate[iso]||[]).length, d = parseISO(iso);
+  const mkCell = (iso)=>{
     const b = document.createElement("button");
-    b.className = "ws-day" + (iso===TODAY?" is-today":"") + (n?"":" empty");
-    b.innerHTML = "<span class='ws-wd'>"+["CN","T2","T3","T4","T5","T6","T7"][d.getDay()]+"</span><span class='ws-dd'>"+String(d.getDate()).padStart(2,"0")+"/"+String(d.getMonth()+1).padStart(2,"0")+"</span><span class='ws-n'>"+(n? n+" buổi" : "—")+"</span>";
+    const all = !iso;
+    const list = all ? days.flatMap(d=>IDX.byDate[d]||[]) : (IDX.byDate[iso]||[]);
+    const active = all ? !state.weekDay : state.weekDay===iso;
+    b.className = "ws-day" + (all?" ws-all":"") + (iso===TODAY?" is-today":"") + (list.length?"":" empty") + (active?" active":"");
+    const colors = []; ["p301","nhu","khi","p303","red"].forEach(c=>{ if(list.some(l=>lessonColor(l)===c)) colors.push(c); });
+    const bars = "<span class='ws-bars'>"+(colors.length ? colors.map(c=>"<i style='background:var(--"+c+")'></i>").join("") : "<i class='none'></i>")+"</span>";
+    if(all){
+      b.innerHTML = "<span class='ws-wd'>Cả</span><span class='ws-dd'>tuần</span>"+bars+"<span class='ws-n'>"+list.length+" buổi</span>";
+    } else {
+      const d = parseISO(iso);
+      b.innerHTML = "<span class='ws-wd'>"+["CN","T2","T3","T4","T5","T6","T7"][d.getDay()]+"</span><span class='ws-dd'>"+String(d.getDate()).padStart(2,"0")+"/"+String(d.getMonth()+1).padStart(2,"0")+"</span>"+bars+"<span class='ws-n'>"+(list.length? list.length+" buổi" : "trống")+"</span>";
+    }
     b.addEventListener("click", ()=>{
-      const card = document.getElementById("day-"+iso); if(!card) return;
-      const hdr = document.querySelector("header.top");
-      const top = card.getBoundingClientRect().top + (window.scrollY||0) - ((hdr?hdr.offsetHeight:0) + 8);
-      window.scrollTo({top:Math.max(0,top), behavior:"smooth"});
-      card.classList.remove("flash"); void card.offsetWidth; card.classList.add("flash");
+      if((iso||null) === state.weekDay) return;
+      const order = [null].concat(days);
+      state.slideDir = order.indexOf(iso||null) > order.indexOf(state.weekDay) ? 1 : -1;
+      state.weekDay = iso || null;
+      renderWeek();
+      const st = document.querySelector("#view-week .week-strip"), hdr = document.querySelector("header.top");
+      if(st){ const top = st.getBoundingClientRect().top - (hdr?hdr.offsetHeight:0) - 8; if(top < 0) window.scrollTo({top:Math.max(0,(window.scrollY||0)+top), behavior:"smooth"}); }
     });
-    strip.appendChild(b);
-  }
+    return b;
+  };
+  strip.appendChild(mkCell(null));
+  days.forEach(iso=>strip.appendChild(mkCell(iso)));
   root.appendChild(strip);
+
+  /* --- Thanh tuần --- */
+  const bar = document.createElement("div"); bar.className="bar";
+  bar.innerHTML = "<h2>Tuần "+fmtVN(state.weekAnchor)+" – "+fmtVN(addDays(state.weekAnchor,4))+"</h2>";
+  const navGroup = document.createElement("div"); navGroup.className="nav-group";
+  const prev = document.createElement("button"); prev.className="iconbtn"; prev.textContent="‹"; prev.setAttribute("aria-label","Tuần trước");
+  const next = document.createElement("button"); next.className="iconbtn"; next.textContent="›"; next.setAttribute("aria-label","Tuần sau");
+  const go = (n)=>{ state.weekAnchor=addDays(state.weekAnchor,7*n); state.weekDay=defaultWeekDay(state.weekAnchor); state.slideDir=n; renderAll(); };
+  prev.addEventListener("click", ()=>go(-1)); next.addEventListener("click", ()=>go(1));
+  navGroup.appendChild(prev); navGroup.appendChild(next); bar.appendChild(navGroup);
   root.appendChild(bar);
 
-  for(let i=0;i<5;i++){
-    const iso = addDays(state.weekAnchor, i);
+  /* --- Thẻ ngày --- */
+  const wrap = document.createElement("div"); wrap.className="week-cards";
+  (state.weekDay ? [state.weekDay] : days).forEach((iso, idx)=>{
     const dayLessons = IDX.byDate[iso]||[];
     const card = document.createElement("div");
     card.className = "day-card" + (iso===TODAY?" is-today":""); card.id = "day-"+iso;
+    card.style.setProperty("--i", idx);
+    const d = parseISO(iso);
     const head = document.createElement("div"); head.className="day-head";
-    head.innerHTML = "<span class='wd'>"+weekdayNameOf(iso)+"</span><span class='dd'>"+parseISO(iso).getDate()+"</span><span class='dt'>"+String(parseISO(iso).getMonth()+1).padStart(2,"0")+"/"+parseISO(iso).getFullYear()+"</span>"+(iso===TODAY?"<span class='today-badge'>Hôm nay</span>":"");
+    head.innerHTML = "<span class='wd'>"+weekdayNameOf(iso)+"</span><span class='dd'>"+d.getDate()+"</span><span class='dt'>"+String(d.getMonth()+1).padStart(2,"0")+"/"+d.getFullYear()+"</span>"+(iso===TODAY?"<span class='today-badge'>Hôm nay</span>":"");
     card.appendChild(head);
     SLOTS.forEach(slot=>{
       const slotLessons = dayLessons.filter(l=>l.period && slotOf(l.period).key===slot.key).sort((a,b)=>TRACKS.findIndex(t=>t.key===a.room)-TRACKS.findIndex(t=>t.key===b.room));
       if(!slotLessons.length) return;
-      const periodLabel = slotLessons[0].period;
       const block = document.createElement("div"); block.className="slot-block";
-      block.innerHTML = "<div class='slot-period'><span class='sp-k'>Tiết</span><span class='sp-n'>"+escapeHtml(periodLabel)+"</span><span class='sp-s'>"+(slot.key==="s3"?"Chiều":"Sáng")+"</span></div>";
+      block.innerHTML = "<div class='slot-period'><span class='sp-k'>Tiết</span><span class='sp-n'>"+escapeHtml(slotLessons[0].period)+"</span><span class='sp-s'>"+(slot.key==="s3"?"Chiều":"Sáng")+"</span></div>";
       const chips = document.createElement("div"); chips.className="slot-chips";
       slotLessons.forEach(l=>chips.appendChild(chipEl(l)));
       block.appendChild(chips);
       card.appendChild(block);
     });
     if(!dayLessons.length){
-      const empty = document.createElement("div"); empty.className="slot-empty"; empty.style.padding="12px"; empty.textContent="Không có lịch học.";
+      const empty = document.createElement("div"); empty.className="slot-empty"; empty.textContent="Không có lịch học.";
       card.appendChild(empty);
     }
-    root.appendChild(card);
-  }
+    wrap.appendChild(card);
+  });
+  root.appendChild(wrap);
+  animIn(wrap, dir);
 }
 
 /* ================= Month view ================= */
@@ -1376,6 +1521,11 @@ function exportToolsPDF(){
 }
 
 /* ================= Orchestrator ================= */
+function setTabIndicator(){
+  const tabs = [...document.querySelectorAll(".tab")];
+  const i = Math.max(0, tabs.findIndex(t=>t.dataset.tab===state.tab));
+  const nav = document.querySelector("nav.tabs"); if(nav) nav.style.setProperty("--ti", i);
+}
 function updateTaskTabLabel(){
   const n = (typeof taskCountFor === "function" && tasksStatus === "ok") ? taskCountFor(TODAY) : 0;
   const tab = document.querySelector('.tab[data-tab="tasks"]');
@@ -1383,6 +1533,7 @@ function updateTaskTabLabel(){
 }
 function renderAll(){
   document.body.dataset.tab = state.tab;
+  setTabIndicator();
   updateTaskTabLabel();
   renderLegend();
   renderPin();
