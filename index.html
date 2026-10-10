@@ -547,6 +547,94 @@ nav.tabs{isolation:isolate;}
 .modal{animation:sheet .45s var(--spring) both;}
 .kv .v{color:var(--ink);}
 @media (prefers-reduced-motion:reduce){.tab-ind,.ws-day{transition:none !important;}}
+
+/* ===== Thẻ công việc (tab Công việc) ===== */
+.tc-list{display:flex; flex-direction:column; gap:14px; margin-bottom:20px;}
+.tcard{--uc:var(--hl); --uc2:var(--hl-2); display:flex; gap:12px; padding:12px; cursor:pointer; background:var(--card);
+  border:1.5px solid color-mix(in srgb,var(--uc) 45%,var(--line)); border-radius:18px;
+  box-shadow:0 1px 0 #ffffff80 inset,0 4px 0 color-mix(in srgb,var(--uc) 32%,var(--line)),0 14px 24px color-mix(in srgb,var(--uc) 18%,transparent);
+  animation:cardIn .5s var(--ease) both; animation-delay:calc(var(--i,0) * 50ms); transition:transform .25s var(--ease),box-shadow .25s var(--ease);}
+.tcard:active{transform:translateY(3px); box-shadow:0 1px 0 #ffffff80 inset,0 1px 0 color-mix(in srgb,var(--uc) 32%,var(--line)),0 4px 10px color-mix(in srgb,var(--uc) 14%,transparent);}
+@media (hover:hover){.tcard:hover{transform:translateY(-3px);}}
+.tcard.is-current{cursor:default; margin-bottom:6px;}
+.tcard.u-now{--uc:#0FAF7E; --uc2:#0C7FA8;} .tcard.u-soon{--uc:#E5413A; --uc2:#E5337C;} .tcard.u-near{--uc:#F08A0C; --uc2:#E5413A;}
+.tc-date{flex:none; width:56px; align-self:flex-start; display:flex; flex-direction:column; align-items:center; padding:7px 0 6px; color:#fff; border-radius:13px;
+  background:linear-gradient(160deg,var(--uc),var(--uc2)); box-shadow:0 6px 14px color-mix(in srgb,var(--uc) 35%,transparent);}
+.tc-wd{font-size:11px; font-weight:700; opacity:.9; letter-spacing:.04em;}
+.tc-dd{font:700 24px/1.05 var(--font-num);}
+.tc-mm{font-size:10.5px; font-weight:600; opacity:.85;}
+.tc-body{flex:1; min-width:0; display:flex; flex-direction:column; gap:8px;}
+.tc-head{display:flex; align-items:center; justify-content:space-between; gap:8px; min-height:22px;}
+.tc-full{font-size:12.5px; font-weight:600; color:var(--muted);}
+.tc-head .cd{margin:0; flex:none; font-size:11px;}
+.tc-task{display:flex; gap:8px; align-items:flex-start;}
+.tc-task + .tc-task{padding-top:8px; border-top:1px dashed var(--line);}
+.tc-idx{flex:none; width:20px; height:20px; display:grid; place-items:center; margin-top:1px; font:700 11px var(--font-num); color:var(--uc); background:color-mix(in srgb,var(--uc) 13%,var(--card)); border-radius:7px;}
+.tc-main{min-width:0; flex:1;}
+.tc-title{font-size:15px; font-weight:700; line-height:1.35; letter-spacing:-.01em; color:var(--ink); word-break:break-word;}
+.tc-tags{display:flex; flex-wrap:wrap; gap:6px; margin-top:6px;}
+.tc-tag{display:inline-flex; align-items:center; gap:5px; max-width:100%; padding:3px 9px 3px 7px; font-size:12px; font-weight:600; line-height:1.3; border-radius:999px; word-break:break-word;}
+.tc-tag svg{flex:none; width:14px; height:14px;}
+.tc-tag.who{color:color-mix(in srgb,var(--hl) 85%,var(--ink)); background:var(--hl-soft);}
+.tc-tag.note{color:var(--gold); background:var(--gold-soft);}
+.tc-empty{display:flex; flex-direction:column; align-items:center; gap:3px; padding:22px 14px; text-align:center; color:var(--muted); font-size:13px;
+  background:linear-gradient(170deg,var(--task-soft),var(--card)); border:1.5px dashed color-mix(in srgb,var(--hl) 45%,var(--line)); border-radius:18px;}
+.tc-empty b{font-size:14.5px; color:var(--ink-2);}
+.tc-empty-ico{width:38px; height:38px; margin-bottom:4px; color:var(--hl); opacity:.75;}
+.log-nav{border-radius:16px; padding:5px 6px;} .log-nav .datelabel{font-size:14.5px;}
+.log-nav{background:linear-gradient(120deg,var(--brand),var(--brand-2) 55%,var(--brand-3));}
+
+/* ===== Tab Công cụ: KPI, vành khuyên, xếp hạng ===== */
+.kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px;}
+@media (min-width:641px){.kpi-grid{grid-template-columns:repeat(4,minmax(0,1fr));}}
+.kpi{--kc:var(--hl); --kc2:var(--hl-2); position:relative; overflow:hidden; display:flex; align-items:center; gap:11px; padding:13px 14px;
+  animation:cardIn .5s var(--ease) both; animation-delay:calc(var(--i,0) * 60ms);}
+.kpi::after{content:""; position:absolute; right:-24px; top:-24px; width:84px; height:84px; border-radius:50%; background:radial-gradient(circle,color-mix(in srgb,var(--kc) 22%,transparent),transparent 70%);}
+.kpi.k2{--kc:#0C7FA8; --kc2:#0FAF7E;} .kpi.k3{--kc:#F08A0C; --kc2:#E5337C;} .kpi.k4{--kc:#8247F0; --kc2:#E5337C;}
+.kpi-ico{flex:none; width:40px; height:40px; display:grid; place-items:center; color:#fff; border-radius:12px; background:linear-gradient(145deg,var(--kc),var(--kc2)); box-shadow:0 6px 14px color-mix(in srgb,var(--kc) 35%,transparent);}
+.kpi-ico svg{width:21px; height:21px;}
+.kpi-txt{min-width:0;}
+.kpi .stat-num{font-size:24px; background:linear-gradient(135deg,var(--kc),var(--kc2)); -webkit-background-clip:text; background-clip:text; color:transparent;}
+.kpi .stat-label{margin-top:2px; font-size:12px; font-weight:600;}
+
+.viz-panel h3{display:flex; align-items:center; gap:9px; font-size:15px; margin-bottom:12px;}
+.viz-panel h3::before{content:""; width:5px; height:17px; border-radius:4px; background:linear-gradient(180deg,var(--hl),var(--amber));}
+.donut-wrap{display:flex; align-items:center; gap:14px; flex-wrap:wrap;}
+.donut{flex:none; width:132px; height:132px; filter:drop-shadow(0 6px 14px color-mix(in srgb,var(--hl) 18%,transparent));}
+.donut-seg{animation:donutIn .9s var(--ease) both; animation-delay:var(--d,0ms); stroke-linecap:butt;}
+@keyframes donutIn{from{stroke-dasharray:0 999;}}
+.donut-n{font:700 26px var(--font-num); fill:var(--ink);} .donut-l{font:600 10.5px var(--font); fill:var(--muted);}
+.donut-legend{flex:1; min-width:170px; display:flex; flex-direction:column; gap:7px;}
+.dl-row{display:grid; grid-template-columns:12px auto 1fr auto; align-items:center; gap:8px; padding:7px 10px; font-size:13px; background:var(--paper); border-radius:11px;}
+.dl-row.zero{opacity:.5;}
+.dl-dot{width:11px; height:11px; border-radius:4px;}
+.dl-name{font-weight:700;} .dl-val{color:var(--muted); font-size:12px; text-align:right;} .dl-val b{color:var(--ink); font-family:var(--font-num);}
+.dl-pct{min-width:36px; padding:1px 6px; font:700 11.5px var(--font-num); text-align:center; color:var(--hl); background:var(--hl-soft); border-radius:999px;}
+
+.rank-list{display:flex; flex-direction:column; gap:8px;}
+.rank-row{display:flex; align-items:center; gap:11px; padding:9px 11px; background:linear-gradient(95deg,var(--paper),var(--card)); border:1px solid var(--line-soft); border-radius:14px;
+  animation:cardIn .45s var(--ease) both; animation-delay:calc(var(--i,0) * 40ms);}
+.rk-ava{position:relative; flex:none; width:40px; height:40px; display:grid; place-items:center; font:800 16px var(--font); color:#fff; border-radius:50%;
+  background:linear-gradient(145deg,hsl(var(--h) 75% 60%),hsl(calc(var(--h) + 35) 70% 46%)); box-shadow:0 5px 12px hsl(var(--h) 70% 50% / .35);}
+.rank-row.unknown .rk-ava{background:linear-gradient(145deg,#9AA3BD,#6A7696); box-shadow:none;}
+.rk-medal{position:absolute; right:-4px; bottom:-3px; width:17px; height:17px; display:grid; place-items:center; font:800 10px var(--font-num); color:#3A2400; border:2px solid var(--card); border-radius:50%;}
+.rk-medal.m1{background:linear-gradient(145deg,#FFE27A,#F5A300);} .rk-medal.m2{background:linear-gradient(145deg,#EEF1F7,#AEB7C9);} .rk-medal.m3{background:linear-gradient(145deg,#F6C79B,#C8783A);}
+.rk-body{flex:1; min-width:0;}
+.rk-top{display:flex; align-items:baseline; justify-content:space-between; gap:8px;}
+.rk-name{font-size:14.5px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.rk-p{flex:none; font-size:12px; color:var(--muted);} .rk-p b{font:700 16px var(--font-num); color:var(--ink); margin-right:2px;}
+.rk-track{height:8px; margin:6px 0 5px; overflow:hidden; background:var(--paper-2); border-radius:999px;}
+.rk-fill{height:100%; width:var(--w); border-radius:999px; background:linear-gradient(90deg,hsl(var(--h) 75% 60%),hsl(calc(var(--h) + 35) 70% 50%)); animation:grow 1s var(--ease) both; animation-delay:calc(var(--i,0) * 40ms + 150ms); transform-origin:left;}
+@keyframes grow{from{transform:scaleX(0);}}
+.rk-meta{display:flex; gap:12px; font-size:11.5px; font-weight:600; color:var(--muted);}
+.rk-meta span::before{content:"•"; margin-right:5px; color:var(--hl);}
+
+@media (max-width:640px){
+  .donut-wrap{flex-direction:column; align-items:stretch;}
+  .donut{align-self:center; width:150px; height:150px;}
+  .donut-legend{min-width:0;}
+}
+.dl-val{white-space:nowrap;}
 </style>
 </head>
 <body>
@@ -1346,21 +1434,59 @@ function renderTasks(){
 
   const items = TASKIDX[state.taskDate] || [];
   if(!items.length){
-    const e=document.createElement("div"); e.className="task-empty"; e.textContent="Không có công việc nào được ghi cho ngày này."; root.appendChild(e);
+    const e=document.createElement("div"); e.className="tc-empty";
+    e.innerHTML = ICON.calCheck + "<b>Không có công việc</b><span>Chưa có công việc nào được ghi cho ngày này.</span>";
+    root.appendChild(e);
   } else {
-    const tl = document.createElement("div"); tl.className="task-list";
-    items.forEach((t,i)=>tl.appendChild(taskItemEl(t,i)));
-    root.appendChild(tl);
+    root.appendChild(taskCardEl(state.taskDate, items, {current:true}));
   }
 
-  const up = tasks.filter(t=>t.date>=TODAY && t.date!==state.taskDate).sort((x,y)=>x.date<y.date?-1:x.date>y.date?1:0).slice(0,30);
+  const up = tasks.filter(t=>t.date>=TODAY && t.date!==state.taskDate).sort((x,y)=>x.date<y.date?-1:x.date>y.date?1:0).slice(0,40);
   if(up.length){
-    const t = document.createElement("h3"); t.className="tbl-title"; t.style.marginTop="8px"; t.textContent="Công việc các ngày sắp tới";
+    const t = document.createElement("h3"); t.className="tbl-title"; t.style.marginTop="18px"; t.textContent="Công việc các ngày sắp tới";
     root.appendChild(t);
-    const w = taskTable(up,true);
-    w.querySelectorAll("tr[data-date]").forEach(tr=>tr.addEventListener("click", ()=>{ state.taskDate=tr.dataset.date; renderTasks(); window.scrollTo({top:0,behavior:"smooth"}); }));
-    root.appendChild(w);
+    const byD = {}; up.forEach(x=>(byD[x.date]=byD[x.date]||[]).push(x));
+    const list = document.createElement("div"); list.className="tc-list";
+    Object.keys(byD).sort().forEach((iso,i)=>{
+      const c = taskCardEl(iso, byD[iso], {});
+      c.style.setProperty("--i", i);
+      c.addEventListener("click", ()=>{ state.taskDate=iso; renderTasks(); window.scrollTo({top:0,behavior:"smooth"}); });
+      list.appendChild(c);
+    });
+    root.appendChild(list);
   }
+}
+const ICON = {
+  people:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='9' cy='8' r='3.2'/><path d='M3.5 19c.6-3.2 2.9-5 5.5-5s4.9 1.8 5.5 5'/><circle cx='17' cy='9' r='2.4'/><path d='M16 14.2c2.3.2 4 1.8 4.5 4.3'/></svg>",
+  note:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M5 4h10l4 4v12H5z'/><path d='M15 4v4h4M8.5 12.5h7M8.5 16h5'/></svg>",
+  calCheck:"<svg class='tc-empty-ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'><rect x='3.5' y='5' width='17' height='15.5' rx='3'/><path d='M3.5 10h17M8 3v4M16 3v4'/><path d='M9 15l2 2 4-4'/></svg>",
+  lesson:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5z'/><path d='M20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5z'/></svg>",
+  clock:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round'><circle cx='12' cy='12' r='8.5'/><path d='M12 7.5V12l3 2'/></svg>",
+  cal:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3.5' y='5' width='17' height='15.5' rx='3'/><path d='M3.5 10h17M8 3v4M16 3v4'/></svg>",
+  user:"<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round'><circle cx='12' cy='8' r='3.6'/><path d='M5 20c.8-4 3.6-6 7-6s6.2 2 7 6'/></svg>",
+};
+function urgencyOf(iso){
+  const n = Math.round((parseISO(iso) - parseISO(TODAY)) / 86400000);
+  return n < 0 ? "past" : n === 0 ? "now" : n === 1 ? "soon" : n <= 3 ? "near" : "far";
+}
+function taskCardEl(iso, list, opt){
+  const d = parseISO(iso);
+  const el = document.createElement("div");
+  el.className = "tcard u-" + urgencyOf(iso) + (opt.current ? " is-current" : "");
+  let h = "<div class='tc-date'><span class='tc-wd'>"+["CN","T2","T3","T4","T5","T6","T7"][d.getDay()]+"</span><span class='tc-dd'>"+String(d.getDate()).padStart(2,"0")+"</span><span class='tc-mm'>Th "+(d.getMonth()+1)+"</span></div>";
+  h += "<div class='tc-body'><div class='tc-head'><span class='tc-full'>"+escapeHtml(weekdayNameOf(iso)+", "+fmtVN(iso))+"</span>"+countdownHtml(iso)+"</div>";
+  list.forEach((t,i)=>{
+    h += "<div class='tc-task'>" + (list.length>1 ? "<span class='tc-idx'>"+(i+1)+"</span>" : "") + "<div class='tc-main'><div class='tc-title'>"+escapeHtml(t.title)+"</div>";
+    if(t.people || t.note){
+      h += "<div class='tc-tags'>";
+      if(t.people) h += "<span class='tc-tag who' title='Thành phần'>"+ICON.people+"<span>"+escapeHtml(t.people)+"</span></span>";
+      if(t.note) h += "<span class='tc-tag note' title='Ghi chú'>"+ICON.note+"<span>"+escapeHtml(t.note)+"</span></span>";
+      h += "</div>";
+    }
+    h += "</div></div>";
+  });
+  el.innerHTML = h + "</div>";
+  return el;
 }
 function countdownHtml(iso){
   const n = Math.round((parseISO(iso) - parseISO(TODAY)) / 86400000);
@@ -1463,39 +1589,66 @@ function renderTools(){
   fp.querySelector("#tlPdf").addEventListener("click", exportToolsPDF);
 
   const d = toolData();
-  const sg = document.createElement("div"); sg.className = "stat-grid";
-  [[d.rows.length,"Số buổi dạy"],[d.sumP,"Tổng số tiết"],[d.days,"Số ngày có lịch"],[d.nTeachers,"Số giáo viên"]].forEach(([n,l])=>{
-    const c = document.createElement("div"); c.className = "stat-card";
-    c.innerHTML = "<div class='stat-num'>"+n+"</div><div class='stat-label'>"+l+"</div>";
+  const sg = document.createElement("div"); sg.className = "stat-grid kpi-grid";
+  [[d.rows.length,"Số buổi dạy",ICON.lesson,"k1"],[d.sumP,"Tổng số tiết",ICON.clock,"k2"],[d.days,"Số ngày có lịch",ICON.cal,"k3"],[d.nTeachers,"Số giáo viên",ICON.user,"k4"]].forEach(([n,l,ic,k],i)=>{
+    const c = document.createElement("div"); c.className = "stat-card kpi "+k; c.style.setProperty("--i",i);
+    c.innerHTML = "<div class='kpi-ico'>"+ic+"</div><div class='kpi-txt'><div class='stat-num' data-n='"+n+"'>"+n+"</div><div class='stat-label'>"+l+"</div></div>";
     sg.appendChild(c);
   });
   root.appendChild(sg);
+  countUp(sg);
 
   if(!d.rows.length){
-    const e = document.createElement("div"); e.className = "task-empty"; e.textContent = "Không có buổi học nào khớp với bộ lọc.";
+    const e = document.createElement("div"); e.className = "tc-empty"; e.innerHTML = ICON.calCheck+"<b>Không có dữ liệu</b><span>Không có buổi học nào khớp với bộ lọc.</span>";
     root.appendChild(e);
     return;
   }
 
-  const tp = document.createElement("div"); tp.className = "panel";
-  tp.innerHTML = "<h3>Thống kê theo giáo viên</h3>";
-  const tw = document.createElement("div"); tw.className = "tbl-wrap"; tw.style.marginBottom = "0";
-  tw.innerHTML = "<table class='tbl'><thead><tr><th>Giáo viên</th><th class='c-num'>Số buổi</th><th class='c-num'>Số tiết</th><th class='c-num'>Số ngày</th></tr></thead><tbody>" +
-    d.tRows.map(t=>"<tr><td class='c-main' data-label='Giáo viên'>"+escapeHtml(t.name)+"</td><td class='c-num' data-label='Số buổi'>"+t.n+"</td><td class='c-num' data-label='Số tiết'>"+t.p+"</td><td class='c-num' data-label='Số ngày'>"+t.d.size+"</td></tr>").join("") +
-    "</tbody></table>";
-  tp.appendChild(tw);
-  root.appendChild(tp);
-
-  const gp = document.createElement("div"); gp.className = "panel";
+  /* --- Số tiết theo ngành: biểu đồ vành khuyên --- */
+  const gp = document.createElement("div"); gp.className = "panel viz-panel";
   gp.innerHTML = "<h3>Số tiết theo ngành</h3>";
-  const maxP = Math.max(1, ...d.gRows.map(g=>g.p));
-  d.gRows.forEach(g=>{
-    const row = document.createElement("div"); row.className = "bar-row";
-    row.innerHTML = "<div class='name'>"+g.label+"</div><div class='track'><div class='fill' style='width:"+(g.p/maxP*100)+"%; background:var(--"+g.v+")'></div></div><div class='n' style='width:auto; min-width:78px'>"+g.p+" tiết · "+g.n+" buổi</div>";
-    gp.appendChild(row);
+  const tot = d.gRows.reduce((s,g)=>s+g.p,0) || 1;
+  const R = 52, C = 2*Math.PI*R; let off = 0;
+  let arcs = "";
+  d.gRows.filter(g=>g.p).forEach((g,i)=>{
+    const len = g.p/tot*C;
+    arcs += "<circle class='donut-seg' r='"+R+"' cx='70' cy='70' fill='none' stroke='var(--"+g.v+")' stroke-width='18' stroke-dasharray='"+Math.max(0,len-2)+" "+(C-Math.max(0,len-2))+"' stroke-dashoffset='"+(-off)+"' style='--d:"+(i*90)+"ms'/>";
+    off += len;
   });
+  const donut = "<svg class='donut' viewBox='0 0 140 140'><circle r='"+R+"' cx='70' cy='70' fill='none' stroke='var(--paper-2)' stroke-width='18'/><g transform='rotate(-90 70 70)'>"+arcs+"</g>" +
+    "<text x='70' y='66' text-anchor='middle' class='donut-n'>"+d.sumP+"</text><text x='70' y='86' text-anchor='middle' class='donut-l'>tổng tiết</text></svg>";
+  const leg = "<div class='donut-legend'>"+d.gRows.map(g=>"<div class='dl-row"+(g.p?"":" zero")+"'><span class='dl-dot' style='background:var(--"+g.v+")'></span><span class='dl-name'>"+g.label+"</span><span class='dl-val'><b>"+g.p+"</b> tiết · "+g.n+" buổi</span><span class='dl-pct'>"+Math.round(g.p/tot*100)+"%</span></div>").join("")+"</div>";
+  gp.insertAdjacentHTML("beforeend","<div class='donut-wrap'>"+donut+leg+"</div>");
   root.appendChild(gp);
 
+  /* --- Thống kê theo giáo viên: bảng xếp hạng --- */
+  const tp = document.createElement("div"); tp.className = "panel viz-panel";
+  tp.innerHTML = "<h3>Thống kê theo giáo viên</h3>";
+  const maxP = Math.max(1, ...d.tRows.map(t=>t.p));
+  const hues = [245,265,200,160,330,25,290,185];
+  const lst = document.createElement("div"); lst.className = "rank-list";
+  d.tRows.forEach((t,i)=>{
+    const ini = t.name==="Chưa rõ" ? "?" : t.name.replace(/^.*[.\s]\s*/,"").slice(0,1).toUpperCase() || t.name.slice(0,1);
+    const hue = hues[i % hues.length];
+    const row = document.createElement("div"); row.className = "rank-row" + (t.name==="Chưa rõ" ? " unknown" : ""); row.style.setProperty("--i", i);
+    row.innerHTML =
+      "<div class='rk-ava' style='--h:"+hue+"'>"+escapeHtml(ini)+(i<3 && t.name!=="Chưa rõ" ? "<span class='rk-medal m"+(i+1)+"'>"+(i+1)+"</span>" : "")+"</div>" +
+      "<div class='rk-body'><div class='rk-top'><span class='rk-name'>"+escapeHtml(t.name)+"</span><span class='rk-p'><b>"+t.p+"</b> tiết</span></div>" +
+      "<div class='rk-track'><div class='rk-fill' style='--w:"+(t.p/maxP*100)+"%; --h:"+hue+"'></div></div>" +
+      "<div class='rk-meta'><span>"+t.n+" buổi</span><span>"+t.d.size+" ngày</span></div></div>";
+    lst.appendChild(row);
+  });
+  tp.appendChild(lst);
+  root.appendChild(tp);
+}
+function countUp(scope){
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  scope.querySelectorAll(".stat-num[data-n]").forEach(el=>{
+    const target = +el.dataset.n; if(!isFinite(target) || target<=0) return;
+    const t0 = performance.now(), dur = 700;
+    const step = (t)=>{ const k = Math.min(1,(t-t0)/dur), e = 1-Math.pow(1-k,3); el.textContent = Math.round(target*e); if(k<1) requestAnimationFrame(step); };
+    el.textContent = "0"; requestAnimationFrame(step);
+  });
 }
 function exportToolsPDF(){
   const d = toolData();
