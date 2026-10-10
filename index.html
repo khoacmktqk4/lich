@@ -568,6 +568,7 @@ const TRACKS = [
   {key:"TChinh", label:"Tài chính"},
 ];
 const QUAN_Y = ["P301","P302","P303","QY"];
+const SHORT_GROUP = {QY:"Q.y", QNhu:"Q.n", QKhi:"Q.k", TChinh:"T.c"};
 const SLOTS = [
   {key:"s1", periods:["1-3","2-3"]},
   {key:"s2", periods:["4-5"]},
@@ -736,12 +737,12 @@ function chipEl(lesson){
   const trackClass = lesson.isHoliday ? "holiday" : "track-"+lesson.room;
   el.className = "chip " + trackClass;
   const trackInfo = TRACKS.find(t=>t.key===lesson.room);
-  const tagText = lesson.isHoliday ? "NGHỈ" : (QUAN_Y.includes(lesson.room) ? "Quân y" : (trackInfo ? trackInfo.label.replace("Quân ","Q.") : lesson.room));
+  const tagText = lesson.isHoliday ? "NGHỈ" : (SHORT_GROUP[groupOf(lesson)] || lesson.room);
   el.innerHTML =
     "<div class='chip-top'><span class='chip-track-tag'>"+escapeHtml(tagText)+"</span>" +
-    "<span class='chip-code'>"+escapeHtml(lesson.code)+", tiết "+escapeHtml(lesson.period||"")+"</span>" +
+    "<span class='chip-code'>tiết "+escapeHtml(lesson.period||"")+"</span>" +
     "<span class='chip-teacher'>"+escapeHtml(lesson.teacher || (lesson.isHoliday? "" : "GV: chưa rõ"))+"</span></div>" +
-    "<div class='chip-subject'>"+escapeHtml(lesson.subject)+"</div>" +
+    "<div class='chip-subject'>"+escapeHtml(lesson.isHoliday ? lesson.subject : lesson.code)+"</div>" +
     (lesson.location ? "<div class='chip-loc'>📍 "+escapeHtml(lesson.location)+"</div>" : "");
   if(state.teacher){
     if(lesson.teacherCode && lesson.teacherCode.toLowerCase() === state.teacher.toLowerCase()) el.classList.add("match");
@@ -942,7 +943,7 @@ function renderMonth(){
   }
   scrollWrap.appendChild(grid); root.appendChild(scrollWrap);
   const lgM = document.createElement("div"); lgM.className="legend legend-month";
-  lgM.innerHTML = [["p301","Quân y"],["nhu","Quân nhu"],["khi","Quân khí"],["p303","Tài chính"]].map(([v,label])=>"<span><span class='dot' style='background:var(--"+v+")'></span>"+label+"</span>").join("");
+  lgM.innerHTML = [["p301","Q.y"],["nhu","Q.n"],["khi","Q.k"],["p303","T.c"]].map(([v,label])=>"<span><span class='dot' style='background:var(--"+v+")'></span>"+label+"</span>").join("");
   root.appendChild(lgM);
   const lessonDetail = document.createElement("div"); lessonDetail.className="day-detail"; lessonDetail.id="monthLessonDetail";
   root.appendChild(lessonDetail);
@@ -1143,8 +1144,8 @@ function taskTable(items, withDate){
 
 /* ================= Công cụ: thống kê, lọc theo giáo viên, xuất PDF ================= */
 const GROUPS = [
-  {key:"QY", label:"Quân y", v:"p301"}, {key:"QNhu", label:"Quân nhu", v:"nhu"},
-  {key:"QKhi", label:"Quân khí", v:"khi"}, {key:"TChinh", label:"Tài chính", v:"p303"},
+  {key:"QY", label:"Q.y", v:"p301"}, {key:"QNhu", label:"Q.n", v:"nhu"},
+  {key:"QKhi", label:"Q.k", v:"khi"}, {key:"TChinh", label:"T.c", v:"p303"},
 ];
 function groupOf(l){ return QUAN_Y.includes(l.room) ? "QY" : l.room; }
 function groupLabel(l){ const g = GROUPS.find(x=>x.key===groupOf(l)); return g ? g.label : (l.room||"—"); }
