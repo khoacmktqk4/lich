@@ -1495,19 +1495,54 @@ let tasks = [];
 let TASKIDX = {};
 let tasksStatus = CSV_URL_TASKS ? "loading" : "nocfg";   // loading | ok | error | nocfg
 let tasksError = "";
+/* Ngày trong sheet CongViec bị lẫn kiểu: có ô là ngày thật bị đảo ngày/tháng
+   (vd hiển thị 9/10/2026 nhưng giá trị là 10/09), có ô là chữ dạng M/D/Y (10/13/2026).
+   Vì công việc được ghi theo thứ tự thời gian, ngày nào mơ hồ (cả hai số đều <= 12)
+   sẽ được chọn cách hiểu khớp nhất với các dòng trước/sau. */
+function dateCandidates(s){
+  if(!s) return [];
+  s = s.trim().replace(/^"|"$/g,"");
+  let m = s.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);
+  if(m) return [m[1]+"-"+m[2].padStart(2,"0")+"-"+m[3].padStart(2,"0")];
+  m = s.match(/^(\d{1,2})[\/\.-](\d{1,2})[\/\.-](\d{4})/);
+  if(!m) return [];
+  const a = +m[1], b = +m[2], y = m[3];
+  const mk = (d,mo)=> (mo>=1&&mo<=12&&d>=1&&d<=31) ? y+"-"+String(mo).padStart(2,"0")+"-"+String(d).padStart(2,"0") : null;
+  const out = [mk(a,b), mk(b,a)].filter(Boolean);   // [D/M, M/D]
+  return [...new Set(out)];
+}
+function dayDiff(x,y){ return Math.abs(parseISO(x)-parseISO(y))/86400000; }
 function buildTasks(rows){
-  const out = [];
+  const raw = [];
   rows.forEach(r=>{
-    const date = normalizeDate(r["Ngày"]||r["Ngay"]||"");
     const title = (r["Nội dung công việc"]||r["Noi dung cong viec"]||"").trim();
-    if(!date || !title) return;
-    out.push({
-      date, title,
+    const cands = dateCandidates(r["Ngày"]||r["Ngay"]||"");
+    if(!cands.length || !title) return;
+    raw.push({cands, title,
       people: (r["Thành phần"]||r["Thanh phan"]||"").trim(),
-      note: (r["Ghi chú"]||r["Ghi chu"]||"").trim(),
-    });
+      note: (r["Ghi chú"]||r["Ghi chu"]||"").trim()});
   });
-  return out;
+  // Ngày chắc chắn (chỉ có 1 cách hiểu) làm mốc
+  const fixed = raw.map(x=> x.cands.length===1 ? x.cands[0] : null);
+  const out = [];
+  raw.forEach((x,i)=>{
+    let date = x.cands[0];
+    if(x.cands.length > 1){
+      let prev = null, next = null;
+      for(let j=i-1;j>=0;j--){ if(out[j]){ prev = out[j].date; break; } }
+      for(let j=i+1;j<raw.length;j++){ if(fixed[j]){ next = fixed[j]; break; } }
+      const score = c => {
+        let sc = 0;
+        if(prev && c < prev) sc += 1000;          // không được lùi về trước dòng trên
+        if(next && c > next) sc += 1000;          // không được vượt dòng dưới
+        if(next) sc += dayDiff(c,next); else if(prev) sc += dayDiff(c,prev);
+        return sc;
+      };
+      date = x.cands.slice().sort((p,q)=>score(p)-score(q))[0];
+    }
+    out[i] = {date, title:x.title, people:x.people, note:x.note};
+  });
+  return out.filter(Boolean);
 }
 function reindexTasks(){
   TASKIDX = {};
