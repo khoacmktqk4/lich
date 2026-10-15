@@ -644,6 +644,51 @@ select.sel,.btn-ghost{background:#ffffff17; border-color:#ffffff30;}
 .btn-gold{box-shadow:inset 0 1px 0 #ffffff60,0 3px 0 #A86507;}
 .rank-row,.dl-row{border-bottom-color:var(--line-soft);}
 
+/* =====================================================================
+   v2.3 — dải ngày tab Công việc, header điện thoại, màu tên giáo viên
+   ===================================================================== */
+/* Nhãn K.CMKT/TQS ánh kim */
+.brand-eyebrow{gap:9px;}
+.brand-eyebrow span{font:800 13.5px var(--font); letter-spacing:.16em;
+  background:linear-gradient(100deg,#FFE7A8 0%,#F2B33D 30%,#FFFFFF 45%,#F2B33D 60%,#FFE7A8 100%); background-size:250% 100%;
+  -webkit-background-clip:text; background-clip:text; color:transparent; animation:shine 4.5s linear infinite;
+  filter:drop-shadow(0 1px 0 rgba(0,0,0,.35)) drop-shadow(0 0 10px rgba(242,179,61,.35));}
+@keyframes shine{from{background-position:200% 0;}to{background-position:-50% 0;}}
+@media (max-width:640px){
+  .brand h1{display:none;}
+  .brand-eyebrow span{font-size:21px; letter-spacing:.14em;}
+  .flag-vn{width:26px; height:17px; border-radius:3px; box-shadow:0 0 0 1px #00000030,0 3px 8px rgba(0,0,0,.3);}
+  .side-tools{gap:6px;}
+  select.sel{flex:1 1 0; min-width:0; max-width:none; padding:0 6px 0 10px; font-size:13px;}
+  .side-btns{flex:none; gap:6px;}
+  #refreshBtn{width:auto; padding:0 10px; gap:5px; font-size:12.5px;}
+  #refreshBtn .lbl{display:inline !important;}
+  #todayBtn{padding:0 10px; font-size:12.5px;}
+  #refreshBtn svg{width:14px; height:14px;}
+}
+@media (max-width:360px){#todayBtn{display:none;}}
+
+/* Dải ngày tab Công việc */
+.task-strip{grid-template-columns:repeat(7,minmax(0,1fr)); gap:5px; margin-bottom:16px;}
+.ws-dots{display:flex; justify-content:center; gap:3px; height:6px; margin:4px 0 3px;}
+.ws-dots i{width:6px; height:6px; border-radius:50%; background:var(--amber);}
+.ws-dots i.none{width:16px; height:3px; margin-top:1.5px; border-radius:2px; background:var(--line);}
+.ws-day.active .ws-dots i{background:#fff;}
+.ws-day.wkend .ws-wd{color:var(--red);}
+.ws-day.active.wkend .ws-wd{color:#fff;}
+.task-weekbar{margin-bottom:10px;} .task-weekbar h2{font-size:19px;}
+.task-weekbar .nav-group{align-items:center;}
+#view-tasks .day-line{margin-bottom:14px;}
+@media (max-width:640px){.task-strip{gap:3px;} .task-strip .ws-dd{font-size:12px;} .task-strip .ws-n{font-size:9px;} .task-weekbar h2{font-size:17px;}}
+
+/* Tên giáo viên: mỗi người một màu */
+.chip-teacher[style]{color:#fff; border:none; font-weight:700; padding:2px 10px 2px 8px;
+  background:linear-gradient(135deg,hsl(var(--th) 68% 46%),hsl(calc(var(--th) + 22) 72% 36%));
+  box-shadow:inset 0 1px 0 #ffffff45,0 2px 0 hsl(var(--th) 60% 26%),0 5px 10px -3px hsl(var(--th) 70% 40% / .55);
+  text-shadow:0 1px 1px rgba(0,0,0,.25);}
+.chip-teacher[style]::before{background:#fff; box-shadow:0 0 0 2px hsl(var(--th) 70% 70% / .5);}
+.chip.match .chip-teacher[style]{color:#1A1204; background:var(--amber); text-shadow:none;}
+
 /* ===== In / xuất PDF ===== */
 #printArea{display:none;}
 @media print{
@@ -713,7 +758,7 @@ select.sel,.btn-ghost{background:#ffffff17; border-color:#ffffff30;}
     <select id="teacherSelect" class="sel" aria-label="Lọc theo giáo viên"><option value="">Tất cả GV</option></select>
     <div class="side-btns">
       <button class="btn btn-ghost" id="todayBtn">Hôm nay</button>
-      <button class="btn btn-ghost" id="refreshBtn" aria-label="Tải lại dữ liệu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg><span class="lbl">Tải lại</span></button>
+      <button class="btn btn-ghost" id="refreshBtn" aria-label="Tải lại dữ liệu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg><span class="lbl">Tải lại trang</span></button>
       <button class="btn btn-ghost" id="themeBtn" aria-label="Đổi giao diện sáng/tối"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
     </div>
   </div>
@@ -1083,6 +1128,14 @@ function openDetail(lesson){
   ].map(([k,v])=>"<div class='kv'><span class='k'>"+k+"</span><span class='v'>"+escapeHtml(v)+"</span></div>").join("");
   detailOverlay.classList.add("show");
 }
+function teacherAttr(l){
+  if(!l.teacher) return "";
+  let idx = l.teacherCode ? teachers.findIndex(t=>t.code.toLowerCase()===l.teacherCode.toLowerCase()) : -1;
+  if(idx < 0){ idx = 0; for(const c of l.teacher) idx = (idx*31 + c.charCodeAt(0)) % 997; }
+  const PAL = [152,212,338,268,28,190,8,108,295,48,232,172];
+  const h = PAL[idx % PAL.length] + Math.floor(idx / PAL.length) * 17;
+  return " style='--th:"+(h % 360)+"'";
+}
 function chipEl(lesson){
   const el = document.createElement("div");
   const trackClass = lesson.isHoliday ? "holiday" : "track-"+lesson.room;
@@ -1094,7 +1147,7 @@ function chipEl(lesson){
     "<div class='chip-left'><div class='chip-top'><span class='chip-track-tag'>"+escapeHtml(tagText)+"</span>" +
     "<span class='chip-code'>tiết "+escapeHtml(lesson.period||"")+"</span></div>" +
     "<div class='chip-subject'>"+escapeHtml(lesson.isHoliday ? lesson.subject : lesson.code)+"</div></div>" +
-    "<div class='chip-right'><span class='chip-teacher'>"+escapeHtml(lesson.teacher || (lesson.isHoliday? "" : "GV: chưa rõ"))+"</span>" +
+    "<div class='chip-right'><span class='chip-teacher'"+teacherAttr(lesson)+">"+escapeHtml(lesson.teacher || (lesson.isHoliday? "" : "GV: chưa rõ"))+"</span>" +
     (lesson.location ? "<div class='chip-loc'>📍 "+escapeHtml(lesson.location)+"</div>" : "") + "</div></div>";
   if(state.teacher){
     if(lesson.teacherCode && lesson.teacherCode.toLowerCase() === state.teacher.toLowerCase()) el.classList.add("match");
@@ -1566,9 +1619,6 @@ function taskItemEl(t, idx){
 function renderTasks(){
   const root = document.getElementById("view-tasks");
   root.innerHTML = "";
-  const bar = document.createElement("div"); bar.className="bar";
-  bar.innerHTML = "<h2>Công việc triển khai theo ngày</h2>";
-  root.appendChild(bar);
 
   if(tasksStatus === "nocfg"){
     root.insertAdjacentHTML("beforeend","<div class='status-panel setup'><h3>Chưa kết nối sheet công việc</h3><p>Dán link CSV của sheet <code>CongViec</code> vào biến <code>CSV_URL_TASKS</code> ở đầu phần &lt;script&gt;.</p></div>");
@@ -1583,21 +1633,31 @@ function renderTasks(){
     return;
   }
 
-  const nav = document.createElement("div"); nav.className="log-nav";
-  const prev = document.createElement("button"); prev.className="iconbtn"; prev.textContent="‹";
-  const next = document.createElement("button"); next.className="iconbtn"; next.textContent="›";
-  prev.addEventListener("click", ()=>{ state.taskDate=addDays(state.taskDate,-1); renderTasks(); });
-  next.addEventListener("click", ()=>{ state.taskDate=addDays(state.taskDate,1); renderTasks(); });
-  const label = document.createElement("div"); label.className="datelabel";
-  label.textContent = weekdayNameOf(state.taskDate)+", "+fmtVN(state.taskDate)+(state.taskDate===TODAY?" (hôm nay)":"");
-  nav.appendChild(prev); nav.appendChild(label); nav.appendChild(next);
-  root.appendChild(nav);
-
-  if(state.taskDate !== TODAY){
-    const jump = document.createElement("button"); jump.className="btn btn-outline btn-sm"; jump.style.marginBottom="12px"; jump.textContent="Về hôm nay";
-    jump.addEventListener("click", ()=>{ state.taskDate=TODAY; renderTasks(); });
-    root.appendChild(jump);
+  const mon = mondayOf(state.taskDate), p2 = n=>String(n).padStart(2,"0");
+  const strip = document.createElement("div"); strip.className = "week-strip task-strip";
+  for(let i=0;i<7;i++){
+    const iso = addDays(mon,i), n = taskCountFor(iso), d = parseISO(iso);
+    const b = document.createElement("button");
+    b.className = "ws-day"+(iso===TODAY?" is-today":"")+(n?"":" empty")+(iso===state.taskDate?" active":"")+(i>=5?" wkend":"");
+    b.innerHTML = "<span class='ws-wd'>"+["CN","T2","T3","T4","T5","T6","T7"][d.getDay()]+"</span><span class='ws-dd'>"+p2(d.getDate())+"/"+p2(d.getMonth()+1)+"</span>" +
+      "<span class='ws-dots'>"+(n ? "<i></i>".repeat(Math.min(n,4)) : "<i class='none'></i>")+"</span><span class='ws-n'>"+(n? n+" việc" : "trống")+"</span>";
+    b.addEventListener("click", ()=>{ state.taskDate = iso; renderTasks(); });
+    strip.appendChild(b);
   }
+  root.appendChild(strip);
+  const wb = document.createElement("div"); wb.className = "bar task-weekbar";
+  wb.innerHTML = "<h2>Tuần "+fmtVN(mon).slice(0,5)+" – "+fmtVN(addDays(mon,6))+"</h2>";
+  const ng = document.createElement("div"); ng.className = "nav-group";
+  if(state.taskDate !== TODAY){ const j = document.createElement("button"); j.className = "btn btn-outline btn-sm"; j.textContent = "Hôm nay"; j.addEventListener("click", ()=>{ state.taskDate = TODAY; renderTasks(); }); ng.appendChild(j); }
+  const pv = document.createElement("button"); pv.className = "iconbtn"; pv.textContent = "‹"; pv.setAttribute("aria-label","Tuần trước");
+  const nx = document.createElement("button"); nx.className = "iconbtn"; nx.textContent = "›"; nx.setAttribute("aria-label","Tuần sau");
+  pv.addEventListener("click", ()=>{ state.taskDate = addDays(state.taskDate,-7); renderTasks(); });
+  nx.addEventListener("click", ()=>{ state.taskDate = addDays(state.taskDate,7); renderTasks(); });
+  ng.appendChild(pv); ng.appendChild(nx); wb.appendChild(ng); root.appendChild(wb);
+  const nSel = taskCountFor(state.taskDate);
+  const line = document.createElement("div"); line.className = "day-line"+(state.taskDate===TODAY?" is-today":"");
+  line.innerHTML = "<span class='dln-wd'>"+weekdayNameOf(state.taskDate)+"</span><span class='dln-date'>"+fmtVN(state.taskDate)+"</span>"+(state.taskDate===TODAY?"<span class='dln-today'>Hôm nay</span>":"")+"<span class='dln-n'>"+nSel+" việc</span>";
+  root.appendChild(line);
 
   const items = TASKIDX[state.taskDate] || [];
   if(!items.length){
