@@ -581,6 +581,69 @@ select.sel,.btn-ghost{background:#ffffff17; border-color:#ffffff30;}
 .ws-day.active{background:linear-gradient(160deg,#2FA06F,var(--g2) 55%,var(--g3)); border-color:transparent; color:#fff; box-shadow:inset 0 1px 0 #ffffff40,0 3px 0 #0B3A29,0 10px 18px -6px rgba(14,59,43,.55);}
 .ws-day.active .ws-wd,.ws-day.active .ws-n{color:#fff;}
 
+/* =====================================================================
+   v2.2 — bỏ ô ghim, màu ca 4-5, thẻ 3D toàn trang
+   ===================================================================== */
+#pinToday{display:none !important;}
+
+/* Ca 4–5: xanh dương */
+.slot-period.s2,.bs.s2{background:linear-gradient(160deg,#4A93D6,#2766A8 55%,#17457A); box-shadow:inset 0 1px 0 #ffffff45,0 3px 0 #123B66,0 8px 16px -6px rgba(23,69,122,.55);}
+
+/* Mẫu thẻ nổi 3D dùng chung */
+.day-card,.panel,.stat-card,.board,.month-cal,.log-nav,.task-item,.tc-empty,.status-panel,.teach-banner{
+  --uc:var(--hl);
+  border:1.5px solid color-mix(in srgb,var(--uc) 45%,var(--line)) !important;
+  box-shadow:inset 0 1px 0 #ffffff80,0 5px 0 color-mix(in srgb,var(--uc) 38%,var(--line)),0 18px 28px -10px color-mix(in srgb,var(--uc) 30%,transparent) !important;
+  margin-bottom:20px;}
+.day-card.is-today{--uc:var(--amber);}
+.kpi.k1{--uc:var(--hl);} .kpi.k2{--uc:var(--blue);} .kpi.k3{--uc:var(--amber);} .kpi.k4{--uc:var(--khi);}
+.status-panel.error{--uc:var(--red);} .status-panel.setup{--uc:var(--amber);}
+.tc-empty{border-style:dashed !important;}
+.log-nav{margin-bottom:22px;}
+.task-item{--uc:var(--hl); margin-bottom:6px;}
+.task-list{gap:12px;}
+#monthDayDetail .panel,#monthLessonDetail .panel{margin-bottom:6px;}
+.month-side{gap:20px;}
+.stat-grid{gap:16px; margin-bottom:22px;}
+.kpi-grid .stat-card{margin-bottom:0;}
+.board{margin-bottom:10px;}
+@media (hover:hover){
+  .day-card,.stat-card,.task-item{transition:transform .25s var(--ease),box-shadow .25s var(--ease);}
+  .day-card:hover,.stat-card:hover,.task-item:hover{transform:translateY(-2px);}
+}
+
+/* Thẻ buổi học: nổi 3D theo màu ngành */
+.chip{border:1.5px solid color-mix(in srgb,var(--tc) 42%,var(--line));
+  box-shadow:inset 0 1px 0 #ffffff80,0 3px 0 color-mix(in srgb,var(--tc) 40%,var(--line)),0 10px 18px -8px color-mix(in srgb,var(--tc) 35%,transparent);
+  margin-bottom:3px;}
+.chip:hover{transform:translateY(-2px); box-shadow:inset 0 1px 0 #ffffff80,0 5px 0 color-mix(in srgb,var(--tc) 40%,var(--line)),0 14px 22px -8px color-mix(in srgb,var(--tc) 40%,transparent);}
+.chip:active{transform:translateY(3px); box-shadow:inset 0 1px 0 #ffffff80,0 0 0 color-mix(in srgb,var(--tc) 40%,var(--line));}
+.chip.match{box-shadow:0 0 0 2px var(--amber),0 3px 0 2px color-mix(in srgb,var(--amber) 60%,var(--line));}
+.slot-chips{gap:9px;}
+.bc{gap:9px; padding:10px 9px;}
+
+/* Ô chọn ngày trong tuần */
+.ws-day{border:1.5px solid color-mix(in srgb,var(--hl) 35%,var(--line));
+  box-shadow:inset 0 1px 0 #ffffff80,0 4px 0 color-mix(in srgb,var(--hl) 30%,var(--line)),0 10px 18px -8px color-mix(in srgb,var(--hl) 25%,transparent);}
+.ws-day.is-today:not(.active){border-color:var(--amber); box-shadow:inset 0 1px 0 #ffffff80,0 4px 0 color-mix(in srgb,var(--amber) 55%,var(--line));}
+.ws-day:active{transform:translateY(3px); box-shadow:0 1px 0 color-mix(in srgb,var(--hl) 30%,var(--line));}
+.week-strip{margin-bottom:22px;}
+
+/* Ô ngày trong lịch tháng */
+.month-cell{background:var(--card); border:1.5px solid var(--line-soft); box-shadow:0 3px 0 var(--line);}
+.month-cell:hover{transform:translateY(-1px); box-shadow:0 4px 0 color-mix(in srgb,var(--hl) 35%,var(--line));}
+.month-grid{gap:6px; row-gap:8px;}
+.month-grid > .month-cell.is-today{box-shadow:0 3px 0 color-mix(in srgb,var(--amber) 60%,var(--line));}
+.month-grid > .month-cell.selected{border-color:var(--hl); box-shadow:0 3px 0 var(--hl),0 10px 18px -8px color-mix(in srgb,var(--hl) 40%,transparent);}
+.month-grid > .month-cell.teach-hit{box-shadow:0 3px 0 var(--g3);}
+
+/* Nút điều hướng */
+.iconbtn{border:1.5px solid color-mix(in srgb,var(--hl) 35%,var(--line)); box-shadow:inset 0 1px 0 #ffffff80,0 3px 0 color-mix(in srgb,var(--hl) 30%,var(--line));}
+.iconbtn:active{transform:translateY(2px); box-shadow:0 1px 0 color-mix(in srgb,var(--hl) 30%,var(--line));}
+.btn-outline{border-width:1.5px; box-shadow:0 3px 0 var(--line);}
+.btn-gold{box-shadow:inset 0 1px 0 #ffffff60,0 3px 0 #A86507;}
+.rank-row,.dl-row{border-bottom-color:var(--line-soft);}
+
 /* ===== In / xuất PDF ===== */
 #printArea{display:none;}
 @media print{
@@ -1166,7 +1229,7 @@ function renderBoard(root, days){
     board.appendChild(h);
   });
   SLOTS.forEach(slot=>{
-    const s = document.createElement("div"); s.className = "bs"+(slot.key==="s3"?" pm":"");
+    const s = document.createElement("div"); s.className = "bs "+slot.key+(slot.key==="s3"?" pm":"");
     s.innerHTML = "<span class='k'>Tiết</span><b>"+SLOT_LABEL[slot.key][0]+"</b><span>"+SLOT_LABEL[slot.key][1]+"</span>";
     board.appendChild(s);
     days.forEach(iso=>{
@@ -1246,7 +1309,7 @@ function renderWeek(){
       const slotLessons = dayLessons.filter(l=>l.period && slotOf(l.period).key===slot.key).sort((a,b)=>TRACKS.findIndex(t=>t.key===a.room)-TRACKS.findIndex(t=>t.key===b.room));
       if(!slotLessons.length) return;
       const block = document.createElement("div"); block.className="slot-block";
-      block.innerHTML = "<div class='slot-period"+(slot.key==="s3"?" pm":"")+"'><span class='sp-k'>Tiết</span><span class='sp-n'>"+escapeHtml(slotLessons[0].period)+"</span><span class='sp-s'>"+(slot.key==="s3"?"Chiều":"Sáng")+"</span></div>";
+      block.innerHTML = "<div class='slot-period "+slot.key+(slot.key==="s3"?" pm":"")+"'><span class='sp-k'>Tiết</span><span class='sp-n'>"+escapeHtml(slotLessons[0].period)+"</span><span class='sp-s'>"+(slot.key==="s3"?"Chiều":"Sáng")+"</span></div>";
       const chips = document.createElement("div"); chips.className="slot-chips";
       slotLessons.forEach(l=>chips.appendChild(chipEl(l)));
       block.appendChild(chips);
@@ -1364,7 +1427,7 @@ function renderDayDetail(){
       const sl = lessonsHere.filter(l=>l.period && slotOf(l.period).key===slot.key);
       if(!sl.length) return;
       const block = document.createElement("div"); block.className="slot-block";
-      block.innerHTML = "<div class='slot-period"+(slot.key==="s3"?" pm":"")+"'><span class='sp-k'>Tiết</span><span class='sp-n'>"+escapeHtml(sl[0].period)+"</span><span class='sp-s'>"+(slot.key==="s3"?"Chiều":"Sáng")+"</span></div>";
+      block.innerHTML = "<div class='slot-period "+slot.key+(slot.key==="s3"?" pm":"")+"'><span class='sp-k'>Tiết</span><span class='sp-n'>"+escapeHtml(sl[0].period)+"</span><span class='sp-s'>"+(slot.key==="s3"?"Chiều":"Sáng")+"</span></div>";
       const chips = document.createElement("div"); chips.className="slot-chips";
       sl.forEach(l=>chips.appendChild(chipEl(l)));
       block.appendChild(chips); wrap.appendChild(block);
