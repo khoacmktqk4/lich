@@ -507,6 +507,80 @@ body:not([data-tab="week"]) #pinToday{display:none !important;}
 .pin,.month-layout,#view-tasks > *,#view-tools > .panel{animation:rise .45s var(--ease) both;}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none !important; transition:none !important; scroll-behavior:auto !important;}}
 
+/* =====================================================================
+   v2.1 — header/thanh điều hướng xanh, dòng ngày, ô tiết nổi, thẻ 3D
+   ===================================================================== */
+:root{--g1:#23885F; --g2:#1D7556; --g3:#0E3B2B;}
+.side{background:radial-gradient(120% 70% at 100% 0%,rgba(231,160,51,.30),transparent 60%),linear-gradient(150deg,var(--g2) 0%,var(--g3) 100%);
+  --side-muted:#B9DCCB; --side-line:#ffffff26; border-right-color:#0A2C20;}
+.side::before{display:none;}
+.side::after{opacity:1; background-image:radial-gradient(#ffffff1c 1px,transparent 1px); background-size:14px 14px;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 70%); mask-image:linear-gradient(90deg,transparent,#000 70%);}
+.brand-logo{background:linear-gradient(145deg,#ffffff38,#ffffff12); border:1px solid #ffffff40; box-shadow:inset 0 1px 0 #ffffff40;}
+.clock{background:#00000018;}
+select.sel,.btn-ghost{background:#ffffff17; border-color:#ffffff30;}
+.btn-ghost:hover{background:#ffffff26;}
+.tab{color:#CFE8DC;}
+.tab[aria-selected="true"]{background:#ffffff22;}
+@media (max-width:1023px){
+  nav.tabs{background:#00000022; border-color:#ffffff26;}
+  .tab[aria-selected="true"]{background:#fff; color:var(--g3); box-shadow:0 4px 12px rgba(0,0,0,.25);}
+}
+@media (max-width:640px){
+  nav.tabs{background:radial-gradient(90% 140% at 100% 0%,rgba(231,160,51,.28),transparent 60%),linear-gradient(150deg,var(--g2),var(--g3)); border-color:#ffffff30; box-shadow:0 16px 40px -8px rgba(14,59,43,.6);}
+  .tab{color:#CFE8DC;}
+}
+:root[data-theme="dark"] .tab[aria-selected="true"]{background:#fff; color:var(--g3);}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tab[aria-selected="true"]{background:#fff; color:var(--g3);}}
+@media (min-width:1024px){.tab[aria-selected="true"]{background:#ffffff22 !important; color:#fff !important;}}
+
+/* Dòng thứ – ngày thay cho ô ngày bên trái */
+.day-line{display:flex; align-items:center; flex-wrap:wrap; gap:6px 10px; margin:6px 2px 10px; animation:cardIn .45s var(--ease) both; animation-delay:calc(var(--i,0) * 40ms);}
+.day-line::before{content:""; width:4px; height:20px; border-radius:3px; background:linear-gradient(180deg,var(--g1),var(--g3));}
+.day-line.is-today::before{background:linear-gradient(180deg,var(--brass-2),var(--amber));}
+.dln-wd{font-size:16px; font-weight:700; letter-spacing:-.02em;}
+.dln-date{font:600 14px var(--mono); letter-spacing:-.03em; color:var(--ink-2);}
+.dln-today{padding:2px 9px; font-size:11px; font-weight:700; color:#1A1204; background:var(--amber); border-radius:999px;}
+.dln-n{margin-left:auto; padding:2px 10px; font-size:12px; font-weight:600; color:var(--hl); background:var(--hl-soft); border-radius:999px;}
+.day-card{grid-template-columns:1fr !important;}
+.day-card .slot-block,.day-card .slot-empty{grid-column:1;}
+.day-card > .slot-block:first-child{border-top:none;}
+
+/* Ô tiết nổi bật */
+.slot-period,.bs{color:#fff; background:linear-gradient(160deg,#2FA06F,var(--g2) 55%,var(--g3)); border:none;
+  box-shadow:inset 0 1px 0 #ffffff40,0 3px 0 #0B3A29,0 8px 16px -6px rgba(14,59,43,.55);}
+.slot-period.pm,.bs.pm{background:linear-gradient(160deg,#F4B34A,#DD8A15 60%,#B86A06); box-shadow:inset 0 1px 0 #ffffff55,0 3px 0 #8A4E04,0 8px 16px -6px rgba(184,106,6,.5);}
+.slot-period .sp-k,.slot-period .sp-s,.bs .k,.bs span{color:#ffffffd9 !important;}
+.slot-period .sp-n,.bs b{color:#fff;}
+.slot-period .sp-n{font-size:16px;}
+.slot-block{align-items:stretch;}
+.bs{margin:8px; border-radius:12px; align-items:center; text-align:center;}
+.board > .bs{border-right:none; border-bottom:none;}
+
+/* Thẻ công việc 3D */
+.tc-list{gap:18px;}
+.tcard{border:1.5px solid color-mix(in srgb,var(--uc) 50%,var(--line)); margin-bottom:6px;
+  box-shadow:inset 0 1px 0 #ffffff90,0 5px 0 color-mix(in srgb,var(--uc) 42%,var(--line)),0 18px 28px -8px color-mix(in srgb,var(--uc) 32%,transparent);}
+.tcard::before{display:none;}
+.tcard.is-current{box-shadow:inset 0 1px 0 #ffffff90,0 6px 0 color-mix(in srgb,var(--uc) 45%,var(--line)),0 22px 34px -8px color-mix(in srgb,var(--uc) 38%,transparent);}
+@media (hover:hover){.tcard:hover{transform:translateY(-3px); box-shadow:inset 0 1px 0 #ffffff90,0 8px 0 color-mix(in srgb,var(--uc) 42%,var(--line)),0 24px 34px -8px color-mix(in srgb,var(--uc) 36%,transparent);}}
+.tcard:active{transform:translateY(4px) !important; box-shadow:inset 0 1px 0 #ffffff90,0 1px 0 color-mix(in srgb,var(--uc) 42%,var(--line)),0 6px 12px -4px color-mix(in srgb,var(--uc) 25%,transparent) !important;}
+.tc-date{color:#fff; background:linear-gradient(160deg,var(--uc),color-mix(in srgb,var(--uc) 65%,#000)); box-shadow:inset 0 1px 0 #ffffff40,0 6px 14px -4px color-mix(in srgb,var(--uc) 55%,transparent);}
+.tc-wd,.tc-mm{opacity:.9;}
+
+/* Đếm ngược nổi bật */
+.cd{display:inline-flex; align-items:center; gap:6px; padding:5px 12px; font:700 12.5px var(--font); letter-spacing:0; color:#fff;
+  background:linear-gradient(135deg,#3B82C4,#245E96); border-radius:999px; box-shadow:inset 0 1px 0 #ffffff40,0 3px 0 #1B4772,0 8px 14px -6px rgba(36,94,150,.6);}
+.cd::before{content:""; width:7px; height:7px; border-radius:50%; background:#fff; opacity:.9;}
+.cd.now{color:#fff; background:linear-gradient(135deg,#2FA06F,#1D7556); box-shadow:inset 0 1px 0 #ffffff40,0 3px 0 #0E3B2B,0 8px 14px -6px rgba(29,117,86,.6);}
+.cd.soon{color:#fff; background:linear-gradient(135deg,#EF5A4E,#C2342A); box-shadow:inset 0 1px 0 #ffffff40,0 3px 0 #8E2119,0 8px 14px -6px rgba(194,52,42,.6);}
+.cd.near{color:#2A1800; background:linear-gradient(135deg,#FFC965,#EC9A1E); box-shadow:inset 0 1px 0 #ffffff60,0 3px 0 #A86507,0 8px 14px -6px rgba(236,154,30,.6);}
+.cd.near::before{background:#2A1800;}
+.cd.now::before,.cd.soon::before{animation:cdpulse 1.6s ease-out infinite;}
+@keyframes cdpulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.8);}100%{box-shadow:0 0 0 7px rgba(255,255,255,0);}}
+.ws-day.active{background:linear-gradient(160deg,#2FA06F,var(--g2) 55%,var(--g3)); border-color:transparent; color:#fff; box-shadow:inset 0 1px 0 #ffffff40,0 3px 0 #0B3A29,0 10px 18px -6px rgba(14,59,43,.55);}
+.ws-day.active .ws-wd,.ws-day.active .ws-n{color:#fff;}
+
 /* ===== In / xuất PDF ===== */
 #printArea{display:none;}
 @media print{
@@ -1165,12 +1239,14 @@ function renderWeek(){
     const d = parseISO(iso);
     const head = document.createElement("div"); head.className="day-head";
     head.innerHTML = "<span class='wd'>"+weekdayNameOf(iso)+"</span><span class='dd'>"+d.getDate()+"</span><span class='dt'>"+String(d.getMonth()+1).padStart(2,"0")+"/"+d.getFullYear()+"</span>"+(iso===TODAY?"<span class='today-badge'>Hôm nay</span>":"");
-    card.appendChild(head);
+    const line = document.createElement("div"); line.className = "day-line"+(iso===TODAY?" is-today":""); line.style.setProperty("--i", idx);
+    line.innerHTML = "<span class='dln-wd'>"+weekdayNameOf(iso)+"</span><span class='dln-date'>"+fmtVN(iso)+"</span>"+(iso===TODAY?"<span class='dln-today'>Hôm nay</span>":"")+"<span class='dln-n'>"+dayLessons.length+" buổi</span>";
+    wrap.appendChild(line);
     SLOTS.forEach(slot=>{
       const slotLessons = dayLessons.filter(l=>l.period && slotOf(l.period).key===slot.key).sort((a,b)=>TRACKS.findIndex(t=>t.key===a.room)-TRACKS.findIndex(t=>t.key===b.room));
       if(!slotLessons.length) return;
       const block = document.createElement("div"); block.className="slot-block";
-      block.innerHTML = "<div class='slot-period'><span class='sp-k'>Tiết</span><span class='sp-n'>"+escapeHtml(slotLessons[0].period)+"</span><span class='sp-s'>"+(slot.key==="s3"?"Chiều":"Sáng")+"</span></div>";
+      block.innerHTML = "<div class='slot-period"+(slot.key==="s3"?" pm":"")+"'><span class='sp-k'>Tiết</span><span class='sp-n'>"+escapeHtml(slotLessons[0].period)+"</span><span class='sp-s'>"+(slot.key==="s3"?"Chiều":"Sáng")+"</span></div>";
       const chips = document.createElement("div"); chips.className="slot-chips";
       slotLessons.forEach(l=>chips.appendChild(chipEl(l)));
       block.appendChild(chips);
@@ -1288,7 +1364,7 @@ function renderDayDetail(){
       const sl = lessonsHere.filter(l=>l.period && slotOf(l.period).key===slot.key);
       if(!sl.length) return;
       const block = document.createElement("div"); block.className="slot-block";
-      block.innerHTML = "<div class='slot-period'><span class='sp-k'>Tiết</span><span class='sp-n'>"+escapeHtml(sl[0].period)+"</span><span class='sp-s'>"+(slot.key==="s3"?"Chiều":"Sáng")+"</span></div>";
+      block.innerHTML = "<div class='slot-period"+(slot.key==="s3"?" pm":"")+"'><span class='sp-k'>Tiết</span><span class='sp-n'>"+escapeHtml(sl[0].period)+"</span><span class='sp-s'>"+(slot.key==="s3"?"Chiều":"Sáng")+"</span></div>";
       const chips = document.createElement("div"); chips.className="slot-chips";
       sl.forEach(l=>chips.appendChild(chipEl(l)));
       block.appendChild(chips); wrap.appendChild(block);
